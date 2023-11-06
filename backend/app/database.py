@@ -7,8 +7,6 @@ config = dotenv_values(".env")
 
 SQLALCHEMY_DATABASE_URL = "mysql+mysqldb://"+config.DB_USER+":"+config.DB_PASS+"@"+config.DB_HOST+":"+config.DB_PORT+"/"+config.DB_NAME
 
-print(config)
-
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
 )
