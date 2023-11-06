@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="44ec0c24-ba5a-4747-9d62-a7b675b0eb59" name="Changes" comment="gitignore changed">
+    <list default="true" id="44ec0c24-ba5a-4747-9d62-a7b675b0eb59" name="Changes" comment=".env on gitignore">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/docker-compose.build.yml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/docker-compose.build.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +65,9 @@
       <workItem from="1699293690496" duration="653000" />
       <workItem from="1699295024772" duration="69000" />
       <workItem from="1699295101169" duration="48000" />
-      <workItem from="1699295178594" duration="798000" />
+      <workItem from="1699295178594" duration="1009000" />
+      <workItem from="1699298744489" duration="9000" />
+      <workItem from="1699298758419" duration="143000" />
     </task>
     <task id="LOCAL-00001" summary="Empty repository">
       <option name="closed" value="true" />
@@ -125,7 +125,23 @@
       <option name="project" value="LOCAL" />
       <updated>1699295241626</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary=".env removed from repo">
+      <option name="closed" value="true" />
+      <created>1699296007611</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1699296007611</updated>
+    </task>
+    <task id="LOCAL-00009" summary=".env on gitignore">
+      <option name="closed" value="true" />
+      <created>1699296054269</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1699296054269</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -138,6 +154,8 @@
     <MESSAGE value="Back and front projects 2" />
     <MESSAGE value=".idea removed" />
     <MESSAGE value="gitignore changed" />
-    <option name="LAST_COMMIT_MESSAGE" value="gitignore changed" />
+    <MESSAGE value=".env removed from repo" />
+    <MESSAGE value=".env on gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value=".env on gitignore" />
   </component>
 </project>

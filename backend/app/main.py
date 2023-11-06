@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from .routers import algorithms, account
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -10,9 +10,6 @@ app.include_router(account.router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost.tiangolo.com",
-        "https://localhost.tiangolo.com",
-        "http://localhost",
         "http://localhost:8080",
         "http://172.22.0.2:8080",
     ],

@@ -39,6 +39,7 @@ frontend/*.sln
 
 # local .env files
 frontend/.env
+backend/.env
 frontend/.env.local*
 
 backend/.venv
