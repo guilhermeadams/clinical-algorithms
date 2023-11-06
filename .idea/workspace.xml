@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="44ec0c24-ba5a-4747-9d62-a7b675b0eb59" name="Changes" comment="Empty repository 2">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="44ec0c24-ba5a-4747-9d62-a7b675b0eb59" name="Changes" comment="Back and front projects">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +44,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "yarn",
+    "ts.external.directory.path": "/home/gabriel/Downloads/WebStorm-232.9921.42/plugins/javascript-impl/jsLanguageServicesImpl/external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -60,7 +62,7 @@
       <option name="presentableId" value="Default" />
       <updated>1699293004923</updated>
       <workItem from="1699293008399" duration="128000" />
-      <workItem from="1699293690496" duration="429000" />
+      <workItem from="1699293690496" duration="497000" />
     </task>
     <task id="LOCAL-00001" summary="Empty repository">
       <option name="closed" value="true" />
@@ -78,7 +80,15 @@
       <option name="project" value="LOCAL" />
       <updated>1699293094155</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Back and front projects">
+      <option name="closed" value="true" />
+      <created>1699294151897</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1699294151897</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -87,6 +97,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Empty repository" />
     <MESSAGE value="Empty repository 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="Empty repository 2" />
+    <MESSAGE value="Back and front projects" />
+    <option name="LAST_COMMIT_MESSAGE" value="Back and front projects" />
   </component>
 </project>

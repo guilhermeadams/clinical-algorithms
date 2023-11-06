@@ -1,3 +1,6 @@
+.vscode
+.idea
+
 frontend/.DS_Store
 frontend/.thumbs.db
 frontend/node_modules
