@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: prod-spa-stage
+      target: build-spa-stage
     ports:
       - "8080:80"
     volumes:

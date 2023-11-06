@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="44ec0c24-ba5a-4747-9d62-a7b675b0eb59" name="Changes" comment=".idea removed">
+    <list default="true" id="44ec0c24-ba5a-4747-9d62-a7b675b0eb59" name="Changes" comment="gitignore changed">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/docker-compose.build.yml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/docker-compose.build.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +67,7 @@
       <workItem from="1699293690496" duration="653000" />
       <workItem from="1699295024772" duration="69000" />
       <workItem from="1699295101169" duration="48000" />
+      <workItem from="1699295178594" duration="798000" />
     </task>
     <task id="LOCAL-00001" summary="Empty repository">
       <option name="closed" value="true" />
@@ -105,7 +109,23 @@
       <option name="project" value="LOCAL" />
       <updated>1699295062283</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary=".idea removed">
+      <option name="closed" value="true" />
+      <created>1699295225069</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1699295225069</updated>
+    </task>
+    <task id="LOCAL-00007" summary="gitignore changed">
+      <option name="closed" value="true" />
+      <created>1699295241626</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1699295241626</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -117,6 +137,7 @@
     <MESSAGE value="Back and front projects" />
     <MESSAGE value="Back and front projects 2" />
     <MESSAGE value=".idea removed" />
-    <option name="LAST_COMMIT_MESSAGE" value=".idea removed" />
+    <MESSAGE value="gitignore changed" />
+    <option name="LAST_COMMIT_MESSAGE" value="gitignore changed" />
   </component>
 </project>

@@ -38,7 +38,7 @@ frontend/*.njsproj
 frontend/*.sln
 
 # local .env files
-frontend/.env.local*
+# frontend/.env.local*
 
 backend/.venv
 backend/.vscode

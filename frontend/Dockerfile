@@ -10,5 +10,3 @@ COPY . .
 FROM develop-stage as build-spa-stage
 RUN yarn
 RUN quasar build -m spa
-
-exit
