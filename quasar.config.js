@@ -15,6 +15,8 @@
 
 const { configure } = require('quasar/wrappers');
 
+require('dotenv').config();
+
 module.exports = configure((ctx) => ({
   // https://v2.quasar.dev/quasar-cli-webpack/supporting-ts
   supportTS: {
@@ -59,6 +61,10 @@ module.exports = configure((ctx) => ({
   // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-build
   build: {
     vueRouterMode: 'history', // available values: 'hash', 'history'
+
+    env: {
+      API_URL: process.env.API_URL,
+    },
 
     // transpile: false,
     // publicPath: '/',
@@ -106,7 +112,7 @@ module.exports = configure((ctx) => ({
     // directives: [],
 
     // Quasar plugins
-    plugins: [],
+    plugins: ['Notify'],
   },
 
   // animations: 'all', // --- includes all animations
