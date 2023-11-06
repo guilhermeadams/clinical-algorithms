@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="elements.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showguides="true"
+     inkscape:zoom="2.8649832"
+     inkscape:cx="399.6533"
+     inkscape:cy="620.59701"
+     inkscape:window-width="1920"
+     inkscape:window-height="1052"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <sodipodi:guide
+       position="142.86661,153.76399"
+       orientation="0,-1"
+       id="guide1"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="73.157477,111.32884"
+       orientation="0,-1"
+       id="guide3"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="rect1"
+       style="stroke-width:1.05833333;fill:none;fill-opacity:1;stroke:#dabf5e;stroke-opacity:1;stroke-dasharray:none"
+       d="m 83.376016,126.98228 45.469974,-1e-5 10.04953,16.25374 -10.04953,16.25372 -45.469974,1e-5 -10.049526,-16.25373 z"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:export-filename="imgs/elements/action_element_no_text.png"
+       inkscape:export-xdpi="47.140305"
+       inkscape:export-ydpi="47.140305" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.582914"
+       id="rect2"
+       width="56.647682"
+       height="1.5385901"
+       x="73.157478"
+       y="184.90187"
+       inkscape:export-filename="imgs/elements/link_element.png"
+       inkscape:export-xdpi="47.140305"
+       inkscape:export-ydpi="47.140305" />
+    <path
+       id="rect3"
+       style="stroke-width:0.872397"
+       d="m 127.39346,182.06165 11.46207,3.60952 -11.46207,3.60952 z"
+       sodipodi:nodetypes="cccc" />
+  </g>
+</svg>

@@ -1,0 +1,16 @@
+{
+  "name": "clinical-algorithms-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "activate": "source .venv/bin/activate",
+    "docker:build": "docker build -t clinical-algorithms-api .",
+    "docker:run": "docker run -d --name clinical-algorithms-api -p 3000:80 clinical-algorithms-api",
+    "docker:stop":  "docker container stop clinical-algorithms-api",
+    "dev": "uvicorn app.main:app --reload --host 0.0.0.0 --port 3000",
+    "docker": "systemctl start docker"
+  },
+  "author": "Gabriel Silveira",
+  "license": "ISC"
+}
