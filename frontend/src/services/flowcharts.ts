@@ -1,4 +1,5 @@
 import { reactive } from 'vue';
+import { api } from 'boot/axios';
 
 export interface IFlowchartCategory {
   name: string,
@@ -12,36 +13,6 @@ export interface IFlowchart {
   categories: IFlowchartCategory[],
   version: string,
 }
-
-const flowchartsMocked: IFlowchart[] = [
-  {
-    id: 1,
-    title: 'Fluxograma #1',
-    summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    author: 'Gabriel Silveira',
-    categories: [
-      {
-        name: 'Prevenção',
-      },
-      {
-        name: 'Emergências',
-      },
-    ],
-    version: '1.2',
-  },
-  {
-    id: 2,
-    title: 'Fluxograma #2',
-    summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    author: 'Roberto Rizzo',
-    categories: [
-      {
-        name: 'Emergências',
-      },
-    ],
-    version: '1.1',
-  },
-];
 
 const emptyFlowchart = {
   id: 0,
@@ -67,13 +38,29 @@ class Flowcharts {
       searchResults: null,
     });
 
-  constructor() {
-    this.data.flowcharts = [...flowchartsMocked];
-  }
-
   get flowchartsList() {
     return this.data.searchResults && this.data.searchResults.length
       ? this.data.searchResults : this.data.flowcharts;
+  }
+
+  public async getAll() {
+    try {
+      this.data.loading = true;
+
+      const { data: flowcharts }: { data: IFlowchart[] } = await api.get('algorithms');
+
+      if (flowcharts && flowcharts.length) {
+        this.data.flowcharts = [...flowcharts];
+      }
+
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
+    } finally {
+      setTimeout(() => {
+        this.data.loading = false;
+      }, 1000);
+    }
   }
 
   public search(keyword: string) {

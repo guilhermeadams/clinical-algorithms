@@ -1,5 +1,6 @@
 import { boot } from 'quasar/wrappers';
 import axios, { AxiosInstance } from 'axios';
+import { LocalStorage } from 'quasar';
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -8,15 +9,32 @@ declare module '@vue/runtime-core' {
   }
 }
 
-// Be careful when using SSR for cross-request state pollution
-// due to creating a Singleton instance here;
-// If any client changes this (global) instance, it might be a
-// good idea to move this instance creation inside of the
-// "export default () => {}" function below (which runs individually
-// for each client)
+function getAuthorizationHeader() {
+  const token = LocalStorage.getItem('token') as string;
+
+  return { Token: token || '' };
+
+  // return !token ? {} : {
+  //   Authorization: `X-Token ${token}`,
+  //   'Content-Type': 'application/json',
+  // };
+}
+
 const api = axios.create({
   baseURL: process.env.API_URL,
 });
+
+// INTERCEPTOR TO INJECT THE BEARER TOKEN
+api.interceptors.request.use(
+  (config) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    config.headers = getAuthorizationHeader();
+
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api

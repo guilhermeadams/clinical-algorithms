@@ -55,9 +55,9 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue';
-import Flowcharts, { IFlowchart } from 'src/services/flowcharts';
+import { inject, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
+import Flowcharts, { IFlowchart } from 'src/services/flowcharts';
 import { EDITOR } from 'src/router/routes/editor';
 
 const flowcharts = inject('flowcharts') as Flowcharts;
@@ -104,4 +104,8 @@ const editFlowchart = (flowchartId: number) => {
 };
 
 const editFlowchartData = (flowchart: IFlowchart) => flowcharts.editFlowchartData(flowchart);
+
+onBeforeMount(() => {
+  flowcharts.getAll();
+});
 </script>
