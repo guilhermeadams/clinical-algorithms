@@ -2,7 +2,7 @@ from models.index import algorithms
 from db import conn
 
 
-def get_algorithms():
+def get_all():
     all_algorithms = conn.execute(algorithms.select()).fetchall()
 
     items = []
