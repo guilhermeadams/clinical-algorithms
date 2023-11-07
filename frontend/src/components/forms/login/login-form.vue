@@ -6,7 +6,7 @@
     <q-input
       v-model="user.username"
       type="text"
-      label="Nome de usuário"
+      label="Login"
       :rules="[val => !!val || 'Informe o nome de usuário']"
       lazy-rules
       no-error-icon
@@ -60,7 +60,7 @@ import { reactive, ref } from 'vue';
 import { api } from 'boot/axios';
 import { LocalStorage, useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
-import { USERS_INDEX } from 'src/router/routes/users';
+import { HOME } from 'src/router/routes/home';
 
 const $q = useQuasar();
 const router = useRouter();
@@ -92,7 +92,7 @@ async function tryLogin() {
       LocalStorage.set('token', data.token);
 
       await router.push({
-        name: USERS_INDEX,
+        name: HOME,
       });
     } else {
       $q.notify({

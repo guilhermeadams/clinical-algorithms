@@ -4,7 +4,6 @@ from db import conn
 from .data_handler import to_dict
 
 
-
 def index():
     all_algorithms = conn.execute(
         algorithm_model.select()

@@ -4,11 +4,11 @@ export const HOME = 'home';
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
+    path: '',
     component: () => import('layouts/main-layout.vue'),
     children: [{
       name: HOME,
-      path: '',
+      path: `/${HOME}`,
       component: () => import('pages/home/home-page.vue'),
     }],
   },
