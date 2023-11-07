@@ -12,6 +12,7 @@
     @close="closeDialog"
   >
     <div>
+      <!-- TITLE -->
       <q-input
         v-if="canEdit"
         v-model="flowcharts.data.flowchart.title"
@@ -24,18 +25,20 @@
         <div>{{ flowcharts.data.flowchart.title }}</div>
       </div>
 
+      <!-- DESCRIPTION -->
       <q-input
         v-if="canEdit"
-        v-model="flowcharts.data.flowchart.summary"
+        v-model="flowcharts.data.flowchart.description"
         label="Síntese do fluxograma"
         type="textarea"
         class="q-mb-md"
       />
       <div class="q-mb-lg" v-else>
         <div class="text-caption text-grey-7">Síntese do fluxograma:</div>
-        <div>{{ flowcharts.data.flowchart.summary }}</div>
+        <div>{{ flowcharts.data.flowchart.description }}</div>
       </div>
 
+      <!-- AUTHOR / VERSION  -->
       <div class="row">
         <div class="col-9 q-pr-lg">
           <q-input
@@ -64,6 +67,7 @@
         </div>
       </div>
 
+      <!-- CATEGORIES -->
       <q-select
         v-if="canEdit"
         v-model="flowcharts.data.flowchart.categories"
@@ -89,11 +93,16 @@
       </q-select>
       <div class="q-mb-lg" v-else>
         <div class="text-caption text-grey-7">Categorias:</div>
-        <q-chip
-          v-for="category of flowcharts.data.flowchart.categories"
-          :key="category.name"
-          :label="category.name"
-        />
+        <div v-if="hasCategories">
+          <q-chip
+            v-for="category of flowcharts.data.flowchart.categories"
+            :key="category.name"
+            :label="category.name"
+          />
+        </div>
+        <div v-else>
+          Nenhuma categoria.
+        </div>
       </div>
     </div>
   </edit-modal>
@@ -115,6 +124,10 @@ import { QInput } from 'quasar';
 const flowcharts = inject('flowcharts') as Flowcharts;
 
 const showEditUserDialog = computed(() => flowcharts.data.showEditDialog);
+
+const hasCategories = computed(
+  () => flowcharts.data.flowchart.categories && flowcharts.data.flowchart.categories.length,
+);
 
 const inputFlowchartTitle = ref<QInput>();
 
@@ -158,8 +171,8 @@ const closeDialog = () => flowcharts.toggleEditDialog();
 const saveAndClose = () => {
   data.saving = true;
 
-  setTimeout(() => {
-    flowcharts.save();
+  setTimeout(async () => {
+    await flowcharts.save();
 
     data.saving = false;
   }, 1500);

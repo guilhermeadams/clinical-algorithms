@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 from services import algorithms
+from schemas.algorithm import AlgorithmModel
 from dependencies import get_token_header
 
 router = APIRouter(
@@ -11,5 +12,15 @@ router = APIRouter(
 
 
 @router.get("/")
-def get_user():
-    return algorithms.get_all()
+def index():
+    return algorithms.index()
+
+
+@router.post("/")
+def store(algorithm: AlgorithmModel):
+    return algorithms.store(algorithm)
+
+
+@router.get("/{algorithm_id}")
+def show(algorithm_id: int):
+    return algorithms.show(algorithm_id)

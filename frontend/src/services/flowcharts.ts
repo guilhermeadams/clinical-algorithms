@@ -8,16 +8,16 @@ export interface IFlowchartCategory {
 export interface IFlowchart {
   id: number,
   title: string,
-  summary: string,
+  description: string,
   author: string,
-  categories: IFlowchartCategory[],
   version: string,
+  categories?: IFlowchartCategory[],
 }
 
 const emptyFlowchart = {
   id: 0,
   title: '',
-  summary: '',
+  description: '',
   author: '',
   categories: [],
   version: '',
@@ -98,29 +98,21 @@ class Flowcharts {
     this.toggleEditDialog();
   }
 
-  public save() {
+  public async save() {
     try {
       this.data.loading = true;
+
+      const { data }: { data: { rowcount: number } } = await api.post('algorithms', {
+        ...this.data.flowchart,
+      });
+
+      if (data.rowcount > 0) await this.getAll();
 
       return Promise.resolve(true);
     } catch (error) {
       return Promise.reject(error);
     } finally {
       this.toggleEditDialog();
-
-      setTimeout(() => {
-        if (this.data.flowchart.id) {
-          // update user
-        } else {
-          // insert user
-          this.data.flowcharts.unshift({
-            ...this.data.flowchart,
-            id: 999,
-          });
-        }
-
-        this.data.loading = false;
-      }, 1500);
     }
   }
 
