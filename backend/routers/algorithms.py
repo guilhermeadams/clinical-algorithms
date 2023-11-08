@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from services import algorithms
-from schemas.algorithm import AlgorithmModel
+from schemas.algorithm import AlgorithmSchema
 from dependencies import get_token_header
 
 router = APIRouter(
@@ -17,7 +17,7 @@ def index():
 
 
 @router.post("/")
-def store(algorithm: AlgorithmModel):
+def store(algorithm: AlgorithmSchema):
     return algorithms.store(algorithm)
 
 

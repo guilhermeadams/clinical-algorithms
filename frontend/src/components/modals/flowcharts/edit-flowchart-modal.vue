@@ -56,6 +56,90 @@
         <div class="col-3">
           <q-input
             v-if="canEdit"
+            v-model="flowcharts.data.flowchart.updated_at"
+            maxlength="10"
+            clearable
+            dense
+          >
+            <template v-slot:append>
+              <q-icon
+                name="event"
+                class="cursor-pointer"
+              >
+                <q-popup-proxy
+                  cover
+                  transition-show="scale"
+                  transition-hide="scale"
+                >
+                  <q-date
+                    v-model="flowcharts.data.flowchart.updated_at"
+                    :locale="myLocale"
+                    mask="DD/MM/YYYY"
+                  >
+                    <div class="row items-center justify-end">
+                      <q-btn
+                        v-close-popup
+                        label="Concluir"
+                        color="primary"
+                        flat
+                      />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+          <div class="q-mb-lg" v-else>
+            <div class="text-caption text-grey-7">Última atualização:</div>
+            <div>{{ flowcharts.data.flowchart.updated_at }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-9 q-pr-lg">
+          <!-- CATEGORIES -->
+          <q-select
+            v-if="canEdit"
+            v-model="flowcharts.data.flowchart.categories"
+            :options="categoriesMocked"
+            :option-label="opt => Object(opt) === opt && 'name' in opt ? opt.name : '- Null -'"
+            bg-color="white"
+            label="Categorias"
+            class="q-mb-md"
+            multiple
+            use-chips
+          >
+            <template v-slot:selected-item="scope">
+              <q-chip
+                :label="scope.opt.name"
+                removable
+                color="primary"
+                text-color="white"
+                @remove="scope.removeAtIndex(scope.index)"
+              >
+                {{ scope.opt.name }}
+              </q-chip>
+            </template>
+          </q-select>
+          <div class="q-mb-lg" v-else>
+            <div class="text-caption text-grey-7">Categorias:</div>
+            <div v-if="hasCategories">
+              <q-chip
+                v-for="category of flowcharts.data.flowchart.categories"
+                :key="category.name"
+                :label="category.name"
+              />
+            </div>
+            <div v-else>
+              Nenhuma categoria.
+            </div>
+          </div>
+        </div>
+
+        <div class="col-3">
+          <q-input
+            v-if="canEdit"
             v-model="flowcharts.data.flowchart.version"
             label="Versão"
             class="q-mb-md"
@@ -64,44 +148,6 @@
             <div class="text-caption text-grey-7">Versão:</div>
             <div>{{ flowcharts.data.flowchart.version }}</div>
           </div>
-        </div>
-      </div>
-
-      <!-- CATEGORIES -->
-      <q-select
-        v-if="canEdit"
-        v-model="flowcharts.data.flowchart.categories"
-        :options="categoriesMocked"
-        :option-label="opt => Object(opt) === opt && 'name' in opt ? opt.name : '- Null -'"
-        bg-color="white"
-        label="Categorias"
-        class="q-mb-md"
-        multiple
-        use-chips
-      >
-        <template v-slot:selected-item="scope">
-          <q-chip
-            :label="scope.opt.name"
-            removable
-            color="primary"
-            text-color="white"
-            @remove="scope.removeAtIndex(scope.index)"
-          >
-            {{ scope.opt.name }}
-          </q-chip>
-        </template>
-      </q-select>
-      <div class="q-mb-lg" v-else>
-        <div class="text-caption text-grey-7">Categorias:</div>
-        <div v-if="hasCategories">
-          <q-chip
-            v-for="category of flowcharts.data.flowchart.categories"
-            :key="category.name"
-            :label="category.name"
-          />
-        </div>
-        <div v-else>
-          Nenhuma categoria.
         </div>
       </div>
     </div>
@@ -119,9 +165,11 @@ import {
 
 import Flowcharts from 'src/services/flowcharts';
 import EditModal from 'components/modals/edit-modal.vue';
-import { QInput } from 'quasar';
+import { QInput, useQuasar } from 'quasar';
+import { myLocale } from 'src/services/locale';
 
 const flowcharts = inject('flowcharts') as Flowcharts;
+const $q = useQuasar();
 
 const showEditUserDialog = computed(() => flowcharts.data.showEditDialog);
 
@@ -168,14 +216,18 @@ const deleteAndClose = () => {
 
 const closeDialog = () => flowcharts.toggleEditDialog();
 
-const saveAndClose = () => {
-  data.saving = true;
+const saveAndClose = async () => {
+  try {
+    data.saving = true;
 
-  setTimeout(async () => {
     await flowcharts.save();
-
+  } catch (error) {
+    $q.notify({
+      message: 'Erro ao salvar dados básicos do fluxograma',
+    });
+  } finally {
     data.saving = false;
-  }, 1500);
+  }
 };
 
 const setEditing = (value: boolean) => {

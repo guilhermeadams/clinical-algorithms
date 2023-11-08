@@ -1,5 +1,6 @@
 import { reactive } from 'vue';
 import { api } from 'boot/axios';
+import date from 'src/services/date';
 
 export interface IFlowchartCategory {
   name: string,
@@ -12,6 +13,7 @@ export interface IFlowchart {
   author: string,
   version: string,
   categories?: IFlowchartCategory[],
+  updated_at: string,
 }
 
 const emptyFlowchart = {
@@ -19,8 +21,9 @@ const emptyFlowchart = {
   title: '',
   description: '',
   author: '',
-  categories: [],
   version: '',
+  updated_at: '',
+  categories: [],
 };
 
 class Flowcharts {
@@ -92,8 +95,11 @@ class Flowcharts {
     this.toggleEditDialog();
   }
 
-  public editFlowchartData(flowchart: IFlowchart) {
+  public viewFlowchartData(flowchart: IFlowchart) {
     this.data.flowchart = { ...flowchart };
+
+    // convert to brazilian date (DD/MM/YYYY)
+    this.data.flowchart.updated_at = date.toBR(flowchart.updated_at);
 
     this.toggleEditDialog();
   }
@@ -108,11 +114,11 @@ class Flowcharts {
 
       if (data.rowcount > 0) await this.getAll();
 
+      this.toggleEditDialog();
+
       return Promise.resolve(true);
     } catch (error) {
       return Promise.reject(error);
-    } finally {
-      this.toggleEditDialog();
     }
   }
 

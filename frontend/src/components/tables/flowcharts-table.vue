@@ -37,7 +37,7 @@
             color="primary"
             no-caps
             push
-            @click.stop="editFlowchartData(props.row)"
+            @click.stop="viewFlowchartData(props.row)"
           />
 
           <q-btn
@@ -103,7 +103,7 @@ const editFlowchart = (flowchartId: number) => {
   });
 };
 
-const editFlowchartData = (flowchart: IFlowchart) => flowcharts.editFlowchartData(flowchart);
+const viewFlowchartData = (flowchart: IFlowchart) => flowcharts.viewFlowchartData(flowchart);
 
 onBeforeMount(() => {
   flowcharts.getAll();

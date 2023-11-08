@@ -1,13 +1,13 @@
-from sqlalchemy import Table, Column
-from sqlalchemy.sql.sqltypes import Integer, String, Text
+from sqlalchemy import Table, Column, DATE, TEXT, VARCHAR, BIGINT
 from db import meta
 
 algorithms = Table(
     'algorithms',
     meta,
-    Column('id', Integer, primary_key=True, index=True),
-    Column('title', String(255), index=True),
-    Column('description', Text, index=True),
-    Column('author', String(255)),
-    Column('version', String(10))
+    Column('id', BIGINT, primary_key=True, index=True),
+    Column('title', VARCHAR(255), index=True),
+    Column('description', TEXT, index=True),
+    Column('author', VARCHAR(255)),
+    Column('version', VARCHAR(10)),
+    Column('updated_at', DATE)
 )

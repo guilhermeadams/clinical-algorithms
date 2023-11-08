@@ -1,7 +1,7 @@
 from models.index import algorithms as algorithm_model
-from schemas.algorithm import AlgorithmModel
+from schemas.algorithm import AlgorithmSchema
 from db import conn
-from .data_handler import to_dict
+from .data_handler import to_dict, to_iso_date
 
 
 def index():
@@ -21,7 +21,7 @@ def show(algorithm_id: int):
         return to_dict(algorithm)[0]
 
 
-def store(algorithm: AlgorithmModel):
+def store(algorithm: AlgorithmSchema):
     algorithm = conn.execute(
         algorithm_model.update()
         .where(algorithm_model.c.id == algorithm.id)
@@ -29,7 +29,8 @@ def store(algorithm: AlgorithmModel):
             title=algorithm.title,
             description=algorithm.description,
             author=algorithm.author,
-            version=algorithm.version
+            version=algorithm.version,
+            updated_at=to_iso_date(algorithm.updated_at)
         )
     )
     return algorithm
