@@ -57,9 +57,9 @@
           <q-input
             v-if="canEdit"
             v-model="flowcharts.data.flowchart.updated_at"
+            label="Última atualização"
             maxlength="10"
             clearable
-            dense
           >
             <template v-slot:append>
               <q-icon
@@ -240,7 +240,11 @@ const saveAndClose = async () => {
   try {
     data.saving = true;
 
-    await flowcharts.save();
+    if (flowcharts.data.flowchart.id) {
+      await flowcharts.update();
+    } else {
+      await flowcharts.save();
+    }
   } catch (error) {
     $q.notify({
       message: 'Erro ao salvar dados básicos do fluxograma',

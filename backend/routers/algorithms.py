@@ -11,14 +11,19 @@ router = APIRouter(
 )
 
 
-@router.get("/")
+@router.get("")
 def index():
     return algorithms.index()
 
 
-@router.post("/")
+@router.post("")
 def store(algorithm: AlgorithmSchema):
     return algorithms.store(algorithm)
+
+
+@router.put("/{algorithm_id}")
+def update(algorithm: AlgorithmSchema):
+    return algorithms.update_algorithm(algorithm)
 
 
 @router.get("/search")

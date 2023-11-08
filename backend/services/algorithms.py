@@ -2,6 +2,7 @@ from models.index import algorithms as algorithm_model
 from schemas.algorithm import AlgorithmSchema
 from db import conn
 from .data_handler import to_dict, to_iso_date
+from sqlalchemy import insert, update
 
 
 def index():
@@ -30,8 +31,22 @@ def show(algorithm_id: int):
 
 
 def store(algorithm: AlgorithmSchema):
-    algorithm = conn.execute(
-        algorithm_model.update()
+    stored_algorithm = conn.execute(
+        insert(algorithm_model).values(
+            title=algorithm.title,
+            description=algorithm.description,
+            author=algorithm.author,
+            version=algorithm.version,
+            updated_at=to_iso_date(algorithm.updated_at)
+        )
+    )
+
+    return stored_algorithm
+
+
+def update_algorithm(algorithm: AlgorithmSchema):
+    updated_algorithm = conn.execute(
+        update(algorithm_model)
         .where(algorithm_model.c.id == algorithm.id)
         .values(
             title=algorithm.title,
@@ -42,7 +57,7 @@ def store(algorithm: AlgorithmSchema):
         )
     )
 
-    return algorithm
+    return updated_algorithm
 
 
 def delete(algorithm_id: int):

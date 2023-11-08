@@ -57,7 +57,7 @@ class Flowcharts {
 
       const { data: flowcharts }: { data: IFlowchart[] } = await api.get(resource);
 
-      if (flowcharts && flowcharts.length) {
+      if (flowcharts) {
         this.data.flowcharts = [...flowcharts];
       }
 
@@ -112,17 +112,37 @@ class Flowcharts {
     this.toggleEditDialog();
   }
 
+  public async update() {
+    try {
+      this.data.loading = true;
+
+      const finalResource = `${resource}/${this.data.flowchart.id}`;
+
+      await api.put(finalResource, {
+        ...this.data.flowchart,
+      });
+
+      await this.getAll();
+
+      this.toggleEditDialog();
+
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
   public async save() {
     try {
       this.data.loading = true;
 
-      const { data }: { data: { rowcount: number } } = await api.post(resource, {
+      await api.post(resource, {
         ...this.data.flowchart,
       });
 
-      this.toggleEditDialog();
+      await this.getAll();
 
-      if (data.rowcount > 0) await this.getAll();
+      this.toggleEditDialog();
 
       return Promise.resolve(true);
     } catch (error) {
@@ -132,21 +152,15 @@ class Flowcharts {
 
   public async delete() {
     try {
-      this.data.loading = true;
+      await api.delete(`${resource}/${this.data.flowchart.id}`);
 
-      const { data } = await api.delete(`${resource}/${this.data.flowchart.id}`);
-
-      console.log(data);
+      await this.getAll();
 
       this.toggleEditDialog();
-
-      if (data.rowcount > 0) await this.getAll();
 
       return Promise.resolve(true);
     } catch (error) {
       return Promise.reject(error);
-    } finally {
-      this.data.loading = false;
     }
   }
 
