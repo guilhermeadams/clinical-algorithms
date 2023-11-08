@@ -43,3 +43,9 @@ def store(algorithm: AlgorithmSchema):
     )
 
     return algorithm
+
+
+def delete(algorithm_id: int):
+    return conn.execute(
+        algorithm_model.delete().where(algorithm_model.c.id == algorithm_id)
+    )

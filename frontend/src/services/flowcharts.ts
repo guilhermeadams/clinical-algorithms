@@ -120,9 +120,9 @@ class Flowcharts {
         ...this.data.flowchart,
       });
 
-      if (data.rowcount > 0) await this.getAll();
-
       this.toggleEditDialog();
+
+      if (data.rowcount > 0) await this.getAll();
 
       return Promise.resolve(true);
     } catch (error) {
@@ -130,30 +130,23 @@ class Flowcharts {
     }
   }
 
-  public delete() {
+  public async delete() {
     try {
       this.data.loading = true;
+
+      const { data } = await api.delete(`${resource}/${this.data.flowchart.id}`);
+
+      console.log(data);
+
+      this.toggleEditDialog();
+
+      if (data.rowcount > 0) await this.getAll();
 
       return Promise.resolve(true);
     } catch (error) {
       return Promise.reject(error);
     } finally {
-      this.toggleEditDialog();
-
-      setTimeout(() => {
-        const updatedFlowcharts: IFlowchart[] = [];
-
-        // eslint-disable-next-line no-restricted-syntax
-        for (const flowchart of this.data.flowcharts) {
-          if (flowchart.id !== this.data.flowchart.id) {
-            updatedFlowcharts.push({ ...flowchart });
-          }
-        }
-
-        this.data.flowcharts = [...updatedFlowcharts];
-
-        this.data.loading = false;
-      }, 1500);
+      this.data.loading = false;
     }
   }
 

@@ -31,3 +31,8 @@ def search(keyword: str | None = None):
 @router.get("/{algorithm_id}")
 def show(algorithm_id: int):
     return algorithms.show(algorithm_id)
+
+
+@router.delete("/{algorithm_id}")
+def delete(algorithm_id: int):
+    return algorithms.delete(algorithm_id)

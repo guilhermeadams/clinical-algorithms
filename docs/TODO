@@ -1,7 +1,10 @@
 TO-DO:
 
-3. Busca somente por título e descrição;
+4. Criar novo fluxograma;
 
+5. Excluir fluxograma;
+
+6. Salvar categorias do fluxograma;
 
 DONE:
 
@@ -9,4 +12,8 @@ DONE:
 1. Tela inicial é só com logo;
 
 2. Data de atualização (datetime);
+
+3. Busca somente por título e descrição;
+
+
 

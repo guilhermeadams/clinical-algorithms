@@ -6,7 +6,7 @@
     :saving="data.saving"
     :editing="data.editing"
     :hide-delete="!flowcharts.data.flowchart.id"
-    @delete="deleteAndClose"
+    @delete="showDeleteDialog"
     @edit="setEditing"
     @save="saveAndClose"
     @close="closeDialog"
@@ -151,6 +151,14 @@
         </div>
       </div>
     </div>
+
+    <delete-modal
+      :show="data.confirmDeleting"
+      title="Tem certeza que deseja excluir o fluxograma?"
+      :item-name="flowcharts.data.flowchart.title"
+      @cancel="showDeleteDialog(false)"
+      @confirm="deleteAndClose"
+    />
   </edit-modal>
 </template>
 
@@ -167,6 +175,7 @@ import Flowcharts from 'src/services/flowcharts';
 import EditModal from 'components/modals/edit-modal.vue';
 import { QInput, useQuasar } from 'quasar';
 import { myLocale } from 'src/services/locale';
+import DeleteModal from 'components/modals/delete-modal.vue';
 
 const flowcharts = inject('flowcharts') as Flowcharts;
 const $q = useQuasar();
@@ -181,6 +190,7 @@ const inputFlowchartTitle = ref<QInput>();
 
 const data = reactive({
   showDialog: false,
+  confirmDeleting: false,
   deleting: false,
   editing: false,
   saving: false,
@@ -204,14 +214,24 @@ watch(() => showEditUserDialog.value, (value) => {
   data.showDialog = value;
 });
 
-const deleteAndClose = () => {
-  data.deleting = true;
+const showDeleteDialog = (value: boolean) => {
+  data.confirmDeleting = value;
+};
 
-  setTimeout(() => {
-    flowcharts.delete();
+const deleteAndClose = async () => {
+  try {
+    showDeleteDialog(false);
 
+    data.deleting = true;
+
+    await flowcharts.delete();
+  } catch (error) {
+    $q.notify({
+      message: 'Erro ao excluir os dados básicos do fluxograma',
+    });
+  } finally {
     data.deleting = false;
-  }, 1500);
+  }
 };
 
 const closeDialog = () => flowcharts.toggleEditDialog();

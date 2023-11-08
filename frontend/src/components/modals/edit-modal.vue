@@ -35,12 +35,12 @@
               label="Excluir"
               color="negative"
               push
-              @click="emitEvent('delete')"
+              @click="emitEvent('delete', true)"
             />
 
             <q-btn
               v-if="!props.editing && !hideDelete"
-              :loading="props.deleting"
+              :loading="props.editing"
               class="float-right q-mr-md"
               style="padding: 0 30px"
               label="Editar"
