@@ -26,6 +26,8 @@ const emptyFlowchart = {
   categories: [],
 };
 
+const resource = 'algorithms';
+
 class Flowcharts {
   public data: {
     loading: boolean,
@@ -33,24 +35,27 @@ class Flowcharts {
     flowcharts: IFlowchart[],
     flowchart: IFlowchart,
     searchResults: IFlowchart[] | null,
+    totalSearchResult: number | null,
   } = reactive({
       loading: false,
       showEditDialog: false,
       flowcharts: [],
       flowchart: { ...emptyFlowchart },
       searchResults: null,
+      totalSearchResult: null,
     });
 
   get flowchartsList() {
-    return this.data.searchResults && this.data.searchResults.length
-      ? this.data.searchResults : this.data.flowcharts;
+    if (this.data.totalSearchResult !== null) return this.data.searchResults;
+
+    return this.data.flowcharts;
   }
 
   public async getAll() {
     try {
       this.data.loading = true;
 
-      const { data: flowcharts }: { data: IFlowchart[] } = await api.get('algorithms');
+      const { data: flowcharts }: { data: IFlowchart[] } = await api.get(resource);
 
       if (flowcharts && flowcharts.length) {
         this.data.flowcharts = [...flowcharts];
@@ -66,20 +71,23 @@ class Flowcharts {
     }
   }
 
-  public search(keyword: string) {
+  public async search(keyword: string) {
     try {
       this.data.loading = true;
 
       this.data.searchResults = [];
 
-      // eslint-disable-next-line no-restricted-syntax
-      for (const flowchart of this.data.flowcharts) {
-        if (flowchart.title.toLowerCase().includes(keyword.toLowerCase())) {
-          this.data.searchResults.push(flowchart);
-        }
+      const { data: flowchartsFound }: { data: IFlowchart[] } = await api.get(`${resource}/search?keyword=${keyword}`);
+
+      if (flowchartsFound && flowchartsFound.length) {
+        this.data.searchResults = [...flowchartsFound];
+
+        this.data.totalSearchResult = flowchartsFound.length;
       }
 
-      return Promise.resolve(this.data.searchResults);
+      this.data.totalSearchResult = 0;
+
+      return Promise.resolve(true);
     } catch (error) {
       return Promise.reject(error);
     } finally {
@@ -108,7 +116,7 @@ class Flowcharts {
     try {
       this.data.loading = true;
 
-      const { data }: { data: { rowcount: number } } = await api.post('algorithms', {
+      const { data }: { data: { rowcount: number } } = await api.post(resource, {
         ...this.data.flowchart,
       });
 
@@ -151,6 +159,7 @@ class Flowcharts {
 
   public clearSearch() {
     this.data.searchResults = null;
+    this.data.totalSearchResult = null;
   }
 
   public toggleEditDialog() {

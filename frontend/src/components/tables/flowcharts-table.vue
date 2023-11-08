@@ -6,10 +6,14 @@
     title="Fluxogramas"
     row-key="name"
     flat
-    hide-bottom
+    :hide-bottom="!(flowcharts.flowchartsList && !flowcharts.flowchartsList.length)"
   >
     <template v-slot:loading>
       <q-inner-loading showing color="primary" />
+    </template>
+
+    <template v-slot:no-data>
+      <b>Nenhum fluxograma encontrado.</b>
     </template>
 
     <template v-slot:body="props">

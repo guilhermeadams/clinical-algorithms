@@ -5,6 +5,7 @@
       :label="props.label"
       maxlength="12"
       bottom-slots
+      debounce="750"
       @update:model-value="emitSearch"
     >
       <template v-slot:append>

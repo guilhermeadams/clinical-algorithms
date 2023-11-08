@@ -12,6 +12,14 @@ def index():
     return to_dict(all_algorithms)
 
 
+def search(keyword: str):
+    algorithms_found = conn.execute(
+        algorithm_model.select().where(algorithm_model.c.title.like("%"+keyword+"%"))
+    ).fetchall()
+
+    return to_dict(algorithms_found)
+
+
 def show(algorithm_id: int):
     algorithm = conn.execute(
         algorithm_model.select().where(algorithm_model.c.id == algorithm_id)
@@ -33,4 +41,5 @@ def store(algorithm: AlgorithmSchema):
             updated_at=to_iso_date(algorithm.updated_at)
         )
     )
+
     return algorithm

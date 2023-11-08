@@ -1,7 +1,5 @@
 TO-DO:
 
-2. Data de atualização (datetime);
-
 3. Busca somente por título e descrição;
 
 
@@ -9,3 +7,6 @@ DONE:
 
 
 1. Tela inicial é só com logo;
+
+2. Data de atualização (datetime);
+

@@ -21,6 +21,13 @@ def store(algorithm: AlgorithmSchema):
     return algorithms.store(algorithm)
 
 
+@router.get("/search")
+def search(keyword: str | None = None):
+    if keyword:
+        return algorithms.search(keyword)
+    return {}
+
+
 @router.get("/{algorithm_id}")
 def show(algorithm_id: int):
     return algorithms.show(algorithm_id)
