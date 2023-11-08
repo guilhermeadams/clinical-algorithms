@@ -1,16 +1,10 @@
-import { RouteRecordRaw } from 'vue-router';
-
 export const EDITOR = 'editor';
 
-const routes: RouteRecordRaw[] = [
+const routes = [
   {
-    path: '',
-    component: () => import('layouts/main-layout.vue'),
-    children: [{
-      name: EDITOR,
-      path: `/${EDITOR}`,
-      component: () => import('pages/editor/editor-page.vue'),
-    }],
+    name: EDITOR,
+    path: `${EDITOR}`,
+    component: () => import('pages/editor/editor-page.vue'),
   },
 ];
 

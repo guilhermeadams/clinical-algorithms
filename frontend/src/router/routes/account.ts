@@ -1,18 +1,11 @@
-import { RouteRecordRaw } from 'vue-router';
-
+export const ACCOUNT = 'account';
 export const ACCOUNT_LOGIN = 'login';
 
-const routes: RouteRecordRaw[] = [
+const routes = [
   {
-    path: '',
-    component: () => import('layouts/login-layout.vue'),
-    children: [
-      {
-        name: ACCOUNT_LOGIN,
-        path: `account/${ACCOUNT_LOGIN}`,
-        component: () => import('pages/account/login-page.vue'),
-      },
-    ],
+    name: ACCOUNT_LOGIN,
+    path: `${ACCOUNT_LOGIN}`,
+    component: () => import('pages/account/login-page.vue'),
   },
 ];
 

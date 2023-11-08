@@ -1,24 +1,40 @@
 import { RouteRecordRaw } from 'vue-router';
-import Account from './routes/account';
+import Account, { ACCOUNT } from './routes/account';
 import Home from './routes/home';
-import Users from './routes/users';
-import FlowchartCategories from './routes/flowchart_categories';
-import Flowcharts from './routes/flowcharts';
+import Users, { USERS_INDEX } from './routes/users';
+import Flowcharts, { FLOWCHARTS_INDEX } from './routes/flowcharts';
 import Editor from './routes/editor';
+// import FlowchartCategories from './routes/flowchart_categories';
 
 const routes: RouteRecordRaw[] = [
-  ...Account,
-  ...Home,
-  ...Users,
-  ...FlowchartCategories,
-  ...Flowcharts,
-  ...Editor,
-
-  // Always leave this as last one,
-  // but you can also remove it
   {
-    path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue'),
+    path: '',
+    component: () => import('layouts/main-layout.vue'),
+    children: [
+      ...Home,
+    ],
+  },
+  {
+    path: `/${ACCOUNT}`,
+    component: () => import('layouts/login-layout.vue'),
+    children: [
+      ...Account,
+    ],
+  },
+  {
+    path: `/${USERS_INDEX}`,
+    component: () => import('layouts/main-layout.vue'),
+    children: [
+      ...Users,
+    ],
+  },
+  {
+    path: `/${FLOWCHARTS_INDEX}`,
+    component: () => import('layouts/main-layout.vue'),
+    children: [
+      ...Flowcharts,
+      ...Editor,
+    ],
   },
 ];
 

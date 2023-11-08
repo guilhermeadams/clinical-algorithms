@@ -1,16 +1,10 @@
-import { RouteRecordRaw } from 'vue-router';
-
 export const HOME = 'home';
 
-const routes: RouteRecordRaw[] = [
+const routes = [
   {
     path: '',
-    component: () => import('layouts/main-layout.vue'),
-    children: [{
-      name: HOME,
-      path: `/${HOME}`,
-      component: () => import('pages/home/home-page.vue'),
-    }],
+    name: HOME,
+    component: () => import('pages/home/home-page.vue'),
   },
 ];
 
