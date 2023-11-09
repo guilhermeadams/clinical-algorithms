@@ -9,10 +9,6 @@ import {
 
 import routes from './routes';
 
-console.log();
-console.log('ROUTES');
-console.log([...routes]);
-
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation;

@@ -4,7 +4,7 @@
     :columns="columns"
     :loading="flowcharts.data.loading"
     title="Fluxogramas"
-    rows-per-page-options="0"
+    :rows-per-page-options="[0]"
     row-key="name"
     flat
     :hide-bottom="!(flowcharts.flowchartsList && !flowcharts.flowchartsList.length)"

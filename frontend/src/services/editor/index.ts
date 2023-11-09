@@ -5,6 +5,7 @@ import { IJointData } from 'src/services/editor/types';
 import { reactive } from 'vue';
 import customElements from 'src/services/editor/elements/custom-elements';
 import Element from 'src/services/editor/element';
+import { api } from 'boot/axios';
 
 class Editor {
   paperDiv: HTMLElement | undefined;
@@ -12,6 +13,7 @@ class Editor {
   element: Element;
 
   data: IJointData = reactive({
+    loadingGraph: false,
     paper: undefined,
     graph: new joint.dia.Graph({}, { cellNamespace: customElements }),
     options: {},
@@ -83,6 +85,37 @@ class Editor {
         reject(error);
       }
     });
+  }
+
+  static async getGraph(graphId: number) {
+    try {
+      const { data }: { data: { graph: string } } = await api.get(`algorithms/graph/${graphId}`);
+
+      return Promise.resolve(data.graph);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async openGraph(graphId: number) {
+    try {
+      this.data.loadingGraph = true;
+
+      const graph = await Editor.getGraph(graphId);
+
+      if (graph) {
+        console.log('Graph #graphId');
+        console.log(graph);
+      } else {
+        console.log('There is no graph yet');
+      }
+    } catch (error) {
+      console.error(error);
+
+      // TODO: $q. notify
+    } finally {
+      this.data.loadingGraph = false;
+    }
   }
 
   private static createLink() {

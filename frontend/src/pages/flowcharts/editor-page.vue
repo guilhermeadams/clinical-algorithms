@@ -24,7 +24,7 @@ import {
   inject,
 } from 'vue';
 
-import { onBeforeRouteLeave } from 'vue-router';
+import { onBeforeRouteLeave, useRoute } from 'vue-router';
 
 import Settings from 'src/services/settings';
 import EditorStage from 'components/editor/editor-stage.vue';
@@ -33,8 +33,12 @@ import EditorStageHeader from 'components/editor/editor-stage-header.vue';
 import EditorElementsToolbar from 'components/editor/editor-elements-toolbar.vue';
 import EditorMetadataPanel from 'components/editor/editor-metadata-panel.vue';
 
-provide('editor', new Editor());
+const editor = new Editor();
+provide('editor', editor);
+
 const settings = inject('settings') as Settings;
+
+const route = useRoute();
 
 const width = computed(
   () => (settings.page.mainMenu ? 'calc(100% - 300px)' : '100%'),
@@ -44,6 +48,10 @@ onBeforeMount(() => {
   settings.page.setTitle('Editor de fluxogramas');
 
   settings.page.mainMenu = false;
+
+  if (route.query.id) {
+    editor.openGraph(Number(route.query.id));
+  }
 });
 
 onBeforeRouteLeave(() => {
