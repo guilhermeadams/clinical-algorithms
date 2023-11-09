@@ -12,6 +12,7 @@
       <editor-elements-toolbar />
       <editor-stage />
       <editor-metadata-panel />
+      <editor-actions-buttons />
     </div>
   </div>
 </template>
@@ -32,6 +33,7 @@ import Editor from 'src/services/editor';
 import EditorStageHeader from 'components/editor/editor-stage-header.vue';
 import EditorElementsToolbar from 'components/editor/editor-elements-toolbar.vue';
 import EditorMetadataPanel from 'components/editor/editor-metadata-panel.vue';
+import EditorActionsButtons from 'components/editor/editor-actions-buttons.vue';
 
 const editor = new Editor();
 provide('editor', editor);
@@ -49,8 +51,10 @@ onBeforeMount(() => {
 
   settings.page.mainMenu = false;
 
-  if (route.query.id) {
-    editor.openGraph(Number(route.query.id));
+  const { id } = route.query;
+
+  if (id && typeof id === 'string') {
+    editor.graph.open(id);
   }
 });
 

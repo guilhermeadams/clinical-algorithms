@@ -1,8 +1,23 @@
 from datetime import datetime
 from db import conn
 from models.index import algorithms_graphs as algorithms_graphs_model
-from sqlalchemy import insert
+from sqlalchemy import insert, update
 from .data_handler import algorithm_graph_to_dict
+from schemas.algorithm import AlgorithmGraphSchema
+
+
+def update_graph(algorithm_graph: AlgorithmGraphSchema):
+    updated_algorithm = conn.execute(
+        update(algorithms_graphs_model)
+        .where(algorithms_graphs_model.c.id == algorithm_graph.id)
+        .values(
+            graph=algorithm_graph.graph,
+            updated_at=datetime.now()
+        )
+    )
+
+    conn.commit()
+    return updated_algorithm
 
 
 def show(algorithm_id: int):

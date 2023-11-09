@@ -12,6 +12,11 @@ class AlgorithmSchema(BaseModel):
 
 class AlgorithmGraphSchema(BaseModel):
     id: int
-    algorithm_id: int
+    algorithm_id: int | None = None
     graph: str
-    updated_at: str
+    updated_at: str | None = None
+
+
+class AlgorithmGraphUpdateSchema(BaseModel):
+    id: int
+    graph: str

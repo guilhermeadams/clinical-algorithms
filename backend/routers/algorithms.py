@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from services import algorithms, algorithms_graphs
-from schemas.algorithm import AlgorithmSchema
+from schemas.algorithm import AlgorithmSchema, AlgorithmGraphSchema
 from dependencies import get_token_header
 
 router = APIRouter(
@@ -33,11 +33,14 @@ def search(keyword: str | None = None):
     return None
 
 
+@router.put("/graph/{algorithm_id}")
+def update_graph(algorithm_graph: AlgorithmGraphSchema):
+    return algorithms_graphs.update_graph(algorithm_graph)
+
+
 @router.get("/graph/{algorithm_id}")
 def search(algorithm_id: int):
-    if algorithm_id:
-        return algorithms_graphs.show(algorithm_id)
-    return None
+    return algorithms_graphs.show(algorithm_id)
 
 
 @router.get("/{algorithm_id}")

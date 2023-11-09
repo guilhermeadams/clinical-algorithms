@@ -49,12 +49,11 @@ class Element {
     this.deselectAll();
   }
 
-  private customRemoveButton(x: number, y: number) {
+  private customRemoveButton() {
     return new joint.elementTools.Button({
       focusOpacity: 0.5,
-      // top-right corner
-      x,
-      y,
+      // x,
+      // y,
       offset: {
         x: 0,
         y: 0,
@@ -82,14 +81,20 @@ class Element {
     });
   }
 
-  private createTools(element: dia.Element, x: number, y: number) {
+  public createElementsTools(elements: dia.Element[]) {
+    elements.forEach((element) => {
+      this.createTools(element);
+    });
+  }
+
+  private createTools(element: dia.Element) {
     const boundaryTool = new joint.elementTools.Boundary({
       padding: 10,
       rotate: true,
       useModelGeometry: true,
     });
 
-    const removeButton = this.customRemoveButton(x, y);
+    const removeButton = this.customRemoveButton();
 
     const toolsView = new joint.dia.ToolsView({
       tools: [
@@ -144,7 +149,7 @@ class Element {
           ports: Element.generatePorts(19, 27),
         }).resize(50, 50).addTo(this.editor.data.graph);
 
-        this.createTools(element, 70, -20);
+        this.createTools(element);
       },
       Action: async () => {
         const element = new customElements.Action({
@@ -155,7 +160,7 @@ class Element {
           ports: Element.generatePorts(95, 42),
         }).resize(200, 84).addTo(this.editor.data.graph);
 
-        this.createTools(element, 0, 0);
+        this.createTools(element);
       },
       Evaluation: async () => {
         const element = new customElements.Evaluation({
@@ -166,7 +171,7 @@ class Element {
           ports: Element.generatePorts(95, 50),
         }).resize(200, 98).addTo(this.editor.data.graph);
 
-        this.createTools(element, 0, 0);
+        this.createTools(element);
       },
       End: async () => {
         const element = new customElements.End({
@@ -176,7 +181,7 @@ class Element {
           },
         }).addTo(this.editor.data.graph);
 
-        this.createTools(element, 0, 0);
+        this.createTools(element);
       },
     };
   }
