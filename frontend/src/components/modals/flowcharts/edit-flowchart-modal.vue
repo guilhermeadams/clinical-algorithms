@@ -58,7 +58,7 @@
           />
           <div class="q-mb-lg" v-else>
             <div class="text-caption text-grey-7">Autor do fluxograma:</div>
-            <div>{{ flowcharts.data.flowchart.author }}</div>
+            <div>{{ flowcharts.data.flowchart.author || 'Não definido' }}</div>
           </div>
         </div>
 
