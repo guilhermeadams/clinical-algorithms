@@ -3,7 +3,6 @@ import Account, { ACCOUNT } from './routes/account';
 import Home from './routes/home';
 import Users, { USERS_INDEX } from './routes/users';
 import Flowcharts, { FLOWCHARTS_INDEX } from './routes/flowcharts';
-import Editor from './routes/editor';
 // import FlowchartCategories from './routes/flowchart_categories';
 
 const routes: RouteRecordRaw[] = [
@@ -33,7 +32,6 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/main-layout.vue'),
     children: [
       ...Flowcharts,
-      ...Editor,
     ],
   },
 ];

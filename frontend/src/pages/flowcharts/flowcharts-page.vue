@@ -42,7 +42,7 @@ import FlowchartsTable from 'components/tables/flowcharts-table.vue';
 import Flowcharts from 'src/services/flowcharts';
 import EditFlowchartModal from 'components/modals/flowcharts/edit-flowchart-modal.vue';
 import { onBeforeRouteLeave } from 'vue-router';
-import { EDITOR } from 'src/router/routes/editor';
+import { FLOWCHARTS_EDITOR } from 'src/router/routes/flowcharts';
 
 const flowcharts = new Flowcharts();
 provide('flowcharts', flowcharts);
@@ -60,7 +60,7 @@ onBeforeMount(() => {
 });
 
 onBeforeRouteLeave((leaveGuard) => {
-  if (leaveGuard.name === EDITOR) {
+  if (leaveGuard.name === FLOWCHARTS_EDITOR) {
     settings.page.mainMenu = false;
   }
 });

@@ -63,7 +63,7 @@
 import { inject, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import Flowcharts, { IFlowchart } from 'src/services/flowcharts';
-import { EDITOR } from 'src/router/routes/editor';
+import { FLOWCHARTS_EDITOR } from 'src/router/routes/flowcharts';
 
 const flowcharts = inject('flowcharts') as Flowcharts;
 
@@ -101,7 +101,7 @@ const columns = [
 
 const editFlowchart = (flowchartId: number) => {
   router.push({
-    name: EDITOR,
+    name: FLOWCHARTS_EDITOR,
     query: {
       id: flowchartId,
     },
