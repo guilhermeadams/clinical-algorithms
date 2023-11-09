@@ -8,10 +8,14 @@
     :hide-delete="!flowcharts.data.flowchart.id"
     @delete="showDeleteDialog"
     @edit="setEditing"
-    @save="saveAndClose"
+    @save="submitFlowchartForm"
     @close="closeDialog"
   >
-    <div>
+    <q-form
+      ref="refFlowchartForm"
+      class="q-gutter-md q-mt-lg"
+      @submit="saveAndClose"
+    >
       <!-- TITLE -->
       <q-input
         v-if="canEdit"
@@ -19,6 +23,8 @@
         ref="inputFlowchartTitle"
         label="Título do fluxograma"
         class="q-mb-md"
+        :rules="[val => !!val || 'Informe o título do fluxograma']"
+        lazy-rules
       />
       <div class="q-mb-lg" v-else>
         <div class="text-caption text-grey-7">Título do fluxograma:</div>
@@ -32,6 +38,8 @@
         label="Síntese do fluxograma"
         type="textarea"
         class="q-mb-md"
+        :rules="[val => !!val || 'Informe a síntese do fluxograma']"
+        lazy-rules
       />
       <div class="q-mb-lg" v-else>
         <div class="text-caption text-grey-7">Síntese do fluxograma:</div>
@@ -40,12 +48,13 @@
 
       <!-- AUTHOR / VERSION  -->
       <div class="row">
-        <div class="col-9 q-pr-lg">
+        <div class="col-8 q-pr-lg">
           <q-input
             v-if="canEdit"
             v-model="flowcharts.data.flowchart.author"
             label="Autor do fluxograma"
             class="q-mb-md"
+            disable
           />
           <div class="q-mb-lg" v-else>
             <div class="text-caption text-grey-7">Autor do fluxograma:</div>
@@ -53,13 +62,15 @@
           </div>
         </div>
 
-        <div class="col-3">
+        <div class="col-4">
           <q-input
             v-if="canEdit"
             v-model="flowcharts.data.flowchart.updated_at"
             label="Última atualização"
             maxlength="10"
             clearable
+            :rules="[val => !!val || 'Informe data da atualização']"
+            lazy-rules
           >
             <template v-slot:append>
               <q-icon
@@ -97,7 +108,7 @@
       </div>
 
       <div class="row">
-        <div class="col-9 q-pr-lg">
+        <div class="col-10 q-pr-lg">
           <!-- CATEGORIES -->
           <q-select
             v-if="canEdit"
@@ -109,6 +120,7 @@
             class="q-mb-md"
             multiple
             use-chips
+            disable
           >
             <template v-slot:selected-item="scope">
               <q-chip
@@ -137,12 +149,14 @@
           </div>
         </div>
 
-        <div class="col-3">
+        <div class="col-2">
           <q-input
             v-if="canEdit"
             v-model="flowcharts.data.flowchart.version"
             label="Versão"
             class="q-mb-md"
+            :rules="[val => !!val || 'Informe a versão']"
+            lazy-rules
           />
           <div class="q-mb-lg" v-else>
             <div class="text-caption text-grey-7">Versão:</div>
@@ -150,7 +164,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </q-form>
 
     <delete-modal
       :show="data.confirmDeleting"
@@ -173,12 +187,14 @@ import {
 
 import Flowcharts from 'src/services/flowcharts';
 import EditModal from 'components/modals/edit-modal.vue';
-import { QInput, useQuasar } from 'quasar';
+import { QForm, QInput, useQuasar } from 'quasar';
 import { myLocale } from 'src/services/locale';
 import DeleteModal from 'components/modals/delete-modal.vue';
 
 const flowcharts = inject('flowcharts') as Flowcharts;
 const $q = useQuasar();
+
+const refFlowchartForm = ref<QForm>();
 
 const showEditUserDialog = computed(() => flowcharts.data.showEditDialog);
 
@@ -260,5 +276,9 @@ const setEditing = (value: boolean) => {
   setTimeout(() => {
     inputFlowchartTitle.value?.focus();
   }, 250);
+};
+
+const submitFlowchartForm = async () => {
+  refFlowchartForm.value?.submit();
 };
 </script>

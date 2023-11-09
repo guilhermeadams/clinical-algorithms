@@ -10,9 +10,8 @@ def to_dict(rows: Sequence[Row]):
             'id': row[0],
             'title': row[1],
             'description': row[2],
-            'author': row[3],
-            'version': row[4],
-            'updated_at': row[5]
+            'version': row[3],
+            'updated_at': row[4]
         }
         items.append(item)
         item = {}

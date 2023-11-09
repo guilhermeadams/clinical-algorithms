@@ -1,13 +1,9 @@
 TO-DO:
 
-4. Criar novo fluxograma;
 
-5. Excluir fluxograma;
 
-6. Salvar categorias do fluxograma;
 
 DONE:
-
 
 1. Tela inicial é só com logo;
 
@@ -15,5 +11,12 @@ DONE:
 
 3. Busca somente por título e descrição;
 
+4. Criar novo fluxograma;
+
+5. Excluir fluxograma;
+
+6. Os campos Categorias e Autor ficarão na tela, porém desabilitados;
+
+7. Validação nos campos do form de "Editar dados do básicos do fluxograma";
 
 

@@ -35,7 +35,7 @@ def store(algorithm: AlgorithmSchema):
         insert(algorithm_model).values(
             title=algorithm.title,
             description=algorithm.description,
-            author=algorithm.author,
+            # author=algorithm.author,
             version=algorithm.version,
             updated_at=to_iso_date(algorithm.updated_at)
         )
@@ -51,7 +51,7 @@ def update_algorithm(algorithm: AlgorithmSchema):
         .values(
             title=algorithm.title,
             description=algorithm.description,
-            author=algorithm.author,
+            # author=algorithm.author,
             version=algorithm.version,
             updated_at=to_iso_date(algorithm.updated_at)
         )
