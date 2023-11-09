@@ -11,7 +11,7 @@ class Graph {
     graphId: 0,
     loading: false,
     saving: false,
-    saved: true,
+    saved: false,
   });
 
   constructor(editor: Editor) {

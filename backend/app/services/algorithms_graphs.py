@@ -1,9 +1,9 @@
 from datetime import datetime
-from db import conn
-from models.index import algorithms_graphs as algorithms_graphs_model
+from app.db import conn
+from app.models.algorithm import algorithms_graphs as algorithms_graphs_model
 from sqlalchemy import insert, update
 from .data_handler import algorithm_graph_to_dict
-from schemas.algorithm import AlgorithmGraphSchema
+from app.schemas.algorithm import AlgorithmGraphSchema
 
 
 def update_graph(algorithm_graph: AlgorithmGraphSchema):

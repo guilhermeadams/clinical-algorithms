@@ -1,5 +1,6 @@
 from sqlalchemy import Table, Column, DATE, TEXT, VARCHAR, BIGINT
-from db import meta
+from app.db import meta
+
 
 algorithms = Table(
     'algorithms',

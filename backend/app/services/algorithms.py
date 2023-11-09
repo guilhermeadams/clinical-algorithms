@@ -1,10 +1,9 @@
-from datetime import datetime
-from models.index import algorithms as algorithm_model
-from schemas.algorithm import AlgorithmSchema
-from db import conn
+from app.models.algorithm import algorithms as algorithm_model
+from app.schemas.algorithm import AlgorithmSchema
+from app.db import conn
 from .data_handler import algorithm_to_dict, to_iso_date
 from sqlalchemy import insert, update
-from services import algorithms_graphs
+from app.services import algorithms_graphs
 
 
 def index():

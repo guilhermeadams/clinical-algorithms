@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
-from services import algorithms, algorithms_graphs
-from schemas.algorithm import AlgorithmSchema, AlgorithmGraphSchema
-from dependencies import get_token_header
+from app.services import algorithms, algorithms_graphs
+from app.schemas.algorithm import AlgorithmSchema, AlgorithmGraphSchema
+from app.dependencies import get_token_header
 
 router = APIRouter(
     prefix="/algorithms",

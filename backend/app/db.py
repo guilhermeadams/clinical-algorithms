@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, MetaData
-from sqlalchemy.orm import sessionmaker
 from dotenv import dotenv_values
+# from sqlalchemy.orm import sessionmaker
 
 config = dotenv_values(".env")
 
