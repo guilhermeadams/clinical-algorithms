@@ -8,3 +8,10 @@ class AlgorithmSchema(BaseModel):
     # author: str
     version: str
     updated_at: str
+
+
+class AlgorithmGraphSchema(BaseModel):
+    id: int
+    algorithm_id: int
+    graph: str
+    updated_at: str

@@ -2,7 +2,7 @@ from sqlite3 import Row
 from typing import Sequence
 
 
-def to_dict(rows: Sequence[Row]):
+def algorithm_to_dict(rows: Sequence[Row]):
     items = []
     item = {}
     for row in rows:
@@ -12,6 +12,22 @@ def to_dict(rows: Sequence[Row]):
             'description': row[2],
             'version': row[3],
             'updated_at': row[4]
+        }
+        items.append(item)
+        item = {}
+
+    return items
+
+
+def algorithm_graph_to_dict(rows: Sequence[Row]):
+    items = []
+    item = {}
+    for row in rows:
+        item = {
+            'id': row[0],
+            'algorithm_id': row[1],
+            'graph': row[2],
+            'updated_at': row[3]
         }
         items.append(item)
         item = {}

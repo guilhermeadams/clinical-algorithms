@@ -1,8 +1,10 @@
+from datetime import datetime
 from models.index import algorithms as algorithm_model
 from schemas.algorithm import AlgorithmSchema
 from db import conn
-from .data_handler import to_dict, to_iso_date
+from .data_handler import algorithm_to_dict, to_iso_date
 from sqlalchemy import insert, update
+from services import algorithms_graphs
 
 
 def index():
@@ -10,7 +12,7 @@ def index():
         algorithm_model.select()
     ).fetchall()
 
-    return to_dict(all_algorithms)
+    return algorithm_to_dict(all_algorithms)
 
 
 def search(keyword: str):
@@ -18,7 +20,7 @@ def search(keyword: str):
         algorithm_model.select().where(algorithm_model.c.title.like("%"+keyword+"%"))
     ).fetchall()
 
-    return to_dict(algorithms_found)
+    return algorithm_to_dict(algorithms_found)
 
 
 def show(algorithm_id: int):
@@ -27,7 +29,7 @@ def show(algorithm_id: int):
     ).fetchall()
 
     if len(algorithm):
-        return to_dict(algorithm)[0]
+        return algorithm_to_dict(algorithm)[0]
 
 
 def store(algorithm: AlgorithmSchema):
@@ -41,6 +43,9 @@ def store(algorithm: AlgorithmSchema):
         )
     )
 
+    algorithms_graphs.store(algorithm_id=stored_algorithm.lastrowid)
+
+    conn.commit()
     return stored_algorithm
 
 
@@ -57,10 +62,17 @@ def update_algorithm(algorithm: AlgorithmSchema):
         )
     )
 
+    conn.commit()
     return updated_algorithm
 
 
 def delete(algorithm_id: int):
-    return conn.execute(
+    deleted_algorithm = conn.execute(
         algorithm_model.delete().where(algorithm_model.c.id == algorithm_id)
     )
+
+    algorithms_graphs.delete(algorithm_id)
+
+    conn.commit()
+    return deleted_algorithm
+

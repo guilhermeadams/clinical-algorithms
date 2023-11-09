@@ -11,3 +11,13 @@ algorithms = Table(
     Column('version', VARCHAR(10)),
     Column('updated_at', DATE)
 )
+
+
+algorithms_graphs = Table(
+    'algorithms_graphs',
+    meta,
+    Column('id', BIGINT, primary_key=True, index=True),
+    Column('algorithm_id', BIGINT, primary_key=True, index=True),
+    Column('graph', TEXT),
+    Column('updated_at', DATE)
+)
