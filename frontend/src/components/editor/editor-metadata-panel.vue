@@ -10,11 +10,14 @@
       class="bg-white shadow-light-up"
     >
       <div id="editor-metadata-panel-header">
-        <div class="text-h6 q-px-md q-pt-sm">
+        <div class="text-h6 q-px-md q-py-sm">
           Nó: {{ data.name }}
         </div>
 
-        <div class="q-pa-md">
+        <div
+          v-if="isActionElement"
+          class="q-pt-sm q-pb-md q-px-md"
+        >
           <div><b>Metadados - Blocos Fixos</b></div>
 
           <q-btn
@@ -29,11 +32,15 @@
       </div>
 
       <div id="editor-metadata-panel-content" class="q-pa-md">
-        <metadata-fixed-form
-          v-for="index of totalForms"
-          :key="`metadata-fixed-form-${index}`"
-          :index="index"
-        />
+        <div
+          v-if="isActionElement"
+        >
+          <metadata-fixed-form
+            v-for="index of totalForms"
+            :key="`metadata-fixed-form-${index}`"
+            :index="index"
+          />
+        </div>
       </div>
     </div>
   </transition>
@@ -41,6 +48,7 @@
 
 <script setup lang="ts">
 import {
+  computed,
   inject,
   reactive,
   ref,
@@ -53,6 +61,8 @@ import MetadataFixedForm from 'components/forms/editor/metadata-fixed-form.vue';
 const editor = inject('editor') as Editor;
 
 const totalForms = ref(0);
+
+const isActionElement = computed(() => editor.element.isAction);
 
 const data = reactive({
   title: '',

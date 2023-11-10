@@ -39,6 +39,10 @@ class Element {
     this.editor = editor;
   }
 
+  public get isAction() {
+    return this.getSelected()?.prop('type') === CustomElement.ACTION;
+  }
+
   public setCreationPosition(x: number, y: number) {
     this.data.creationPosition = { x, y };
   }

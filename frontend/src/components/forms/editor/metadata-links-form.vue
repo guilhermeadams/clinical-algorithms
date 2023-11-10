@@ -1,0 +1,9 @@
+<template>
+  <div>
+    Links
+  </div>
+</template>
+
+<script setup lang="ts">
+
+</script>
