@@ -1,7 +1,7 @@
 <template>
   <div
     id="editor-actions-buttons"
-    class="q-pa-md shadow-light"
+    class="q-pa-md shadow-light-up"
   >
     <div id="updated-at-info" class="text-center text-body1 text-grey-8">
       Fluxograma e metadados salvos em {{ formatDatetime(graphData.updated_at) }}

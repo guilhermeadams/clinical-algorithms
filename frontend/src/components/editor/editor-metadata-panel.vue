@@ -7,7 +7,7 @@
     <div
       v-if="editor.element.data.selectedId"
       id="editor-metadata-panel"
-      class="shadow-light bg-white q-pa-md"
+      class="bg-white q-pa-md"
     >
       <div class="text-h6 q-mb-md">
         Nó: {{ data.name }}
