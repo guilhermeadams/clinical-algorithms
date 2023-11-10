@@ -106,13 +106,15 @@ class Graph {
 
       this.data.graph.updated_at = data.updated_at;
 
-      this.data.saved = true;
+      // this.data.saved = true;
     } catch (error) {
       console.error(error);
 
       // TODO: $q. notify
     } finally {
-      this.data.saving = false;
+      setTimeout(() => {
+        this.data.saving = false;
+      }, 1000);
     }
   }
 }
