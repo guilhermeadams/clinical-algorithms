@@ -1,0 +1,16 @@
+version: "1.0"
+
+services:
+  app:
+    image: ${DOCKER_REGISTRY-}paho-frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: build-spa-stage
+    ports:
+      - "8080:80"
+    volumes:
+      - paho-frontend:/app
+
+volumes:
+  paho-frontend:
