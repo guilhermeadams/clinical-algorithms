@@ -1,6 +1,6 @@
 import Editor from 'src/services/editor/index';
 import { api } from 'boot/axios';
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 
 const RESOURCE = 'algorithms/graph';
 
@@ -8,7 +8,11 @@ class Graph {
   editor: Editor;
 
   data = reactive({
-    graphId: 0,
+    graph: {
+      id: 0,
+      algorithm_id: 0,
+      updated_at: '',
+    },
     loading: false,
     saving: false,
     saved: false,
@@ -18,14 +22,20 @@ class Graph {
     this.editor = editor;
   }
 
-  static async getGraph(graphId: number | string) {
+  private async getGraph(graphId: number | string) {
     try {
-      const { data }: { data: {
-        id: number,
-        graph: string,
+      const { data: graph }: { data: {
+          id: number,
+          algorithm_id: number,
+          graph: string,
+          updated_at: string,
       } } = await api.get(`${RESOURCE}/${graphId}`);
 
-      return Promise.resolve(data);
+      this.data.graph.id = graph.id;
+      this.data.graph.algorithm_id = graph.algorithm_id;
+      this.data.graph.updated_at = graph.updated_at;
+
+      return Promise.resolve(graph.graph);
     } catch (error) {
       return Promise.reject(error);
     }
@@ -35,28 +45,19 @@ class Graph {
     try {
       this.data.loading = true;
 
-      const graph = await Graph.getGraph(graphId);
+      const graph = await this.getGraph(graphId);
 
-      this.data.graphId = graph.id;
-
-      if (graph.graph) {
-        const graphJson = JSON.parse(graph.graph);
+      if (graph) {
+        const graphJson = JSON.parse(graph);
 
         if (graphJson) {
-          this.editor.data.graph.fromJSON(JSON.parse(graph.graph));
+          this.editor.data.graph.fromJSON(JSON.parse(graph));
 
           const allElements = this.editor.data.graph.getElements();
 
           this.editor.element.createElementsTools(allElements);
         }
       }
-      //
-      // if (this.graph) {
-      //   console.log('Graph #graphId');
-      //   console.log(graph);
-      // } else {
-      //   console.log('There is no graph yet');
-      // }
     } catch (error) {
       console.error(error);
 
@@ -70,8 +71,8 @@ class Graph {
     try {
       this.data.saving = true;
 
-      await api.put(`${RESOURCE}/${this.data.graphId}`, {
-        id: this.data.graphId,
+      await api.put(`${RESOURCE}/${this.data.graph.id}`, {
+        id: this.data.graph.id,
         graph: JSON.stringify(this.editor.data.graph),
       });
 
