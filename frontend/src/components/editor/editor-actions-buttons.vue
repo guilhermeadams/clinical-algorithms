@@ -4,11 +4,12 @@
     class="q-pa-md shadow-light-up"
   >
     <div id="updated-at-info" class="text-center text-body1 text-grey-8">
-      Fluxograma e metadados salvos em {{ formatDatetime(graphData.updated_at) }}
+      Fluxograma e metadados salvos em {{ formatDatetime(lastUpdate) }}
     </div>
 
     <q-btn
-      label="Voltar para a lista de fluxogramas"
+      label="Voltar à lista de fluxogramas"
+      icon="arrow_back"
       class="float-right q-ml-md"
       color="primary"
       flat
@@ -52,9 +53,9 @@ const router = useRouter();
 
 const editor = inject('editor') as Editor;
 
-const graphData = computed(() => editor.graph.data.graph);
 const saved = computed(() => editor.graph.data.saved);
 const savingGraph = computed(() => editor.graph.data.saving);
+const lastUpdate = computed(() => editor.graph.lastUpdate);
 
 const goFlowchartsPage = () => router.push({ name: FLOWCHARTS_INDEX });
 

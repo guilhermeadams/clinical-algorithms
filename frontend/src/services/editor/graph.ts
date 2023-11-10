@@ -1,7 +1,9 @@
 import Editor from 'src/services/editor/index';
 import { api } from 'boot/axios';
 import { reactive } from 'vue';
+import { formatDatetime } from 'src/services/date';
 
+const RESOURCE_ALGORITHM = 'algorithms';
 const RESOURCE = 'algorithms/graph';
 
 class Graph {
@@ -13,6 +15,13 @@ class Graph {
       algorithm_id: 0,
       updated_at: '',
     },
+    algorithm: {
+      id: 0,
+      title: '',
+      description: '',
+      version: '',
+      updated_at: '',
+    },
     loading: false,
     saving: false,
     saved: false,
@@ -22,20 +31,48 @@ class Graph {
     this.editor = editor;
   }
 
-  private async getGraph(graphId: number | string) {
+  public get lastUpdate() {
+    return this.data.graph.updated_at;
+  }
+
+  private async setGraph(graphId: number | string) {
     try {
-      const { data: graph }: { data: {
+      const { data }: { data: {
           id: number,
           algorithm_id: number,
           graph: string,
           updated_at: string,
       } } = await api.get(`${RESOURCE}/${graphId}`);
 
-      this.data.graph.id = graph.id;
-      this.data.graph.algorithm_id = graph.algorithm_id;
-      this.data.graph.updated_at = graph.updated_at;
+      this.data.graph.id = data.id;
+      this.data.graph.algorithm_id = data.algorithm_id;
+      this.data.graph.updated_at = data.updated_at;
 
-      return Promise.resolve(graph.graph);
+      if (data.graph) {
+        const graphJson = JSON.parse(data.graph);
+
+        if (graphJson) {
+          this.editor.data.graph.fromJSON(JSON.parse(data.graph));
+
+          const allElements = this.editor.data.graph.getElements();
+
+          this.editor.element.createElementsTools(allElements);
+        }
+      }
+
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  private async setAlgorithm() {
+    try {
+      const { data } = await api.get(`${RESOURCE_ALGORITHM}/${this.data.graph.algorithm_id}`);
+
+      this.data.algorithm = { ...data };
+
+      return Promise.resolve(true);
     } catch (error) {
       return Promise.reject(error);
     }
@@ -45,19 +82,9 @@ class Graph {
     try {
       this.data.loading = true;
 
-      const graph = await this.getGraph(graphId);
+      await this.setGraph(graphId);
 
-      if (graph) {
-        const graphJson = JSON.parse(graph);
-
-        if (graphJson) {
-          this.editor.data.graph.fromJSON(JSON.parse(graph));
-
-          const allElements = this.editor.data.graph.getElements();
-
-          this.editor.element.createElementsTools(allElements);
-        }
-      }
+      await this.setAlgorithm();
     } catch (error) {
       console.error(error);
 
@@ -71,10 +98,13 @@ class Graph {
     try {
       this.data.saving = true;
 
-      await api.put(`${RESOURCE}/${this.data.graph.id}`, {
+      const { data } = await api.put(`${RESOURCE}/${this.data.graph.id}`, {
         id: this.data.graph.id,
         graph: JSON.stringify(this.editor.data.graph),
+        algorithm_id: this.data.graph.algorithm_id,
       });
+
+      this.data.graph.updated_at = data.updated_at;
 
       this.data.saved = true;
     } catch (error) {

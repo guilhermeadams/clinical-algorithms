@@ -17,7 +17,7 @@ def update_graph(algorithm_graph: AlgorithmGraphSchema):
     )
 
     conn.commit()
-    return updated_algorithm
+    return show(algorithm_graph.algorithm_id)
 
 
 def show(algorithm_id: int):
