@@ -1,7 +1,7 @@
 <template>
   <edit-modal
     :show="showEditUserDialog"
-    :title="title"
+    title="Dados básicos do fluxograma"
     :deleting="data.deleting"
     :saving="data.saving"
     :editing="data.editing"
@@ -213,12 +213,6 @@ const data = reactive({
 });
 
 const canEdit = computed(() => data.editing || !flowcharts.data.flowchart.id);
-
-const title = computed(() => {
-  if (!flowcharts.data.flowchart.id) return 'Cadastrar dados básicos do fluxograma';
-  if (data.editing && flowcharts.data.flowchart.id) return 'Editar dados básicos do fluxograma';
-  return 'Dados básicos do fluxograma';
-});
 
 const categoriesMocked = ref([
   { name: 'Doenças' },

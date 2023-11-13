@@ -135,7 +135,7 @@ import {
   onBeforeMount,
   reactive,
   inject,
-  watch, computed, ref,
+  watch, computed, ref, onMounted, onBeforeUnmount,
 } from 'vue';
 
 import MetadataLinksForm from 'components/forms/editor/metadata-links-form.vue';
@@ -204,6 +204,14 @@ onBeforeMount(() => {
       data.additional_comments = fixed[currentIndex].additional_comments;
       data.recommendation_source = fixed[currentIndex].recommendation_source;
     }
+
+    setTimeout(() => {
+      editor.metadata.data.mountingComponent = false;
+    }, 500);
   }
+
+  onBeforeUnmount(() => {
+    editor.metadata.data.mountingComponent = true;
+  });
 });
 </script>

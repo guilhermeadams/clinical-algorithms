@@ -3,8 +3,22 @@
     id="editor-actions-buttons"
     class="q-pa-md shadow-light-up"
   >
-    <div id="updated-at-info" class="text-center text-body1 text-grey-8">
-      Fluxograma e metadados salvos em {{ formatDatetime(lastUpdate) }}
+    <div
+      id="updated-at-info" class="text-center text-body1"
+    >
+      <div
+        v-if="saved"
+        class="text-grey-8"
+      >
+        Fluxograma e metadados salvos em {{ formatDatetime(lastUpdate) }}
+      </div>
+
+      <div
+        v-else
+        class="text-negative"
+      >
+        Pendente de Salvamento
+      </div>
     </div>
 
     <q-btn
@@ -18,18 +32,6 @@
     />
 
     <q-btn
-      v-if="saved"
-      disable
-      label="Salvo"
-      icon="check"
-      class="float-right"
-      style="width:120px"
-      color="primary"
-      push
-    />
-
-    <q-btn
-      v-else
       :loading="savingGraph"
       label="Salvar"
       class="float-right"

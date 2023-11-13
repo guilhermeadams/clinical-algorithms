@@ -9,9 +9,16 @@
     </div>
 
     <div id="editor-content" class="bg-white overflow-auto">
+      <!-- ELEMENTS -->
       <editor-elements-toolbar />
+
+      <!-- STAGE -->
       <editor-stage />
+
+      <!-- METADATA -->
       <editor-metadata-panel />
+
+      <!-- ACTIONS -->
       <editor-actions-buttons />
     </div>
   </div>

@@ -1,7 +1,7 @@
 <template>
   <edit-modal
     :show="showEditUserDialog"
-    :title="title"
+    title="Usuário"
     :deleting="data.deleting"
     :saving="data.saving"
     :editing="data.editing"
@@ -110,12 +110,6 @@ watch(() => showEditUserDialog.value, (value) => {
 });
 
 const canEdit = computed(() => data.editing || !users.data.user.id);
-
-const title = computed(() => {
-  if (!users.data.user.id) return 'Cadastrar usuário';
-  if (data.editing && users.data.user.id) return 'Editar usuário';
-  return 'Detalhes do usuário';
-});
 
 const deleteAndClose = () => {
   data.deleting = true;

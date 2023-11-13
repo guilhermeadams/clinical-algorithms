@@ -1,7 +1,6 @@
 import Editor from 'src/services/editor/index';
 import { api } from 'boot/axios';
 import { reactive } from 'vue';
-import { formatDatetime } from 'src/services/date';
 
 const RESOURCE_ALGORITHM = 'algorithms';
 const RESOURCE = 'algorithms/graph';
@@ -24,7 +23,7 @@ class Graph {
     },
     loading: false,
     saving: false,
-    saved: false,
+    saved: true,
   });
 
   constructor(editor: Editor) {
@@ -94,6 +93,14 @@ class Graph {
     }
   }
 
+  public notSaved() {
+    this.data.saved = false;
+  }
+
+  public saved() {
+    this.data.saved = true;
+  }
+
   public async save() {
     try {
       this.data.saving = true;
@@ -106,7 +113,7 @@ class Graph {
 
       this.data.graph.updated_at = data.updated_at;
 
-      // this.data.saved = true;
+      this.saved();
     } catch (error) {
       console.error(error);
 

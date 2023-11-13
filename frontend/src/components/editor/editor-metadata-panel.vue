@@ -5,7 +5,7 @@
     leave-active-class="animated fadeOut"
   >
     <div
-      v-if="editor.element.data.selectedId"
+      v-if="showMetadataPanel"
       id="editor-metadata-panel"
       class="bg-white shadow-light-up"
     >
@@ -50,17 +50,21 @@
 <script setup lang="ts">
 import {
   computed,
+  onBeforeUnmount,
   reactive,
   inject,
   watch,
 } from 'vue';
 
 import Editor from 'src/services/editor';
+
 import MetadataFixedForm from 'components/forms/editor/metadata-fixed-form.vue';
 
 const editor = inject('editor') as Editor;
 
 const totalBlocks = computed(() => editor.metadata.data.totalBlocks);
+
+const showMetadataPanel = computed(() => editor.metadata.data.showPanel);
 
 const isActionElement = computed(() => editor.element.isAction);
 
@@ -83,6 +87,8 @@ const updateTotalBlocks = () => {
 };
 
 watch(() => editor.element.data.selectedId, (value) => {
+  editor.metadata.closeMetadataPanel();
+
   if (value) {
     setInitialValue();
 
@@ -93,7 +99,15 @@ watch(() => editor.element.data.selectedId, (value) => {
 
       editor.metadata.data.totalBlocks = fixed.length;
     }
+
+    setTimeout(() => {
+      editor.metadata.openMetadataPanel();
+    }, 10);
   }
+});
+
+onBeforeUnmount(() => {
+  editor.metadata.resetTotalBlocks();
 });
 </script>
 
