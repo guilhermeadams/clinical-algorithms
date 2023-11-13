@@ -33,12 +33,13 @@
 
       <div id="editor-metadata-panel-content" class="q-pa-md">
         <div
-          v-if="isActionElement"
+          v-if="isActionElement && totalBlocks"
         >
           <metadata-fixed-form
-            v-for="index of totalForms"
+            v-for="index of totalBlocks"
             :key="`metadata-fixed-form-${index}`"
             :index="index"
+            @deleted="updateTotalBlocks"
           />
         </div>
       </div>
@@ -49,9 +50,8 @@
 <script setup lang="ts">
 import {
   computed,
-  inject,
   reactive,
-  ref,
+  inject,
   watch,
 } from 'vue';
 
@@ -60,7 +60,7 @@ import MetadataFixedForm from 'components/forms/editor/metadata-fixed-form.vue';
 
 const editor = inject('editor') as Editor;
 
-const totalForms = ref(0);
+const totalBlocks = computed(() => editor.metadata.data.totalBlocks);
 
 const isActionElement = computed(() => editor.element.isAction);
 
@@ -74,15 +74,27 @@ const setInitialValue = () => {
   data.name = editor.element.getName();
 };
 
+const addBlock = () => {
+  editor.metadata.data.totalBlocks += 1;
+};
+
+const updateTotalBlocks = () => {
+  editor.metadata.updateTotalBlocks();
+};
+
 watch(() => editor.element.data.selectedId, (value) => {
   if (value) {
     setInitialValue();
+
+    const metadata = editor.metadata.getFromElement();
+
+    if (metadata) {
+      const { fixed } = metadata;
+
+      editor.metadata.data.totalBlocks = fixed.length;
+    }
   }
 });
-
-const addBlock = () => {
-  totalForms.value += 1;
-};
 </script>
 
 <style lang="sass">

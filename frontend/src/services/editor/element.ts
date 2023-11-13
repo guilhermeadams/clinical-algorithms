@@ -209,7 +209,7 @@ class Element {
     value: boolean | string | number | object | undefined | null,
     commitChanges = true,
   ) {
-    this.getSelected()?.prop(propName, value);
+    this.getSelected()?.prop(`props/${propName}`, value);
 
     // avoid "setNotSavedChanges" without changing anything
     // if (commitChanges) {

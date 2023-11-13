@@ -6,6 +6,7 @@ import { reactive } from 'vue';
 import customElements from 'src/services/editor/elements/custom-elements';
 import Element from 'src/services/editor/element';
 import Graph from 'src/services/editor/graph';
+import Metadata from 'src/services/editor/metadata';
 
 class Editor {
   paperDiv: HTMLElement | undefined;
@@ -13,6 +14,8 @@ class Editor {
   graph: Graph;
 
   element: Element;
+
+  metadata: Metadata;
 
   data: IJointData = reactive({
     paper: undefined,
@@ -23,6 +26,7 @@ class Editor {
   constructor() {
     this.element = new Element(this);
     this.graph = new Graph(this);
+    this.metadata = new Metadata(this);
   }
 
   public async init(elementId: string) {
