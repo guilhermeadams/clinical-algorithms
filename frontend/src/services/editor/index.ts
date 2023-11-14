@@ -97,6 +97,14 @@ class Editor {
           console.log(this.element.getSelected());
         });
 
+        this.data.paper.on('link:connect', () => {
+          this.graph.notSaved();
+        });
+
+        this.data.paper.on('link:disconnect', () => {
+          this.graph.notSaved();
+        });
+
         resolve(true);
       } catch (error) {
         reject(error);
@@ -105,7 +113,7 @@ class Editor {
   }
 
   private static createLink() {
-    return new customElements.Link();
+    return new customElements.LinkElement();
   }
 }
 

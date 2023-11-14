@@ -7,7 +7,11 @@
       id="updated-at-info" class="text-center text-body1"
     >
       <div
-        v-if="saved"
+        v-if="saved === null"
+      />
+
+      <div
+        v-else-if="saved"
         class="text-grey-8"
       >
         Fluxograma e metadados salvos em {{ formatDatetime(lastUpdate) }}

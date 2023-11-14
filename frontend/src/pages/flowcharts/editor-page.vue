@@ -66,10 +66,6 @@ onBeforeMount(() => {
   }
 });
 
-// onBeforeUnmount(() => {
-//   editor.reset();
-// });
-
 onBeforeRouteLeave(() => {
   settings.page.mainMenu = true;
 

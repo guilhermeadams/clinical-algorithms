@@ -1,12 +1,12 @@
 import * as joint from 'jointjs';
 
 export enum CustomElement {
-  START = 'Start',
-  ACTION = 'Action',
-  EVALUATION = 'Evaluation',
-  END = 'End',
-  LINK = 'Link',
-  CARD = 'CardExample',
+  START = 'StartElement',
+  ACTION = 'ActionElement',
+  EVALUATION = 'EvaluationElement',
+  END = 'EndElement',
+  LINK = 'LinkElement',
+  // CARD = 'ElementCardExample',
 }
 
 export const elementName: {
@@ -17,7 +17,7 @@ export const elementName: {
   [CustomElement.EVALUATION]: 'Avaliação',
   [CustomElement.END]: 'Fim',
   [CustomElement.LINK]: 'Link',
-  [CustomElement.CARD]: 'Card interativo',
+  // [CustomElement.CARD]: 'Card interativo',
 };
 
 export const PORT = {

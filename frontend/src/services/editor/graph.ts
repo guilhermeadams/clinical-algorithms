@@ -1,16 +1,32 @@
 import Editor from 'src/services/editor/index';
 import { api } from 'boot/axios';
 import { reactive } from 'vue';
-import * as joint from 'jointjs';
-import customElements from 'src/services/editor/elements/custom-elements';
 
 const RESOURCE_ALGORITHM = 'algorithms';
 const RESOURCE = 'algorithms/graph';
 
+export interface IEditorData {
+  graph: {
+    id: number,
+    algorithm_id: number,
+    updated_at: string,
+  },
+  algorithm: {
+    id: number,
+    title: string,
+    description: string,
+    version: string,
+    updated_at: string,
+  },
+  loading: boolean,
+  saving: boolean,
+  saved: boolean | null,
+}
+
 class Graph {
   editor: Editor;
 
-  data = reactive({
+  data: IEditorData = reactive({
     graph: {
       id: 0,
       algorithm_id: 0,
@@ -25,7 +41,7 @@ class Graph {
     },
     loading: false,
     saving: false,
-    saved: true,
+    saved: null,
   });
 
   constructor(editor: Editor) {

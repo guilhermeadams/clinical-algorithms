@@ -51,6 +51,8 @@ class Element {
     this.getSelected()?.remove();
 
     this.deselectAll();
+
+    this.editor.graph.notSaved();
   }
 
   private customRemoveButton() {
@@ -140,12 +142,14 @@ class Element {
       default:
         await this.create.Start();
     }
+
+    this.editor.graph.notSaved();
   }
 
   get create() {
     return {
       Start: async () => {
-        const element = new customElements.Start({
+        const element = new customElements.StartElement({
           position: {
             x: this.data.creationPosition.x,
             y: this.data.creationPosition.y,
@@ -156,7 +160,7 @@ class Element {
         this.createTools(element);
       },
       Action: async () => {
-        const element = new customElements.Action({
+        const element = new customElements.ActionElement({
           position: {
             x: this.data.creationPosition.x,
             y: this.data.creationPosition.y,
@@ -167,7 +171,7 @@ class Element {
         this.createTools(element);
       },
       Evaluation: async () => {
-        const element = new customElements.Evaluation({
+        const element = new customElements.EvaluationElement({
           position: {
             x: this.data.creationPosition.x,
             y: this.data.creationPosition.y,
@@ -178,7 +182,7 @@ class Element {
         this.createTools(element);
       },
       End: async () => {
-        const element = new customElements.End({
+        const element = new customElements.EndElement({
           position: {
             x: this.data.creationPosition.x,
             y: this.data.creationPosition.y,

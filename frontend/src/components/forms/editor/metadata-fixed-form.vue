@@ -108,10 +108,11 @@
 
             <div class="q-pa-md bg-grey-2">
               <q-btn
-                :label="`Remove bloco #${props.index}`"
+                :label="`Remove o bloco #${props.index}`"
                 class="full-width"
                 color="negative"
                 icon="close"
+                no-caps
                 push
                 dense
                 @click="showDeleteBlockDialog = true"
