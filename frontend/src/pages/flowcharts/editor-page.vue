@@ -27,6 +27,7 @@
 <script setup lang="ts">
 import {
   computed,
+  // onBeforeUnmount,
   onBeforeMount,
   provide,
   inject,
@@ -65,8 +66,14 @@ onBeforeMount(() => {
   }
 });
 
+// onBeforeUnmount(() => {
+//   editor.reset();
+// });
+
 onBeforeRouteLeave(() => {
   settings.page.mainMenu = true;
+
+  editor.reset();
 });
 </script>
 

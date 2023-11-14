@@ -161,6 +161,7 @@ const emit = defineEmits(['deleted']);
 const showDeleteBlockDialog = ref(false);
 
 const data = reactive({
+  index: 1,
   description: '',
   recommendation_type: '',
   intervention_type: '',
@@ -172,12 +173,13 @@ const data = reactive({
   implementation_considerations: '',
   additional_comments: '',
   recommendation_source: '',
+  links: [],
 });
 
 const blockName = computed(() => `Bloco #${props.index}`);
 
 watch(data, (value) => {
-  editor.metadata.setFixedMetadata({ ...value }, props.index);
+  editor.metadata.fixed.set(props.index, { ...value });
 });
 
 const deleteBlock = () => {
@@ -188,8 +190,10 @@ const deleteBlock = () => {
   emit('deleted');
 };
 
-onBeforeMount(() => {
+const setInitialValues = () => {
   const metadata = editor.metadata.getFromElement();
+
+  data.index = props.index;
 
   if (metadata) {
     const { fixed } = metadata;
@@ -214,9 +218,13 @@ onBeforeMount(() => {
   setTimeout(() => {
     editor.metadata.data.mountingComponent = false;
   }, 500);
+};
+
+onBeforeMount(() => {
+  setInitialValues();
 });
 
 onBeforeUnmount(() => {
-  editor.metadata.data.mountingComponent = true;
+  editor.metadata.clearMetadata();
 });
 </script>

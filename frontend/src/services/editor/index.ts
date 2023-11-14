@@ -22,13 +22,16 @@ class Editor {
   data: IJointData = reactive({
     paper: undefined,
     graph,
-    options: {},
   });
 
   constructor() {
     this.element = new Element(this);
     this.graph = new Graph(this);
     this.metadata = new Metadata(this);
+  }
+
+  public reset() {
+    this.data.graph.clear();
   }
 
   public async init(elementId: string) {

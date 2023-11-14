@@ -1,8 +1,24 @@
 TO-DO:
 
-15. Salvar e recuperar links do bloco;
+Prioridade maior
 
-16. Remover bloco (e manter os não removidos);
+18. Exibir mensagem de Fluxograma e metadados salvo... em verde e só quando salvar ao editar; (ao criar, ou seja, gráfico vazio não exibir);
+
+19. Sumir a mensagem em cada caso quando houver alteração tanto na edição do gráfico como em edição de metatados;
+
+20. Salvar o título do elemento;
+
+21. Bug: quando contecta 2 elementos e logo em seguida tenta conectar outro está duplicando elementos;
+
+22. Exibir o nome do elemento no painel da direita;
+
+- - - - - - - - - - - - - - - - - -
+
+Prioridade menor
+
+17. Remover bloco de metadados (e manter os não removidos);
+
+15. Salvar e recuperar links do bloco de metadados;
 
 
 - - - - - - - - - - - - - - - - - - - - - - - -
@@ -40,3 +56,5 @@ DONE:
 13. Texto do botão "Remove o bloco #3";
 
 14. Ao mudar de elementos está sumindo metadata do elemento anterior;
+
+16. Limpar elementos do gráfico ao sair;

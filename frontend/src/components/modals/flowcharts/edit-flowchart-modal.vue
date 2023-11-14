@@ -47,7 +47,7 @@
 
       <!-- AUTHOR / VERSION  -->
       <div class="row">
-        <div class="col-9 q-pr-lg">
+        <div class="col-8 q-pr-lg">
           <q-input
             v-if="canEdit"
             v-model="flowcharts.data.flowchart.author"
@@ -60,7 +60,7 @@
           </div>
         </div>
 
-        <div class="col-3">
+        <div class="col-4">
           <q-input
             v-if="canEdit"
             v-model="flowcharts.data.flowchart.updated_at"

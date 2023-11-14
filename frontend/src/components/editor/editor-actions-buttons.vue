@@ -17,7 +17,7 @@
         v-else
         class="text-negative"
       >
-        Pendente de Salvamento
+        Pendente de salvamento
       </div>
     </div>
 

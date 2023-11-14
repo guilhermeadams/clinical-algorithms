@@ -1,6 +1,8 @@
 import Editor from 'src/services/editor/index';
 import { api } from 'boot/axios';
 import { reactive } from 'vue';
+import * as joint from 'jointjs';
+import customElements from 'src/services/editor/elements/custom-elements';
 
 const RESOURCE_ALGORITHM = 'algorithms';
 const RESOURCE = 'algorithms/graph';
@@ -48,6 +50,7 @@ class Graph {
       this.data.graph.updated_at = data.updated_at;
 
       if (data.graph) {
+        // open graph...
         const graphJson = JSON.parse(data.graph);
 
         if (graphJson) {
@@ -57,6 +60,9 @@ class Graph {
 
           this.editor.element.createElementsTools(allElements);
         }
+      } else {
+        // TODO: create empty graph...
+        // this.editor.data.graph = new joint.dia.Graph({}, { cellNamespace: customElements });
       }
 
       return Promise.resolve(true);
