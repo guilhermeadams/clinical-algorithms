@@ -66,11 +66,12 @@ def update_algorithm(algorithm: AlgorithmSchema):
 
 
 def delete(algorithm_id: int):
+    # delete the graph before...
+    algorithms_graphs.delete(algorithm_id)
+
     deleted_algorithm = conn.execute(
         algorithm_model.delete().where(algorithm_model.c.id == algorithm_id)
     )
-
-    algorithms_graphs.delete(algorithm_id)
 
     conn.commit()
     return deleted_algorithm

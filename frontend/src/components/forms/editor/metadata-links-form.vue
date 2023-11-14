@@ -1,34 +1,45 @@
 <template>
-  <div>
-    <div>Links</div>
+  <div class="q-py-lg">
+    <div class="q-pb-md">
+      <q-btn
+        class="float-right"
+        label="Inserir link"
+        color="primary"
+        no-caps
+        push
+        @click="addLink"
+      />
+
+      <div class="q-pt-sm">Links</div>
+    </div>
 
     <metadata-link-form
-      v-for="index of data.total"
+      v-for="index of totalLinks"
       :key="`link-${index}`"
-      :index="index"
+      :block-index="props.blockIndex"
+      :link-index="index"
       class="q-my-md"
-    />
-
-    <q-btn
-      class="q-mt-sm full-width"
-      label="Inserir link"
-      color="primary"
-      no-caps
-      push
-      @click="addLink"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { computed, inject } from 'vue';
 import MetadataLinkForm from 'components/forms/editor/metadata-link-form.vue';
+import Editor from 'src/services/editor';
 
-const data = reactive({
-  total: 0,
+const editor = inject('editor') as Editor;
+
+const props = defineProps({
+  blockIndex: {
+    type: Number,
+    default: 0,
+  },
 });
 
+const totalLinks = computed(() => editor.metadata.data.totalLinks[props.blockIndex]);
+
 const addLink = () => {
-  data.total += 1;
+  editor.metadata.addLink(props.blockIndex);
 };
 </script>

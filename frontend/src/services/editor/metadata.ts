@@ -23,11 +23,17 @@ export interface IFixedMetadata {
 class Metadata {
   editor: Editor;
 
-  data = reactive({
-    mountingComponent: true,
-    totalBlocks: 0,
-    showPanel: false,
-  });
+  data: {
+    mountingComponent: boolean,
+    totalBlocks: number,
+    totalLinks: { [key: number]: number },
+    showPanel: boolean,
+  } = reactive({
+      mountingComponent: true,
+      totalBlocks: 0,
+      totalLinks: {},
+      showPanel: false,
+    });
 
   constructor(editor: Editor) {
     this.editor = editor;
@@ -94,10 +100,7 @@ class Metadata {
 
         const updatedFixedMetadata: IFixedMetadata[] = [];
 
-        console.log(index - 1);
         for (let currentIndex = 0; currentIndex < oldItems.length; currentIndex += 1) {
-          console.log(currentIndex, index - 1, metadata.fixed[currentIndex].description);
-          console.log(currentIndex !== (index - 1));
           if (currentIndex !== (index - 1)) {
             updatedFixedMetadata.push(oldItems[currentIndex]);
           }
@@ -107,16 +110,12 @@ class Metadata {
           fixed: updatedFixedMetadata,
           variable: [],
         });
-
-        console.log(updatedFixedMetadata);
       }
     }
   }
 
   public async setFixedMetadata(data: IFixedMetadata, index: number) {
-    console.log('Before');
     if (!this.data.mountingComponent) {
-      console.log('After');
       const selectedElement = this.editor.element.getSelected();
 
       if (selectedElement) {
@@ -163,6 +162,14 @@ class Metadata {
 
         this.editor.graph.notSaved();
       }
+    }
+  }
+
+  public addLink(blockIndex: number) {
+    if (!this.data.totalLinks[blockIndex]) {
+      this.data.totalLinks[blockIndex] = 1;
+    } else {
+      this.data.totalLinks[blockIndex] += 1;
     }
   }
 }

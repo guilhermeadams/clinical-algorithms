@@ -1,9 +1,11 @@
 TO-DO:
 
-8. Dúvida: qual é a diferença da Data de Atualizaão e Data do Salvamento;
+15. Salvar e recuperar links do bloco;
 
-9. Metadados fixos:
-  9.1 - Todos os checkboxes viram select;
+16. Remover bloco (e manter os não removidos);
+
+
+- - - - - - - - - - - - - - - - - - - - - - - -
 
 
 DONE:
@@ -22,4 +24,19 @@ DONE:
 
 7. Validação nos campos do form de "Editar dados do básicos do fluxograma";
 
+8. Dúvida: qual é a diferença da Data de Atualização e Data do Salvamento;
 
+9. Metadados fixos:
+  9.1 - Todos os checkboxes viram select;
+
+10. Textos:
+  - Dados básicos de fluxograma (título do modal);
+  - Usuário (título do modal);
+
+11. Colocar Pendente de Salvamento após qualquer alteração no fluxo;
+
+12. Diminuir o botão Inserir Link para separar visualmente do remover bloco;
+
+13. Texto do botão "Remove o bloco #3";
+
+14. Ao mudar de elementos está sumindo metadata do elemento anterior;

@@ -13,7 +13,7 @@
   >
     <q-form
       ref="refFlowchartForm"
-      class="q-gutter-md q-mt-lg"
+      :class="canEdit ? '' : 'q-col-gutter-lg'"
       @submit="saveAndClose"
     >
       <!-- TITLE -->
@@ -22,11 +22,10 @@
         v-model="flowcharts.data.flowchart.title"
         ref="inputFlowchartTitle"
         label="Título do fluxograma"
-        class="q-mb-md"
         :rules="[val => !!val || 'Informe o título do fluxograma']"
         lazy-rules
       />
-      <div class="q-mb-lg" v-else>
+      <div v-else>
         <div class="text-caption text-grey-7">Título do fluxograma:</div>
         <div>{{ flowcharts.data.flowchart.title }}</div>
       </div>
@@ -37,32 +36,31 @@
         v-model="flowcharts.data.flowchart.description"
         label="Síntese do fluxograma"
         type="textarea"
-        class="q-mb-md"
         :rules="[val => !!val || 'Informe a síntese do fluxograma']"
         lazy-rules
+        rows="4"
       />
-      <div class="q-mb-lg" v-else>
+      <div v-else>
         <div class="text-caption text-grey-7">Síntese do fluxograma:</div>
         <div>{{ flowcharts.data.flowchart.description }}</div>
       </div>
 
       <!-- AUTHOR / VERSION  -->
       <div class="row">
-        <div class="col-8 q-pr-lg">
+        <div class="col-9 q-pr-lg">
           <q-input
             v-if="canEdit"
             v-model="flowcharts.data.flowchart.author"
             label="Autor do fluxograma"
-            class="q-mb-md"
             disable
           />
-          <div class="q-mb-lg" v-else>
+          <div v-else>
             <div class="text-caption text-grey-7">Autor do fluxograma:</div>
             <div>{{ flowcharts.data.flowchart.author || 'Não definido' }}</div>
           </div>
         </div>
 
-        <div class="col-4">
+        <div class="col-3">
           <q-input
             v-if="canEdit"
             v-model="flowcharts.data.flowchart.updated_at"
@@ -100,7 +98,7 @@
               </q-icon>
             </template>
           </q-input>
-          <div class="q-mb-lg" v-else>
+          <div v-else>
             <div class="text-caption text-grey-7">Última atualização:</div>
             <div>{{ flowcharts.data.flowchart.updated_at }}</div>
           </div>
@@ -134,7 +132,7 @@
               </q-chip>
             </template>
           </q-select>
-          <div class="q-mb-lg" v-else>
+          <div v-else>
             <div class="text-caption text-grey-7">Categorias:</div>
             <div v-if="hasCategories">
               <q-chip
@@ -154,11 +152,10 @@
             v-if="canEdit"
             v-model="flowcharts.data.flowchart.version"
             label="Versão"
-            class="q-mb-md"
             :rules="[val => !!val || 'Informe a versão']"
             lazy-rules
           />
-          <div class="q-mb-lg" v-else>
+          <div v-else>
             <div class="text-caption text-grey-7">Versão:</div>
             <div>{{ flowcharts.data.flowchart.version }}</div>
           </div>

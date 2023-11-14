@@ -3,7 +3,7 @@
     <q-card-section class="q-pa-none">
       <div class="q-px-md">
         <div class="q-pt-md q-mb-sm">
-          Link #{{ props.index }}
+          Link #{{ props.linkIndex }}
         </div>
 
         <q-input
@@ -28,12 +28,16 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { reactive, watch } from 'vue';
 
 const props = defineProps({
-  index: {
+  blockIndex: {
     type: Number,
-    required: true,
+    default: 0,
+  },
+  linkIndex: {
+    type: Number,
+    default: 0,
   },
 });
 
@@ -41,4 +45,9 @@ const data = reactive({
   link: '',
   link_type: '',
 });
+
+// TODO: save links data
+// watch(data, (value) => {
+//
+// });
 </script>
