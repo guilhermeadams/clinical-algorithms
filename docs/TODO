@@ -1,14 +1,9 @@
+- - - - - - - - - - - - - - - - - - - - - - - -
+
+
 TO-DO:
 
 PRIORIDADE MAIOR
-
-20. Salvar o título do elemento;
-
-21. Preencher o textarea no elemento action com o título quando carregar gráfico para edição:
-    - criar método loadTextareaValues();
-    - document.querySelector('[model-id="e155c899-be83-4e83-bbc7-4171654b7d0a"]');
-
-21. Exibir o título do elemento no painel da direita;
 
 22. Bug: quando contecta 2 elementos e logo em seguida tenta conectar outro está duplicando elementos;
 
@@ -21,7 +16,6 @@ PRIORIDADE MENOR
 15. Salvar e recuperar links do bloco de metadados;
 
 - - - - - - - - - - - - - - - - - - - - - - - -
-
 
 
 DONE:
@@ -62,3 +56,18 @@ DONE:
 18. Exibir mensagem de Fluxograma e metadados salvo... em verde e só quando salvar ao editar; (ao criar, ou seja, gráfico vazio não exibir);
 
 19. Sumir a mensagem em cada caso quando houver alteração tanto na edição do gráfico como em edição de metatados;
+
+20. Salvar o título do elemento;
+
+21. Preencher o textarea no elemento action com o título quando carregar gráfico para edição:
+    - criar método loadTextareaValues();
+    - document.querySelector('[model-id="e155c899-be83-4e83-bbc7-4171654b7d0a"]');
+
+
+21. Preencher o textarea no elemento action com o título quando carregar gráfico para edição:
+    - criar método loadTextareaValues();
+    - document.querySelector('[model-id="e155c899-be83-4e83-bbc7-4171654b7d0a"]');
+
+21. Exibir o título do elemento no painel da direita;
+
+

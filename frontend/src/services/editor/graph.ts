@@ -76,7 +76,7 @@ class Graph {
 
           this.editor.element.createElementsTools(allElements);
 
-          this.editor.element.setTextareaValues(allElements);
+          this.editor.element.textarea.setValues(allElements);
 
           this.editor.element.textarea.createEventHandlers();
         }

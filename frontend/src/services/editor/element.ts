@@ -100,20 +100,6 @@ class Element {
     });
   }
 
-  public setTextareaValues(elements: dia.Element[]) {
-    elements.forEach((element) => {
-      if (this.isAction(element)) {
-        const domElement = document.querySelector(`[model-id="${element.id}"]`);
-
-        const textarea = domElement?.getElementsByTagName('textarea');
-
-        if (textarea?.length) {
-          textarea[0].value = element.prop('props/label') || '';
-        }
-      }
-    });
-  }
-
   private createTools(element: dia.Element) {
     const boundaryTool = new joint.elementTools.Boundary({
       padding: 10,
@@ -260,6 +246,10 @@ class Element {
     return elements.find(({ id }) => this.data.selectedId === id);
   }
 
+  public getLabel() {
+    return this.getSelected()?.prop('props/label') || '';
+  }
+
   public getTitle() {
     return this.getSelected()?.prop('title') || '';
   }
@@ -291,6 +281,29 @@ class Element {
 
   get textarea() {
     return {
+      getFromEditorElement(elementId: dia.Cell.ID) {
+        const domElement = document.querySelector(`[model-id="${elementId}"]`);
+
+        return domElement?.getElementsByTagName('textarea')[0];
+      },
+      value: () => {
+        const selectedElement = this.getSelected();
+
+        if (selectedElement) {
+          // this.textarea.
+        }
+      },
+      setValues: (elements: dia.Element[]) => {
+        elements.forEach((element) => {
+          if (this.isAction(element)) {
+            const textarea = this.textarea.getFromEditorElement(element.id);
+
+            if (textarea) {
+              textarea.value = element.prop('props/label') || '';
+            }
+          }
+        });
+      },
       getEditorElement: (textarea: HTMLElement) => {
         const father = textarea.parentElement;
         const grandfather = father?.parentElement;

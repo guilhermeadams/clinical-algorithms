@@ -11,7 +11,7 @@
     >
       <div id="editor-metadata-panel-header">
         <div class="text-h6 q-px-md q-py-sm">
-          Nó: {{ data.name }}
+          {{ data.name }}{{ elementLabel }}
         </div>
 
         <div
@@ -67,6 +67,12 @@ const totalBlocks = computed(() => editor.metadata.data.totalBlocks);
 const showMetadataPanel = computed(() => editor.metadata.data.showPanel);
 
 const isActionElement = computed(() => editor.element.isAction());
+
+const elementLabel = computed(() => {
+  const label = editor.element.getLabel();
+
+  return label ? `: ${label}` : '';
+});
 
 const data = reactive({
   title: '',

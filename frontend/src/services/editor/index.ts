@@ -10,6 +10,10 @@ import Metadata from 'src/services/editor/metadata';
 
 const graph = new joint.dia.Graph({}, { cellNamespace: customElements });
 
+const deselectAllTexts = () => {
+  window.getSelection()?.removeAllRanges();
+};
+
 class Editor {
   paperDiv: HTMLElement | undefined;
 
@@ -84,6 +88,10 @@ class Editor {
           this.graph.notSaved();
         });
 
+        this.data.paper.on('element:pointerdown', (/* elementView: dia.ElementView */) => {
+          this.element.deselectAll();
+        });
+
         this.data.paper.on('element:pointerup', (elementView: dia.ElementView) => {
           this.element.deselectAll();
 
@@ -97,11 +105,21 @@ class Editor {
           console.log(this.element.getSelected());
         });
 
+        this.data.paper.on('link:snap:connect', () => {
+          this.element.deselectAll();
+
+          deselectAllTexts();
+        });
+
         this.data.paper.on('link:connect', () => {
+          this.element.deselectAll();
+
           this.graph.notSaved();
         });
 
         this.data.paper.on('link:disconnect', () => {
+          this.element.deselectAll();
+
           this.graph.notSaved();
         });
 
