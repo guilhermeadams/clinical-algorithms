@@ -75,6 +75,10 @@ class Graph {
           const allElements = this.editor.data.graph.getElements();
 
           this.editor.element.createElementsTools(allElements);
+
+          this.editor.element.setTextareaValues(allElements);
+
+          this.editor.element.textarea.createEventHandlers();
         }
       } else {
         // TODO: create empty graph...

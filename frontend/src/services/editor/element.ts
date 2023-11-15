@@ -44,7 +44,9 @@ class Element {
     this.editor = editor;
   }
 
-  public get isAction() {
+  public isAction(element?: dia.Element) {
+    if (element) return element.prop('type') === CustomElement.ACTION;
+
     return this.getSelected()?.prop('type') === CustomElement.ACTION;
   }
 
@@ -95,6 +97,20 @@ class Element {
   public createElementsTools(elements: dia.Element[]) {
     elements.forEach((element) => {
       this.createTools(element);
+    });
+  }
+
+  public setTextareaValues(elements: dia.Element[]) {
+    elements.forEach((element) => {
+      if (this.isAction(element)) {
+        const domElement = document.querySelector(`[model-id="${element.id}"]`);
+
+        const textarea = domElement?.getElementsByTagName('textarea');
+
+        if (textarea?.length) {
+          textarea[0].value = element.prop('props/label') || '';
+        }
+      }
     });
   }
 

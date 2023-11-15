@@ -66,7 +66,7 @@ const totalBlocks = computed(() => editor.metadata.data.totalBlocks);
 
 const showMetadataPanel = computed(() => editor.metadata.data.showPanel);
 
-const isActionElement = computed(() => editor.element.isAction);
+const isActionElement = computed(() => editor.element.isAction());
 
 const data = reactive({
   title: '',
