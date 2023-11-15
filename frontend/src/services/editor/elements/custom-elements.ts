@@ -1,12 +1,12 @@
 import * as joint from 'jointjs';
 
 export enum CustomElement {
-  START = 'Start',
-  ACTION = 'Action',
-  EVALUATION = 'Evaluation',
-  END = 'End',
-  LINK = 'Link',
-  CARD = 'CardExample',
+  START = 'StartElement',
+  ACTION = 'ActionElement',
+  EVALUATION = 'EvaluationElement',
+  END = 'EndElement',
+  LINK = 'LinkElement',
+  // CARD = 'ElementCardExample',
 }
 
 export const elementName: {
@@ -17,7 +17,7 @@ export const elementName: {
   [CustomElement.EVALUATION]: 'Avaliação',
   [CustomElement.END]: 'Fim',
   [CustomElement.LINK]: 'Link',
-  [CustomElement.CARD]: 'Card interativo',
+  // [CustomElement.CARD]: 'Card interativo',
 };
 
 export const PORT = {
@@ -40,6 +40,8 @@ export const PORT = {
     },
   ],
 };
+
+export const TEXTAREA_CLASSNAME = 'element-textarea-input';
 
 const customElements = {
   [CustomElement.LINK]: joint.dia.Link.define(CustomElement.LINK, {
@@ -105,21 +107,23 @@ const customElements = {
     },
   }, {
     markup: joint.util.svg/* xml */`
-      <foreignObject @selector="foreignObject">
+      <foreignObject
+        @selector="foreignObject"
+      >
         <div
           xmlns="http://www.w3.org/1999/xhtml"
           class="editor-action-element"
         >
           <div class="element-textarea-container">
             <textarea
-              @selector="elementLabel"
-              class="element-textarea-input"
+              class="${TEXTAREA_CLASSNAME}"
               autocomplete="off"
               placeholder="Ação"
               contenteditable="true"
               maxlength="70"
               spellcheck="false"
               rows="1"
+              @selector="elementLabel"
             ></textarea>
           </div>
         </div>

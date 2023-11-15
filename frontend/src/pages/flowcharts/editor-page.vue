@@ -9,9 +9,16 @@
     </div>
 
     <div id="editor-content" class="bg-white overflow-auto">
+      <!-- ELEMENTS -->
       <editor-elements-toolbar />
+
+      <!-- STAGE -->
       <editor-stage />
+
+      <!-- METADATA -->
       <editor-metadata-panel />
+
+      <!-- ACTIONS -->
       <editor-actions-buttons />
     </div>
   </div>
@@ -20,6 +27,7 @@
 <script setup lang="ts">
 import {
   computed,
+  // onBeforeUnmount,
   onBeforeMount,
   provide,
   inject,
@@ -60,6 +68,8 @@ onBeforeMount(() => {
 
 onBeforeRouteLeave(() => {
   settings.page.mainMenu = true;
+
+  editor.reset();
 });
 </script>
 

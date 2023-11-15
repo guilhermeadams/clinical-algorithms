@@ -5,16 +5,19 @@
     leave-active-class="animated fadeOut"
   >
     <div
-      v-if="editor.element.data.selectedId"
+      v-if="showMetadataPanel"
       id="editor-metadata-panel"
       class="bg-white shadow-light-up"
     >
       <div id="editor-metadata-panel-header">
-        <div class="text-h6 q-px-md q-pt-sm">
-          Nó: {{ data.name }}
+        <div class="text-h6 q-px-md q-py-sm">
+          {{ data.name }}{{ elementLabel }}
         </div>
 
-        <div class="q-pa-md">
+        <div
+          v-if="isActionElement"
+          class="q-pt-sm q-pb-md q-px-md"
+        >
           <div><b>Metadados - Blocos Fixos</b></div>
 
           <q-btn
@@ -29,11 +32,16 @@
       </div>
 
       <div id="editor-metadata-panel-content" class="q-pa-md">
-        <metadata-fixed-form
-          v-for="index of totalForms"
-          :key="`metadata-fixed-form-${index}`"
-          :index="index"
-        />
+        <div
+          v-if="isActionElement && totalBlocks"
+        >
+          <metadata-fixed-form
+            v-for="index of totalBlocks"
+            :key="`metadata-fixed-form-${index}`"
+            :index="index"
+            @deleted="updateTotalBlocks"
+          />
+        </div>
       </div>
     </div>
   </transition>
@@ -41,18 +49,30 @@
 
 <script setup lang="ts">
 import {
-  inject,
+  computed,
+  onBeforeUnmount,
   reactive,
-  ref,
+  inject,
   watch,
 } from 'vue';
 
 import Editor from 'src/services/editor';
+
 import MetadataFixedForm from 'components/forms/editor/metadata-fixed-form.vue';
 
 const editor = inject('editor') as Editor;
 
-const totalForms = ref(0);
+const totalBlocks = computed(() => editor.metadata.data.totalBlocks);
+
+const showMetadataPanel = computed(() => editor.metadata.data.showPanel);
+
+const isActionElement = computed(() => editor.element.isAction());
+
+const elementLabel = computed(() => {
+  const label = editor.element.getLabel();
+
+  return label ? `: ${label}` : '';
+});
 
 const data = reactive({
   title: '',
@@ -64,15 +84,37 @@ const setInitialValue = () => {
   data.name = editor.element.getName();
 };
 
+const addBlock = () => {
+  editor.metadata.data.totalBlocks += 1;
+};
+
+const updateTotalBlocks = () => {
+  editor.metadata.updateTotalBlocks();
+};
+
 watch(() => editor.element.data.selectedId, (value) => {
+  editor.metadata.closeMetadataPanel();
+
   if (value) {
     setInitialValue();
+
+    const metadata = editor.metadata.getFromElement();
+
+    if (metadata) {
+      const { fixed } = metadata;
+
+      editor.metadata.data.totalBlocks = fixed.length;
+    }
+
+    setTimeout(() => {
+      editor.metadata.openMetadataPanel();
+    }, 10);
   }
 });
 
-const addBlock = () => {
-  totalForms.value += 1;
-};
+onBeforeUnmount(() => {
+  editor.metadata.resetTotalBlocks();
+});
 </script>
 
 <style lang="sass">

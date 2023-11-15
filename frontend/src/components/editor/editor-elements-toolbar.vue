@@ -58,8 +58,8 @@
 
 <script setup lang="ts">
 import { inject, onMounted } from 'vue';
-import Editor from 'src/services/editor';
 import { CustomElement } from 'src/services/editor/elements/custom-elements';
+import Editor from 'src/services/editor';
 
 const editor = inject('editor') as Editor;
 

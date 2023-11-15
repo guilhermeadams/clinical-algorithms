@@ -6,6 +6,13 @@ import { reactive } from 'vue';
 import customElements from 'src/services/editor/elements/custom-elements';
 import Element from 'src/services/editor/element';
 import Graph from 'src/services/editor/graph';
+import Metadata from 'src/services/editor/metadata';
+
+const graph = new joint.dia.Graph({}, { cellNamespace: customElements });
+
+const deselectAllTexts = () => {
+  window.getSelection()?.removeAllRanges();
+};
 
 class Editor {
   paperDiv: HTMLElement | undefined;
@@ -14,15 +21,21 @@ class Editor {
 
   element: Element;
 
+  metadata: Metadata;
+
   data: IJointData = reactive({
     paper: undefined,
-    graph: new joint.dia.Graph({}, { cellNamespace: customElements }),
-    options: {},
+    graph,
   });
 
   constructor() {
     this.element = new Element(this);
     this.graph = new Graph(this);
+    this.metadata = new Metadata(this);
+  }
+
+  public reset() {
+    this.data.graph.clear();
   }
 
   public async init(elementId: string) {
@@ -69,6 +82,16 @@ class Editor {
         //   cellView.preventDefaultInteraction(evt);
         // });
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        this.data.graph.on('change:position', (/* cell: dia.Cell */) => {
+          this.graph.notSaved();
+        });
+
+        this.data.paper.on('element:pointerdown', (/* elementView: dia.ElementView */) => {
+          this.element.deselectAll();
+        });
+
         this.data.paper.on('element:pointerup', (elementView: dia.ElementView) => {
           this.element.deselectAll();
 
@@ -82,6 +105,24 @@ class Editor {
           console.log(this.element.getSelected());
         });
 
+        this.data.paper.on('link:snap:connect', () => {
+          this.element.deselectAll();
+
+          deselectAllTexts();
+        });
+
+        this.data.paper.on('link:connect', () => {
+          this.element.deselectAll();
+
+          this.graph.notSaved();
+        });
+
+        this.data.paper.on('link:disconnect', () => {
+          this.element.deselectAll();
+
+          this.graph.notSaved();
+        });
+
         resolve(true);
       } catch (error) {
         reject(error);
@@ -90,7 +131,7 @@ class Editor {
   }
 
   private static createLink() {
-    return new customElements.Link();
+    return new customElements.LinkElement();
   }
 }
 

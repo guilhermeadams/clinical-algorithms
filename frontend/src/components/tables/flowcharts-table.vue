@@ -32,7 +32,7 @@
         </q-td>
 
         <q-td key="author" :props="props">
-          {{ props.row.author }}
+          {{ props.row.author || 'Não definido' }}
         </q-td>
 
         <q-td key="action" :props="props">

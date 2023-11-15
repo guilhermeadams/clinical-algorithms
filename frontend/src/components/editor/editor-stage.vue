@@ -1,13 +1,12 @@
 <template>
   <div id="editor-stage-wrapper" class="overflow-auto">
-    <div id="editor-stage">
-      Index stage
-    </div>
+    <div id="editor-stage"></div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { inject, onMounted } from 'vue';
+
 import Editor from 'src/services/editor';
 
 const editor = inject('editor') as Editor;

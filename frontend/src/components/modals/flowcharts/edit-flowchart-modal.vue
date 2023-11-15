@@ -1,7 +1,7 @@
 <template>
   <edit-modal
     :show="showEditUserDialog"
-    :title="title"
+    title="Dados básicos do fluxograma"
     :deleting="data.deleting"
     :saving="data.saving"
     :editing="data.editing"
@@ -13,7 +13,7 @@
   >
     <q-form
       ref="refFlowchartForm"
-      class="q-gutter-md q-mt-lg"
+      :class="canEdit ? '' : 'q-col-gutter-lg'"
       @submit="saveAndClose"
     >
       <!-- TITLE -->
@@ -22,11 +22,10 @@
         v-model="flowcharts.data.flowchart.title"
         ref="inputFlowchartTitle"
         label="Título do fluxograma"
-        class="q-mb-md"
         :rules="[val => !!val || 'Informe o título do fluxograma']"
         lazy-rules
       />
-      <div class="q-mb-lg" v-else>
+      <div v-else>
         <div class="text-caption text-grey-7">Título do fluxograma:</div>
         <div>{{ flowcharts.data.flowchart.title }}</div>
       </div>
@@ -37,11 +36,11 @@
         v-model="flowcharts.data.flowchart.description"
         label="Síntese do fluxograma"
         type="textarea"
-        class="q-mb-md"
         :rules="[val => !!val || 'Informe a síntese do fluxograma']"
         lazy-rules
+        rows="4"
       />
-      <div class="q-mb-lg" v-else>
+      <div v-else>
         <div class="text-caption text-grey-7">Síntese do fluxograma:</div>
         <div>{{ flowcharts.data.flowchart.description }}</div>
       </div>
@@ -53,10 +52,9 @@
             v-if="canEdit"
             v-model="flowcharts.data.flowchart.author"
             label="Autor do fluxograma"
-            class="q-mb-md"
             disable
           />
-          <div class="q-mb-lg" v-else>
+          <div v-else>
             <div class="text-caption text-grey-7">Autor do fluxograma:</div>
             <div>{{ flowcharts.data.flowchart.author || 'Não definido' }}</div>
           </div>
@@ -100,7 +98,7 @@
               </q-icon>
             </template>
           </q-input>
-          <div class="q-mb-lg" v-else>
+          <div v-else>
             <div class="text-caption text-grey-7">Última atualização:</div>
             <div>{{ flowcharts.data.flowchart.updated_at }}</div>
           </div>
@@ -134,7 +132,7 @@
               </q-chip>
             </template>
           </q-select>
-          <div class="q-mb-lg" v-else>
+          <div v-else>
             <div class="text-caption text-grey-7">Categorias:</div>
             <div v-if="hasCategories">
               <q-chip
@@ -154,11 +152,10 @@
             v-if="canEdit"
             v-model="flowcharts.data.flowchart.version"
             label="Versão"
-            class="q-mb-md"
             :rules="[val => !!val || 'Informe a versão']"
             lazy-rules
           />
-          <div class="q-mb-lg" v-else>
+          <div v-else>
             <div class="text-caption text-grey-7">Versão:</div>
             <div>{{ flowcharts.data.flowchart.version }}</div>
           </div>
@@ -213,12 +210,6 @@ const data = reactive({
 });
 
 const canEdit = computed(() => data.editing || !flowcharts.data.flowchart.id);
-
-const title = computed(() => {
-  if (!flowcharts.data.flowchart.id) return 'Cadastrar dados básicos do fluxograma';
-  if (data.editing && flowcharts.data.flowchart.id) return 'Editar dados básicos do fluxograma';
-  return 'Dados básicos do fluxograma';
-});
 
 const categoriesMocked = ref([
   { name: 'Doenças' },

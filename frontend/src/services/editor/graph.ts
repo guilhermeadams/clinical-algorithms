@@ -1,15 +1,32 @@
 import Editor from 'src/services/editor/index';
 import { api } from 'boot/axios';
 import { reactive } from 'vue';
-import { formatDatetime } from 'src/services/date';
 
 const RESOURCE_ALGORITHM = 'algorithms';
 const RESOURCE = 'algorithms/graph';
 
+export interface IEditorData {
+  graph: {
+    id: number,
+    algorithm_id: number,
+    updated_at: string,
+  },
+  algorithm: {
+    id: number,
+    title: string,
+    description: string,
+    version: string,
+    updated_at: string,
+  },
+  loading: boolean,
+  saving: boolean,
+  saved: boolean | null,
+}
+
 class Graph {
   editor: Editor;
 
-  data = reactive({
+  data: IEditorData = reactive({
     graph: {
       id: 0,
       algorithm_id: 0,
@@ -24,7 +41,7 @@ class Graph {
     },
     loading: false,
     saving: false,
-    saved: false,
+    saved: null,
   });
 
   constructor(editor: Editor) {
@@ -49,6 +66,7 @@ class Graph {
       this.data.graph.updated_at = data.updated_at;
 
       if (data.graph) {
+        // open graph...
         const graphJson = JSON.parse(data.graph);
 
         if (graphJson) {
@@ -57,7 +75,14 @@ class Graph {
           const allElements = this.editor.data.graph.getElements();
 
           this.editor.element.createElementsTools(allElements);
+
+          this.editor.element.textarea.setValues(allElements);
+
+          this.editor.element.textarea.createEventHandlers();
         }
+      } else {
+        // TODO: create empty graph...
+        // this.editor.data.graph = new joint.dia.Graph({}, { cellNamespace: customElements });
       }
 
       return Promise.resolve(true);
@@ -94,6 +119,14 @@ class Graph {
     }
   }
 
+  public notSaved() {
+    this.data.saved = false;
+  }
+
+  public saved() {
+    this.data.saved = true;
+  }
+
   public async save() {
     try {
       this.data.saving = true;
@@ -106,7 +139,7 @@ class Graph {
 
       this.data.graph.updated_at = data.updated_at;
 
-      // this.data.saved = true;
+      this.saved();
     } catch (error) {
       console.error(error);
 

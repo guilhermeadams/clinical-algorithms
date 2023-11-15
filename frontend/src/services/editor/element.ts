@@ -2,7 +2,12 @@ import * as joint from 'jointjs';
 import { dia } from 'jointjs';
 
 import Editor from 'src/services/editor/index';
-import customElements, { CustomElement, elementName, PORT } from 'src/services/editor/elements/custom-elements';
+import customElements, {
+  CustomElement,
+  elementName,
+  PORT,
+  TEXTAREA_CLASSNAME,
+} from 'src/services/editor/elements/custom-elements';
 import { reactive } from 'vue';
 
 export interface IElementToolsPadding {
@@ -39,6 +44,12 @@ class Element {
     this.editor = editor;
   }
 
+  public isAction(element?: dia.Element) {
+    if (element) return element.prop('type') === CustomElement.ACTION;
+
+    return this.getSelected()?.prop('type') === CustomElement.ACTION;
+  }
+
   public setCreationPosition(x: number, y: number) {
     this.data.creationPosition = { x, y };
   }
@@ -47,6 +58,8 @@ class Element {
     this.getSelected()?.remove();
 
     this.deselectAll();
+
+    this.editor.graph.notSaved();
   }
 
   private customRemoveButton() {
@@ -136,12 +149,14 @@ class Element {
       default:
         await this.create.Start();
     }
+
+    this.editor.graph.notSaved();
   }
 
   get create() {
     return {
       Start: async () => {
-        const element = new customElements.Start({
+        const element = new customElements.StartElement({
           position: {
             x: this.data.creationPosition.x,
             y: this.data.creationPosition.y,
@@ -152,7 +167,7 @@ class Element {
         this.createTools(element);
       },
       Action: async () => {
-        const element = new customElements.Action({
+        const element = new customElements.ActionElement({
           position: {
             x: this.data.creationPosition.x,
             y: this.data.creationPosition.y,
@@ -161,9 +176,11 @@ class Element {
         }).resize(200, 84).addTo(this.editor.data.graph);
 
         this.createTools(element);
+
+        this.textarea.createEventHandlers();
       },
       Evaluation: async () => {
-        const element = new customElements.Evaluation({
+        const element = new customElements.EvaluationElement({
           position: {
             x: this.data.creationPosition.x,
             y: this.data.creationPosition.y,
@@ -174,7 +191,7 @@ class Element {
         this.createTools(element);
       },
       End: async () => {
-        const element = new customElements.End({
+        const element = new customElements.EndElement({
           position: {
             x: this.data.creationPosition.x,
             y: this.data.creationPosition.y,
@@ -205,7 +222,7 @@ class Element {
     value: boolean | string | number | object | undefined | null,
     commitChanges = true,
   ) {
-    this.getSelected()?.prop(propName, value);
+    this.getSelected()?.prop(`props/${propName}`, value);
 
     // avoid "setNotSavedChanges" without changing anything
     // if (commitChanges) {
@@ -219,10 +236,18 @@ class Element {
     // await this.joint.setNotSavedChanges(true);
   }
 
+  public getById(id: dia.Cell.ID): dia.Element | undefined {
+    return this.editor.data.graph.getElements().find((element) => element.id === id);
+  }
+
   public getSelected() {
     const elements = this.editor.data.graph.getElements();
 
     return elements.find(({ id }) => this.data.selectedId === id);
+  }
+
+  public getLabel() {
+    return this.getSelected()?.prop('props/label') || '';
   }
 
   public getTitle() {
@@ -252,6 +277,62 @@ class Element {
     if (elementType) return elementName[elementType];
 
     return '';
+  }
+
+  get textarea() {
+    return {
+      getFromEditorElement(elementId: dia.Cell.ID) {
+        const domElement = document.querySelector(`[model-id="${elementId}"]`);
+
+        return domElement?.getElementsByTagName('textarea')[0];
+      },
+      value: () => {
+        const selectedElement = this.getSelected();
+
+        if (selectedElement) {
+          // this.textarea.
+        }
+      },
+      setValues: (elements: dia.Element[]) => {
+        elements.forEach((element) => {
+          if (this.isAction(element)) {
+            const textarea = this.textarea.getFromEditorElement(element.id);
+
+            if (textarea) {
+              textarea.value = element.prop('props/label') || '';
+            }
+          }
+        });
+      },
+      getEditorElement: (textarea: HTMLElement) => {
+        const father = textarea.parentElement;
+        const grandfather = father?.parentElement;
+        const grandGrandfather = grandfather?.parentElement;
+        const element = grandGrandfather?.parentElement;
+
+        if (element) {
+          const elementId = element?.getAttribute('model-id');
+
+          if (elementId) return this.getById(elementId);
+        }
+
+        return undefined;
+      },
+      createEventHandlers: () => {
+        const textareaElements = document.getElementsByClassName(TEXTAREA_CLASSNAME);
+
+        if (textareaElements.length) {
+          // eslint-disable-next-line no-restricted-syntax
+          for (const textareaElement of textareaElements) {
+            textareaElement.addEventListener('input', (event: any) => {
+              const element = this.textarea.getEditorElement(event.target);
+
+              element?.prop('props/label', event.target.value);
+            });
+          }
+        }
+      },
+    };
   }
 }
 
