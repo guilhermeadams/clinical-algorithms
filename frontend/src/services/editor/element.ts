@@ -2,7 +2,12 @@ import * as joint from 'jointjs';
 import { dia } from 'jointjs';
 
 import Editor from 'src/services/editor/index';
-import customElements, { CustomElement, elementName, PORT } from 'src/services/editor/elements/custom-elements';
+import customElements, {
+  CustomElement,
+  elementName,
+  PORT,
+  TEXTAREA_CLASSNAME,
+} from 'src/services/editor/elements/custom-elements';
 import { reactive } from 'vue';
 
 export interface IElementToolsPadding {
@@ -169,6 +174,8 @@ class Element {
         }).resize(200, 84).addTo(this.editor.data.graph);
 
         this.createTools(element);
+
+        this.textarea.createEventHandlers();
       },
       Evaluation: async () => {
         const element = new customElements.EvaluationElement({
@@ -227,6 +234,10 @@ class Element {
     // await this.joint.setNotSavedChanges(true);
   }
 
+  public getById(id: dia.Cell.ID): dia.Element | undefined {
+    return this.editor.data.graph.getElements().find((element) => element.id === id);
+  }
+
   public getSelected() {
     const elements = this.editor.data.graph.getElements();
 
@@ -260,6 +271,39 @@ class Element {
     if (elementType) return elementName[elementType];
 
     return '';
+  }
+
+  get textarea() {
+    return {
+      getEditorElement: (textarea: HTMLElement) => {
+        const father = textarea.parentElement;
+        const grandfather = father?.parentElement;
+        const grandGrandfather = grandfather?.parentElement;
+        const element = grandGrandfather?.parentElement;
+
+        if (element) {
+          const elementId = element?.getAttribute('model-id');
+
+          if (elementId) return this.getById(elementId);
+        }
+
+        return undefined;
+      },
+      createEventHandlers: () => {
+        const textareaElements = document.getElementsByClassName(TEXTAREA_CLASSNAME);
+
+        if (textareaElements.length) {
+          // eslint-disable-next-line no-restricted-syntax
+          for (const textareaElement of textareaElements) {
+            textareaElement.addEventListener('input', (event: any) => {
+              const element = this.textarea.getEditorElement(event.target);
+
+              element?.prop('props/label', event.target.value);
+            });
+          }
+        }
+      },
+    };
   }
 }
 

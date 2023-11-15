@@ -41,6 +41,8 @@ export const PORT = {
   ],
 };
 
+export const TEXTAREA_CLASSNAME = 'element-textarea-input';
+
 const customElements = {
   [CustomElement.LINK]: joint.dia.Link.define(CustomElement.LINK, {
     connector: { name: 'rounded' },
@@ -105,21 +107,23 @@ const customElements = {
     },
   }, {
     markup: joint.util.svg/* xml */`
-      <foreignObject @selector="foreignObject">
+      <foreignObject
+        @selector="foreignObject"
+      >
         <div
           xmlns="http://www.w3.org/1999/xhtml"
           class="editor-action-element"
         >
           <div class="element-textarea-container">
             <textarea
-              @selector="elementLabel"
-              class="element-textarea-input"
+              class="${TEXTAREA_CLASSNAME}"
               autocomplete="off"
               placeholder="Ação"
               contenteditable="true"
               maxlength="70"
               spellcheck="false"
               rows="1"
+              @selector="elementLabel"
             ></textarea>
           </div>
         </div>
