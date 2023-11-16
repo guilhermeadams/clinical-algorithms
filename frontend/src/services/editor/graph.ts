@@ -48,6 +48,10 @@ class Graph {
     this.editor = editor;
   }
 
+  get isSaved() {
+    return this.data.saved === true || this.data.saved === null;
+  }
+
   public get lastUpdate() {
     return this.data.graph.updated_at;
   }

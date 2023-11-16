@@ -146,7 +146,7 @@ import {
 
 import MetadataLinksForm from 'components/forms/editor/metadata-links-form.vue';
 import Editor from 'src/services/editor';
-import DeleteModal from 'components/modals/delete-modal.vue';
+import DeleteModal from 'components/modals/simple-modal.vue';
 
 const editor = inject('editor') as Editor;
 

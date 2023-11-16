@@ -63,7 +63,13 @@ const saved = computed(() => editor.graph.data.saved);
 const savingGraph = computed(() => editor.graph.data.saving);
 const lastUpdate = computed(() => editor.graph.lastUpdate);
 
-const goFlowchartsPage = () => router.push({ name: FLOWCHARTS_INDEX });
+const goFlowchartsPage = () => {
+  if (editor.graph.isSaved) {
+    router.push({ name: FLOWCHARTS_INDEX });
+  } else {
+    editor.toggleSaveDialog();
+  }
+};
 
 const saveGraph = () => {
   editor.graph.save();

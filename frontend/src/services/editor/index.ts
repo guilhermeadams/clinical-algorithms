@@ -24,6 +24,7 @@ class Editor {
   metadata: Metadata;
 
   data: IJointData = reactive({
+    showSaveDialog: false,
     paper: undefined,
     graph,
   });
@@ -132,6 +133,10 @@ class Editor {
 
   private static createLink() {
     return new customElements.LinkElement();
+  }
+
+  public toggleSaveDialog() {
+    this.data.showSaveDialog = !this.data.showSaveDialog;
   }
 }
 
