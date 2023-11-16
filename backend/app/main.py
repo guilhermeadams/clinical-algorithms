@@ -9,10 +9,7 @@ app.include_router(algorithms.router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:8080",
-        "http://172.22.0.2:8080",
-    ],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

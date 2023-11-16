@@ -5,17 +5,20 @@ TO-DO:
 
 PRIORIDADE MAIOR
 
-22. Bug: quando contecta 2 elementos e logo em seguida tenta conectar outro está duplicando elementos;
+23. Textarea handler no elemento de Avaliação;
+
+24. Alertar pendência de salvamento ao sair;
+
+25. Gerenciamento de usuários;
+
 
 - - - - - - - - - - - - - - - - - -
 
 PRIORIDADE MENOR
 
-17. Remover bloco de metadados (e manter os não removidos);
+15. Links do bloco de metadados;
 
-15. Salvar e recuperar links do bloco de metadados;
-
-- - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - -
 
 
 DONE:
@@ -69,5 +72,9 @@ DONE:
     - document.querySelector('[model-id="e155c899-be83-4e83-bbc7-4171654b7d0a"]');
 
 21. Exibir o título do elemento no painel da direita;
+
+22. Bug: quando contecta 2 elementos e logo em seguida tenta conectar outro está duplicando elementos;
+
+17. Remover bloco de metadados (e manter os não removidos);
 
 

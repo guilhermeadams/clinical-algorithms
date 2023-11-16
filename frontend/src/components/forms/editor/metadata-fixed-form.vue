@@ -184,9 +184,9 @@ watch(data, (value) => {
 });
 
 const deleteBlock = () => {
-  editor.metadata.removeFixed(props.index);
-
   showDeleteBlockDialog.value = false;
+
+  editor.metadata.fixed.removeBlock(props.index);
 
   emit('deleted');
 };

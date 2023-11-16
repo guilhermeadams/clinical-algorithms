@@ -1,6 +1,6 @@
 import Editor from 'src/services/editor/index';
 import { dia } from 'jointjs';
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 
 export interface IFixedMetadataLink {
   index: number,
@@ -29,11 +29,13 @@ class Metadata {
 
   data: {
     mountingComponent: boolean,
+    loadingBlocks: boolean,
     totalBlocks: number,
     totalLinks: { [key: number]: number },
     showPanel: boolean,
   } = reactive({
       mountingComponent: true,
+      loadingBlocks: false,
       totalBlocks: 0,
       totalLinks: {},
       showPanel: false,
@@ -91,41 +93,55 @@ class Metadata {
     return undefined;
   }
 
-  public async removeFixed(index: number) {
-    const selectedElement = this.editor.element.getSelected();
+  get fixed() {
+    return {
+      removeBlock: async (index: number) => {
+        this.data.loadingBlocks = true;
 
-    if (selectedElement) {
-      const metadata = this.getFromElement(selectedElement);
+        const selectedElement = this.editor.element.getSelected();
 
-      if (
-        metadata
-        && metadata?.fixed
-        && metadata?.fixed.length
-      ) {
-        // get fixed metadata
-        const oldItems = [...metadata.fixed];
+        if (selectedElement) {
+          const metadata = this.getFromElement(selectedElement);
 
-        // delete metadata before updating
-        await this.editor.element.setProp('metadata', null);
+          if (
+            metadata
+            && metadata?.fixed
+            && metadata?.fixed.length
+          ) {
+            // get fixed metadata
+            const oldItems = [...metadata.fixed];
 
-        const updatedFixedMetadata: IFixedMetadata[] = [];
+            // delete metadata before updating
+            await this.editor.element.setProp('metadata', null);
 
-        for (let currentIndex = 0; currentIndex < oldItems.length; currentIndex += 1) {
-          if (currentIndex !== (index - 1)) {
-            updatedFixedMetadata.push(oldItems[currentIndex]);
+            const updatedFixedMetadata: IFixedMetadata[] = [];
+
+            let newIndex = 1;
+
+            for (let currentIndex = 0; currentIndex < oldItems.length; currentIndex += 1) {
+              if (currentIndex !== (index - 1)) {
+                updatedFixedMetadata.push({
+                  ...oldItems[currentIndex],
+                  index: newIndex,
+                });
+
+                newIndex += 1;
+              }
+            }
+
+            await this.editor.element.setProp('metadata', {
+              fixed: updatedFixedMetadata,
+              variable: [],
+            });
+
+            this.data.totalBlocks = updatedFixedMetadata.length;
           }
         }
 
-        await this.editor.element.setProp('metadata', {
-          fixed: updatedFixedMetadata,
-          variable: [],
-        });
-      }
-    }
-  }
-
-  get fixed() {
-    return {
+        setTimeout(() => {
+          this.data.loadingBlocks = false;
+        }, 1000);
+      },
       get: (element: dia.Element | undefined = undefined) => {
         if (element) {
           const prop = element.prop('props/metadata') as {
