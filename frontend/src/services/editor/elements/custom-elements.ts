@@ -157,7 +157,7 @@ const customElements = {
           <div>
             <input
               class="${TEXTAREA_CLASSNAME}"
-              placeholder="Ação"
+              placeholder="Avaliação"
               contenteditable="true"
               maxlength="70"
               spellcheck="false"

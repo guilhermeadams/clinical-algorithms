@@ -217,14 +217,50 @@ class Metadata {
           }
         }
       },
+      setTotalLinksInBlock: (blockIndex: number) => {
+        const metadata = this.getFromElement();
+
+        // already has fixed metadata
+        if (
+          metadata
+          && metadata.fixed
+          && metadata.fixed.length
+        ) {
+          const { fixed } = metadata;
+
+          if (fixed && fixed.length) {
+            this.data.totalLinks[blockIndex] = fixed[blockIndex - 1].links.length;
+          }
+        }
+      },
+      getLinks: (blockIndex: number, linkIndex: number) => {
+        const selectedElement = this.editor.element.getSelected();
+
+        if (selectedElement) {
+          const metadata = this.getFromElement(selectedElement);
+
+          // already has fixed metadata
+          if (
+            metadata
+            && metadata.fixed
+            && metadata.fixed.length
+          ) {
+            const { fixed } = metadata;
+
+            if (fixed && fixed.length) {
+              return fixed[blockIndex - 1].links[linkIndex - 1];
+            }
+          }
+        }
+
+        return undefined;
+      },
       setLinks: async (params: {
         blockIndex: number,
         linkIndex: number,
         url: string,
         type: string,
       }) => {
-        // const totalLinks = this.data.totalLinks[params.blockIndex];
-
         const selectedElement = this.editor.element.getSelected();
 
         if (selectedElement) {
@@ -241,9 +277,10 @@ class Metadata {
               if (fixedMetadata.index === params.blockIndex) {
                 if (fixedMetadata.links.length) {
                   console.log('HAS LINKS');
+                  console.log(`metadata/fixed/${params.blockIndex}/links/${params.linkIndex}/type`);
 
                   void this.editor.element.setProp(
-                    `metadata/fixed/${params.blockIndex}/links/${params.linkIndex}/type`,
+                    `metadata/fixed/${params.blockIndex - 1}/links/${params.linkIndex - 1}/type`,
                     params.type,
                   );
                 } else {
@@ -257,6 +294,8 @@ class Metadata {
                       type: params.type,
                     }],
                   };
+
+                  console.log({ ...updatedFixedMetadata });
 
                   void this.fixed.set(params.blockIndex, updatedFixedMetadata);
                 }

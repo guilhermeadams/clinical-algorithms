@@ -62,7 +62,10 @@ watch(data, (value) => {
 });
 
 const setInitialValues = () => {
-  //
+  const link = editor.metadata.fixed.getLinks(props.blockIndex, props.linkIndex);
+
+  data.url = link?.url || '';
+  data.type = link?.type || '';
 };
 
 onBeforeMount(() => {

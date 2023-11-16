@@ -5,10 +5,6 @@ TO-DO:
 
 PRIORIDADE MAIOR
 
-23. Textarea handler no elemento de Avaliação;
-
-24. Alertar pendência de salvamento ao sair;
-
 25. Gerenciamento de usuários;
 
 
@@ -76,5 +72,9 @@ DONE:
 22. Bug: quando contecta 2 elementos e logo em seguida tenta conectar outro está duplicando elementos;
 
 17. Remover bloco de metadados (e manter os não removidos);
+
+23. Textarea handler no elemento de Avaliação;
+
+24. Alertar pendência de salvamento ao sair;
 
 
