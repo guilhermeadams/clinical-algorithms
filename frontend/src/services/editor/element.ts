@@ -50,6 +50,12 @@ class Element {
     return this.getSelected()?.prop('type') === CustomElement.ACTION;
   }
 
+  public isEvaluation(element?: dia.Element) {
+    if (element) return element.prop('type') === CustomElement.EVALUATION;
+
+    return this.getSelected()?.prop('type') === CustomElement.EVALUATION;
+  }
+
   public setCreationPosition(x: number, y: number) {
     this.data.creationPosition = { x, y };
   }
@@ -186,9 +192,11 @@ class Element {
             y: this.data.creationPosition.y,
           },
           ports: Element.generatePorts(95, 50),
-        }).resize(200, 98).addTo(this.editor.data.graph);
+        }).resize(200, 100).addTo(this.editor.data.graph);
 
         this.createTools(element);
+
+        this.textarea.createEventHandlers();
       },
       End: async () => {
         const element = new customElements.EndElement({
@@ -284,7 +292,7 @@ class Element {
       getFromEditorElement(elementId: dia.Cell.ID) {
         const domElement = document.querySelector(`[model-id="${elementId}"]`);
 
-        return domElement?.getElementsByTagName('textarea')[0];
+        return domElement?.getElementsByTagName('input')[0];
       },
       value: () => {
         const selectedElement = this.getSelected();
@@ -295,7 +303,7 @@ class Element {
       },
       setValues: (elements: dia.Element[]) => {
         elements.forEach((element) => {
-          if (this.isAction(element)) {
+          if (this.isAction(element) || this.isEvaluation(element)) {
             const textarea = this.textarea.getFromEditorElement(element.id);
 
             if (textarea) {
@@ -319,11 +327,11 @@ class Element {
         return undefined;
       },
       createEventHandlers: () => {
-        const textareaElements = document.getElementsByClassName(TEXTAREA_CLASSNAME);
+        const inputElements = document.getElementsByClassName(TEXTAREA_CLASSNAME);
 
-        if (textareaElements.length) {
+        if (inputElements.length) {
           // eslint-disable-next-line no-restricted-syntax
-          for (const textareaElement of textareaElements) {
+          for (const textareaElement of inputElements) {
             textareaElement.addEventListener('input', (event: any) => {
               const element = this.textarea.getEditorElement(event.target);
 
