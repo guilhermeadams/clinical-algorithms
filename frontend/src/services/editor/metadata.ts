@@ -276,16 +276,12 @@ class Metadata {
             for (const fixedMetadata of metadata.fixed) {
               if (fixedMetadata.index === params.blockIndex) {
                 if (fixedMetadata.links.length) {
-                  console.log('HAS LINKS');
-                  console.log(`metadata/fixed/${params.blockIndex}/links/${params.linkIndex}/type`);
-
                   void this.editor.element.setProp(
                     `metadata/fixed/${params.blockIndex - 1}/links/${params.linkIndex - 1}/type`,
                     params.type,
                   );
                 } else {
-                  console.log('NO LINKS');
-
+                  // console.log('NO LINKS');
                   const updatedFixedMetadata = {
                     ...fixedMetadata,
                     links: [{
@@ -294,8 +290,6 @@ class Metadata {
                       type: params.type,
                     }],
                   };
-
-                  console.log({ ...updatedFixedMetadata });
 
                   void this.fixed.set(params.blockIndex, updatedFixedMetadata);
                 }

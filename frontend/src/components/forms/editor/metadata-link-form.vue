@@ -17,11 +17,22 @@
           <q-select
             v-model="data.type"
             :options="['Texto completo', 'Banco de dados BIG', 'Banco de dados BIGREC']"
-            class="q-my-lg"
+            class="q-mt-lg"
             label="Tipo de link"
             dense
           />
         </div>
+
+        <q-btn
+          :label="`Remove o link #${props.linkIndex}`"
+          class="full-width q-my-md"
+          color="negative"
+          icon="close"
+          no-caps
+          dense
+          flat
+          @click="showDeleteLinkDialog = true"
+        />
       </div>
     </q-card-section>
   </q-card>
@@ -33,6 +44,7 @@ import {
   reactive,
   inject,
   watch,
+  ref,
 } from 'vue';
 
 import Editor from 'src/services/editor';
@@ -49,6 +61,8 @@ const props = defineProps({
     default: 0,
   },
 });
+
+const showDeleteLinkDialog = ref(false);
 
 const data = reactive({
   blockIndex: props.blockIndex,

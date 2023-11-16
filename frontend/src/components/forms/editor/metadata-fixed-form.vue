@@ -113,8 +113,8 @@
                 color="negative"
                 icon="close"
                 no-caps
-                push
                 dense
+                flat
                 @click="showDeleteBlockDialog = true"
               />
             </div>
