@@ -24,8 +24,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject } from 'vue';
-import MetadataLinkForm from 'components/forms/editor/metadata-link-form.vue';
+import { computed, inject, onBeforeMount } from 'vue';
+import MetadataLinkForm from 'components/forms/editor/fixed-metadata-link-form.vue';
 import Editor from 'src/services/editor';
 
 const editor = inject('editor') as Editor;
@@ -42,4 +42,8 @@ const totalLinks = computed(() => editor.metadata.data.totalLinks[props.blockInd
 const addLink = () => {
   editor.metadata.addLink(props.blockIndex);
 };
+
+onBeforeMount(() => {
+  editor.metadata.fixed.setTotalLinksInBlock(props.blockIndex);
+});
 </script>

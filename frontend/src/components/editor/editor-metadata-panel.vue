@@ -32,9 +32,14 @@
       </div>
 
       <div id="editor-metadata-panel-content" class="q-pa-md">
+        <div v-if="loadingBlocks">
+          <loading-spinner />
+        </div>
+
         <div
-          v-if="isActionElement && totalBlocks"
+          v-else-if="isActionElement && totalBlocks"
         >
+          <!-- FIXED METADATA -->
           <metadata-fixed-form
             v-for="index of totalBlocks"
             :key="`metadata-fixed-form-${index}`"
@@ -58,7 +63,8 @@ import {
 
 import Editor from 'src/services/editor';
 
-import MetadataFixedForm from 'components/forms/editor/metadata-fixed-form.vue';
+import MetadataFixedForm from 'components/forms/editor/fixed-metadata-form.vue';
+import LoadingSpinner from 'components/spinners/loading-spinner.vue';
 
 const editor = inject('editor') as Editor;
 
@@ -67,6 +73,8 @@ const totalBlocks = computed(() => editor.metadata.data.totalBlocks);
 const showMetadataPanel = computed(() => editor.metadata.data.showPanel);
 
 const isActionElement = computed(() => editor.element.isAction());
+
+const loadingBlocks = computed(() => editor.metadata.data.loadingBlocks);
 
 const elementLabel = computed(() => {
   const label = editor.element.getLabel();

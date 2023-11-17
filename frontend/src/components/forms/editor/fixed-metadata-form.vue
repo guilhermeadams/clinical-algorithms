@@ -106,15 +106,14 @@
 
             <q-separator />
 
-            <div class="q-pa-md bg-grey-2">
+            <div class="bg-grey-2">
               <q-btn
-                :label="`Remove o bloco #${props.index}`"
+                :label="`Remover o bloco #${props.index}`"
                 class="full-width"
                 color="negative"
                 icon="close"
                 no-caps
-                push
-                dense
+                flat
                 @click="showDeleteBlockDialog = true"
               />
             </div>
@@ -122,6 +121,7 @@
         </q-card>
       </q-expansion-item>
 
+      <!-- REMOVE METADATA BLOCK -->
       <delete-modal
         :show="showDeleteBlockDialog"
         title="Deseja excluir o bloco de metadados?"
@@ -144,9 +144,9 @@ import {
   ref,
 } from 'vue';
 
-import MetadataLinksForm from 'components/forms/editor/metadata-links-form.vue';
+import MetadataLinksForm from 'components/forms/editor/fixed-metadata-links-form.vue';
 import Editor from 'src/services/editor';
-import DeleteModal from 'components/modals/delete-modal.vue';
+import DeleteModal from 'components/modals/simple-modal.vue';
 
 const editor = inject('editor') as Editor;
 
@@ -184,9 +184,9 @@ watch(data, (value) => {
 });
 
 const deleteBlock = () => {
-  editor.metadata.removeFixed(props.index);
-
   showDeleteBlockDialog.value = false;
+
+  editor.metadata.fixed.removeBlock(props.index);
 
   emit('deleted');
 };

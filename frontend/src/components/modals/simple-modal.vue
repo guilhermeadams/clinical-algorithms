@@ -4,7 +4,10 @@
     persistent
   >
     <q-card>
-      <q-card-section class="row items-center">
+      <q-card-section
+        class="row items-center"
+        :class="{ 'text-negative': props.negative }"
+      >
         <b class="q-px-md q-pt-sm">{{ props.title }}</b>
       </q-card-section>
 
@@ -15,7 +18,7 @@
       <q-card-actions align="right" class="q-pa-md">
         <q-btn
           style="padding: 0 30px"
-          label="Cancelar"
+          :label="props.cancelLabel"
           color="primary"
           @click="emitEvent('cancel')"
           flat
@@ -23,7 +26,7 @@
 
         <q-btn
           style="padding: 0 30px"
-          label="Excluir"
+          :label="props.confirmLabel"
           color="primary"
           push
           @click="emitEvent('confirm')"
@@ -48,6 +51,18 @@ const props = defineProps({
   itemName: {
     type: String,
     required: true,
+  },
+  negative: {
+    type: Boolean,
+    default: false,
+  },
+  confirmLabel: {
+    type: String,
+    default: 'Excluir',
+  },
+  cancelLabel: {
+    type: String,
+    default: 'Cancelar',
   },
 });
 

@@ -186,7 +186,7 @@ import Flowcharts from 'src/services/flowcharts';
 import EditModal from 'components/modals/edit-modal.vue';
 import { QForm, QInput, useQuasar } from 'quasar';
 import { myLocale } from 'src/services/locale';
-import DeleteModal from 'components/modals/delete-modal.vue';
+import DeleteModal from 'components/modals/simple-modal.vue';
 
 const flowcharts = inject('flowcharts') as Flowcharts;
 const $q = useQuasar();
