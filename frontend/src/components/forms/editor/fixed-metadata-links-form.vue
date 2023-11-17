@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { computed, inject, onBeforeMount } from 'vue';
-import MetadataLinkForm from 'components/forms/editor/metadata-link-form.vue';
+import MetadataLinkForm from 'components/forms/editor/fixed-metadata-link-form.vue';
 import Editor from 'src/services/editor';
 
 const editor = inject('editor') as Editor;

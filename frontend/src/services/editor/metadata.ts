@@ -228,7 +228,7 @@ class Metadata {
         ) {
           const { fixed } = metadata;
 
-          if (fixed && fixed.length) {
+          if (fixed && fixed.length && fixed[blockIndex - 1]) {
             this.data.totalLinks[blockIndex] = fixed[blockIndex - 1].links.length;
           }
         }
@@ -255,7 +255,7 @@ class Metadata {
 
         return undefined;
       },
-      setLinks: async (params: {
+      saveLink: async (params: {
         blockIndex: number,
         linkIndex: number,
         url: string,
@@ -266,33 +266,57 @@ class Metadata {
         if (selectedElement) {
           const metadata = this.getFromElement(selectedElement);
 
-          // already has fixed metadata
+          // has fixed metadata?
           if (
             metadata
             && metadata.fixed
             && metadata.fixed.length
           ) {
-            // eslint-disable-next-line no-restricted-syntax
-            for (const fixedMetadata of metadata.fixed) {
-              if (fixedMetadata.index === params.blockIndex) {
-                if (fixedMetadata.links.length) {
-                  void this.editor.element.setProp(
-                    `metadata/fixed/${params.blockIndex - 1}/links/${params.linkIndex - 1}/type`,
-                    params.type,
-                  );
-                } else {
-                  // console.log('NO LINKS');
-                  const updatedFixedMetadata = {
-                    ...fixedMetadata,
-                    links: [{
+            // has block
+            if (metadata.fixed[params.blockIndex - 1]) {
+              // has a link in this index?
+              if (
+                metadata.fixed[params.blockIndex - 1].links.length
+                && metadata.fixed[params.blockIndex - 1].links[params.linkIndex - 1]
+              ) {
+                // update the current link in block
+                void this.editor.element.setProp(
+                  `metadata/fixed/${params.blockIndex - 1}/links/${params.linkIndex - 1}`,
+                  {
+                    index: params.linkIndex,
+                    url: params.url,
+                    type: params.type,
+                  },
+                );
+              } else if (
+                metadata.fixed[params.blockIndex - 1].links.length
+              ) {
+                // add link in the block
+                const updatedFixedMetadata = {
+                  ...metadata.fixed[params.blockIndex - 1],
+                  links: [
+                    ...metadata.fixed[params.blockIndex - 1].links,
+                    {
                       index: params.linkIndex,
                       url: params.url,
                       type: params.type,
-                    }],
-                  };
+                    },
+                  ],
+                };
 
-                  void this.fixed.set(params.blockIndex, updatedFixedMetadata);
-                }
+                void this.fixed.set(params.blockIndex, updatedFixedMetadata);
+              } else { // will insert the very first link in the block
+                // insert new link in the block
+                const updatedFixedMetadata = {
+                  ...metadata.fixed[params.blockIndex - 1],
+                  links: [{
+                    index: params.linkIndex,
+                    url: params.url,
+                    type: params.type,
+                  }],
+                };
+
+                void this.fixed.set(params.blockIndex, updatedFixedMetadata);
               }
             }
           }

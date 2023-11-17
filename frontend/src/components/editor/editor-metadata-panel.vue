@@ -39,6 +39,7 @@
         <div
           v-else-if="isActionElement && totalBlocks"
         >
+          <!-- FIXED METADATA -->
           <metadata-fixed-form
             v-for="index of totalBlocks"
             :key="`metadata-fixed-form-${index}`"
@@ -62,7 +63,7 @@ import {
 
 import Editor from 'src/services/editor';
 
-import MetadataFixedForm from 'components/forms/editor/metadata-fixed-form.vue';
+import MetadataFixedForm from 'components/forms/editor/fixed-metadata-form.vue';
 import LoadingSpinner from 'components/spinners/loading-spinner.vue';
 
 const editor = inject('editor') as Editor;

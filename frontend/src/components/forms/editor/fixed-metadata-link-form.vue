@@ -22,18 +22,29 @@
             dense
           />
         </div>
+      </div>
 
+      <q-separator class="q-mt-md" />
+
+      <div class="bg-grey-2">
         <q-btn
-          :label="`Remove o link #${props.linkIndex}`"
-          class="full-width q-my-md"
+          :label="`Remover o link #${props.linkIndex}`"
+          class="full-width"
           color="negative"
           icon="close"
           no-caps
-          dense
           flat
-          @click="showDeleteLinkDialog = true"
+          @click="showRemoveLinkDialog = true"
         />
       </div>
+
+      <simple-modal
+        :show="showRemoveLinkDialog"
+        :title="`Deseja remover o link do bloco #${props.blockIndex}?`"
+        :item-name="`Link #${props.linkIndex}`"
+        @cancel="showRemoveLinkDialog = false"
+        @confirm="removeLink"
+      />
     </q-card-section>
   </q-card>
 </template>
@@ -48,8 +59,11 @@ import {
 } from 'vue';
 
 import Editor from 'src/services/editor';
+import SimpleModal from 'components/modals/simple-modal.vue';
 
 const editor = inject('editor') as Editor;
+
+const showRemoveLinkDialog = ref(false);
 
 const props = defineProps({
   blockIndex: {
@@ -62,8 +76,6 @@ const props = defineProps({
   },
 });
 
-const showDeleteLinkDialog = ref(false);
-
 const data = reactive({
   blockIndex: props.blockIndex,
   linkIndex: props.linkIndex,
@@ -72,8 +84,12 @@ const data = reactive({
 });
 
 watch(data, (value) => {
-  editor.metadata.fixed.setLinks({ ...value });
+  editor.metadata.fixed.saveLink({ ...value });
 });
+
+const removeLink = () => {
+  //
+};
 
 const setInitialValues = () => {
   const link = editor.metadata.fixed.getLinks(props.blockIndex, props.linkIndex);
