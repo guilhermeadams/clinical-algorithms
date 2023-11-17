@@ -336,6 +336,8 @@ class Element {
               const element = this.textarea.getEditorElement(event.target);
 
               element?.prop('props/label', event.target.value);
+
+              this.editor.graph.notSaved();
             });
           }
         }

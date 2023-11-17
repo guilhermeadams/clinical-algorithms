@@ -139,6 +139,8 @@ class Metadata {
         }
 
         setTimeout(() => {
+          this.editor.graph.notSaved();
+
           this.data.loadingBlocks = false;
         }, 1000);
       },
@@ -348,6 +350,10 @@ class Metadata {
                     type: params.type,
                   },
                 );
+
+                if (!this.editor.metadata.data.mountingComponent) {
+                  this.editor.graph.notSaved();
+                }
               } else if (
                 metadata.fixed[params.blockIndex - 1].links.length
               ) {
