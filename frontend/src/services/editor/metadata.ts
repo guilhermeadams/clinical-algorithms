@@ -255,6 +255,66 @@ class Metadata {
 
         return undefined;
       },
+      removeLink: (blockIndex: number, linkIndex: number) => {
+        this.data.loadingBlocks = true;
+
+        const selectedElement = this.editor.element.getSelected();
+
+        if (selectedElement) {
+          const metadata = this.getFromElement(selectedElement);
+
+          // already has fixed metadata
+          if (
+            metadata
+            && metadata.fixed
+            && metadata.fixed.length
+          ) {
+            // has block
+            if (metadata.fixed[blockIndex - 1]) {
+              // has a links?
+              if (
+                metadata.fixed[blockIndex - 1].links.length
+              ) {
+                const oldLinks = [...metadata.fixed[blockIndex - 1].links];
+                const updatedLinks: IFixedMetadataLink[] = [];
+
+                // clear before updating
+                void this.editor.element.setProp(
+                  `metadata/fixed/${blockIndex - 1}/links`,
+                  null,
+                );
+
+                let newIndex = 1;
+
+                // eslint-disable-next-line no-restricted-syntax
+                for (const oldLink of oldLinks) {
+                  if (oldLink.index !== linkIndex) {
+                    updatedLinks.push({
+                      ...oldLink,
+                      index: newIndex,
+                    });
+
+                    newIndex += 1;
+                  }
+                }
+
+                void this.editor.element.setProp(
+                  `metadata/fixed/${blockIndex - 1}/links`,
+                  [...updatedLinks],
+                );
+              }
+            }
+
+            setTimeout(() => {
+              const updatedMetadata = this.getFromElement(selectedElement);
+
+              this.data.totalBlocks = updatedMetadata?.fixed.length || 0;
+
+              this.data.loadingBlocks = false;
+            }, 1000);
+          }
+        }
+      },
       saveLink: async (params: {
         blockIndex: number,
         linkIndex: number,
