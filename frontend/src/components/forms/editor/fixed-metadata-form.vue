@@ -57,6 +57,7 @@
               />
 
               <q-select
+                v-if="isFormal"
                 v-model="data.strength"
                 :options="['Forte', 'Fraca']"
                 class="q-my-lg"
@@ -65,6 +66,7 @@
               />
 
               <q-select
+                v-if="isFormal"
                 v-model="data.certainty_of_the_evidence"
                 :options="['Alta', 'Moderada', 'Baixa', 'Não especificada']"
                 class="q-my-lg"
@@ -178,6 +180,8 @@ const data = reactive({
 });
 
 const blockName = computed(() => `Bloco #${props.index}`);
+
+const isFormal = computed(() => data.recommendation_type === 'Recomendação formal');
 
 watch(data, (value) => {
   editor.metadata.fixed.set(props.index, { ...value });
