@@ -56,6 +56,12 @@ class Element {
     return this.getSelected()?.prop('type') === CustomElement.EVALUATION;
   }
 
+  public isLane(element?: dia.Element) {
+    if (element) return element.prop('type') === CustomElement.LANE;
+
+    return this.getSelected()?.prop('type') === CustomElement.LANE;
+  }
+
   public setCreationPosition(x: number, y: number) {
     this.data.creationPosition = { x, y };
   }
@@ -68,14 +74,14 @@ class Element {
     this.editor.graph.notSaved();
   }
 
-  private customRemoveButton() {
+  private customRemoveButton(x = 0, y = 0) {
     return new joint.elementTools.Button({
       focusOpacity: 0.5,
       // x,
       // y,
       offset: {
-        x: 0,
-        y: 0,
+        x,
+        y,
       },
       action: () => {
         this.removeSelected();
@@ -102,18 +108,30 @@ class Element {
 
   public createElementsTools(elements: dia.Element[]) {
     elements.forEach((element) => {
-      this.createTools(element);
+      if (element.prop('type') === CustomElement.LANE) {
+        this.createTools(element, {
+          removeButtons: {
+            x: 20,
+            y: 17,
+          },
+        });
+      } else {
+        this.createTools(element);
+      }
     });
   }
 
-  private createTools(element: dia.Element) {
+  private createTools(element: dia.Element, params?: { removeButtons: { x: number, y: number } }) {
     const boundaryTool = new joint.elementTools.Boundary({
       padding: 10,
       rotate: true,
       useModelGeometry: true,
     });
 
-    const removeButton = this.customRemoveButton();
+    const removeButton = this.customRemoveButton(
+      params?.removeButtons.x,
+      params?.removeButtons.y,
+    );
 
     const toolsView = new joint.dia.ToolsView({
       tools: [
@@ -152,6 +170,10 @@ class Element {
         this.setCreationPosition(event.x - 24, event.y - 135);
         await this.create.End();
         break;
+      case CustomElement.LANE:
+        this.setCreationPosition(event.x - 24, event.y - 135);
+        await this.create.Lane();
+        break;
       default:
         await this.create.Start();
     }
@@ -183,7 +205,7 @@ class Element {
 
         this.createTools(element);
 
-        this.textarea.createEventHandlers();
+        this.input.createEventHandlers();
       },
       Evaluation: async () => {
         const element = new customElements.EvaluationElement({
@@ -196,7 +218,7 @@ class Element {
 
         this.createTools(element);
 
-        this.textarea.createEventHandlers();
+        this.input.createEventHandlers();
       },
       End: async () => {
         const element = new customElements.EndElement({
@@ -207,6 +229,23 @@ class Element {
         }).addTo(this.editor.data.graph);
 
         this.createTools(element);
+      },
+      Lane: async () => {
+        const element = new customElements.LaneElement({
+          position: {
+            x: 0,
+            y: this.data.creationPosition.y,
+          },
+        }).resize(3000, 50).addTo(this.editor.data.graph);
+
+        this.createTools(element, {
+          removeButtons: {
+            x: 20,
+            y: 17,
+          },
+        });
+
+        this.input.createEventHandlers();
       },
     };
   }
@@ -287,7 +326,7 @@ class Element {
     return '';
   }
 
-  get textarea() {
+  get input() {
     return {
       getFromEditorElement(elementId: dia.Cell.ID) {
         const domElement = document.querySelector(`[model-id="${elementId}"]`);
@@ -303,8 +342,12 @@ class Element {
       },
       setValues: (elements: dia.Element[]) => {
         elements.forEach((element) => {
-          if (this.isAction(element) || this.isEvaluation(element)) {
-            const textarea = this.textarea.getFromEditorElement(element.id);
+          if (
+            this.isAction(element)
+            || this.isEvaluation(element)
+            || this.isLane(element)
+          ) {
+            const textarea = this.input.getFromEditorElement(element.id);
 
             if (textarea) {
               textarea.value = element.prop('props/label') || '';
@@ -333,8 +376,9 @@ class Element {
           // eslint-disable-next-line no-restricted-syntax
           for (const textareaElement of inputElements) {
             textareaElement.addEventListener('input', (event: any) => {
-              const element = this.textarea.getEditorElement(event.target);
+              const element = this.input.getEditorElement(event.target);
 
+              console.log(element?.id, event.target.value);
               element?.prop('props/label', event.target.value);
 
               this.editor.graph.notSaved();

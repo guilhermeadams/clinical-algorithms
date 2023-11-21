@@ -53,6 +53,22 @@
         <b>Término</b>
       </div>
     </div>
+
+    <div
+      class="create-element-button cursor-pointer text-center q-mb-sm"
+      draggable="true"
+      @dragstart="setCreatingElement(CustomElement.LANE)"
+    >
+      <q-icon
+        class="q-mr-sm inline-block"
+        name="power_input"
+        color="black"
+        size="34px"
+      />
+      <div class="inline-block q-mt-sm text-black">
+        <b>Raia</b>
+      </div>
+    </div>
   </div>
 </template>
 

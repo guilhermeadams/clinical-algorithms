@@ -3,7 +3,7 @@ import { dia } from 'jointjs';
 
 import { IJointData } from 'src/services/editor/types';
 import { reactive } from 'vue';
-import customElements from 'src/services/editor/elements/custom-elements';
+import customElements, { CustomElement } from 'src/services/editor/elements/custom-elements';
 import Element from 'src/services/editor/element';
 import Graph from 'src/services/editor/graph';
 import Metadata from 'src/services/editor/metadata';
@@ -66,7 +66,6 @@ class Editor {
           defaultLink: () => Editor.createLink(),
           linkPinning: false,
           snapLinks: { radius: 10 },
-
         });
 
         this.data.paper.on('blank:pointerup', (/* elementView */) => {
@@ -85,7 +84,7 @@ class Editor {
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        this.data.graph.on('change:position', (/* cell: dia.Cell */) => {
+        this.data.graph.on('change:position', (cell: dia.Cell) => {
           this.graph.notSaved();
         });
 
@@ -104,6 +103,20 @@ class Editor {
 
           console.log('SELECTED ELEMENT:');
           console.log(this.element.getSelected());
+
+          const selectedElement = this.element.getSelected();
+
+          if (selectedElement && selectedElement.prop('type') === CustomElement.LANE) {
+            const { y } = selectedElement.position();
+
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            selectedElement.position(0, y);
+
+            if (document.activeElement?.tagName !== 'INPUT') {
+              deselectAllTexts();
+            }
+          }
         });
 
         this.data.paper.on('link:snap:connect', () => {

@@ -80,9 +80,9 @@ class Graph {
 
           this.editor.element.createElementsTools(allElements);
 
-          this.editor.element.textarea.setValues(allElements);
+          this.editor.element.input.setValues(allElements);
 
-          this.editor.element.textarea.createEventHandlers();
+          this.editor.element.input.createEventHandlers();
         }
       } else {
         // TODO: create empty graph...
