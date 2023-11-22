@@ -75,6 +75,7 @@ class Editor {
         this.data.paper.on('blank:pointerdown cell:pointerdown', () => {
           if (document.activeElement && document.activeElement instanceof HTMLElement) {
             document.activeElement.blur();
+            deselectAllTexts();
           }
         });
 
@@ -86,6 +87,8 @@ class Editor {
         // @ts-ignore
         this.data.graph.on('change:position', (cell: dia.Cell) => {
           this.graph.notSaved();
+
+          deselectAllTexts();
         });
 
         this.data.paper.on('element:pointerdown', (/* elementView: dia.ElementView */) => {
@@ -93,6 +96,7 @@ class Editor {
         });
 
         this.data.paper.on('element:pointerup', (elementView: dia.ElementView) => {
+          console.log('FOI!!!');
           this.element.deselectAll();
 
           elementView.showTools();

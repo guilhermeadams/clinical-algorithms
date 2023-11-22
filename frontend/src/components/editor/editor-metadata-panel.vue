@@ -70,11 +70,13 @@ const editor = inject('editor') as Editor;
 
 const totalBlocks = computed(() => editor.metadata.data.totalBlocks);
 
-const showMetadataPanel = computed(() => editor.metadata.data.showPanel);
-
 const isActionElement = computed(() => editor.element.isAction());
 
 const isEvaluationElement = computed(() => editor.element.isEvaluation());
+
+const showMetadataPanel = computed(
+  () => editor.metadata.data.showPanel && (isActionElement.value || isEvaluationElement.value),
+);
 
 const loadingBlocks = computed(() => editor.metadata.data.loadingBlocks);
 

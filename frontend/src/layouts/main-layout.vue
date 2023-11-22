@@ -3,6 +3,7 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn
+          v-if="showMenuButton"
           flat
           dense
           round
@@ -35,13 +36,19 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue';
+import { computed, inject } from 'vue';
 import Settings from 'src/services/settings';
 import MainMenu from 'components/menus/main-menu.vue';
+import { useRoute } from 'vue-router';
+import { FLOWCHARTS_EDITOR } from 'src/router/routes/flowcharts';
+
+const route = useRoute();
 
 const settings = inject('settings') as Settings;
 
-function toggleLeftDrawer() {
+const toggleLeftDrawer = () => {
   settings.page.mainMenu = !settings.page.mainMenu;
-}
+};
+
+const showMenuButton = computed(() => route.name !== FLOWCHARTS_EDITOR);
 </script>

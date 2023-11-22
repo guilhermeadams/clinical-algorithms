@@ -238,7 +238,7 @@ const customElements = {
         >
           <div>
             <div
-              style="height:20px;border-bottom:3px solid #777777;margin-top:30px;cursor:ns-resize"
+              style="height:20px;border-bottom:2px solid #777777;margin-top:30px;cursor:ns-resize"
               class="editor-lane-element"
             >
             </div>
