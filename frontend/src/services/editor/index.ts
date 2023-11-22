@@ -96,7 +96,6 @@ class Editor {
         });
 
         this.data.paper.on('element:pointerup', (elementView: dia.ElementView) => {
-          console.log('FOI!!!');
           this.element.deselectAll();
 
           elementView.showTools();
