@@ -16,10 +16,11 @@
 
   #editor-elements-toolbar
     z-index: 9999
-    top: 30px
+    left: 0
+    top: 10px
     position: absolute
     width: 160px
-    height: 325px
+    height: 390px
     border: 1px solid rgba(0, 0, 0, 0.05)
     -webkit-border-top-right-radius: 15px
     -webkit-border-bottom-right-radius: 15px
@@ -27,6 +28,10 @@
     -moz-border-radius-bottomright: 15px
     border-top-right-radius: 15px
     border-bottom-right-radius: 15px
+    transition: left ease-in 0.2s
+
+  #editor-elements-toolbar.hide
+    left: -160px
 
   #editor-metadata-panel
     z-index: 100

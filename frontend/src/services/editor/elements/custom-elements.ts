@@ -7,6 +7,7 @@ export enum CustomElement {
   END = 'EndElement',
   LINK = 'LinkElement',
   // CARD = 'ElementCardExample',
+  LANE = 'LaneElement',
 }
 
 export const elementName: {
@@ -18,6 +19,7 @@ export const elementName: {
   [CustomElement.END]: 'Fim',
   [CustomElement.LINK]: 'Link',
   // [CustomElement.CARD]: 'Card interativo',
+  [CustomElement.LANE]: 'Raia',
 };
 
 export const PORT = {
@@ -218,6 +220,40 @@ const customElements = {
   //     selector: 'icon',
   //   }],
   // }),
+
+  [CustomElement.LANE]: joint.dia.Element.define(CustomElement.LANE, {
+    attrs: {
+      foreignObject: {
+        width: 'calc(w)',
+        height: 'calc(h)',
+      },
+    },
+  }, {
+    markup: joint.util.svg/* xml */`
+      <foreignObject
+        @selector="foreignObject"
+      >
+        <div
+          xmlns="http://www.w3.org/1999/xhtml"
+        >
+          <div>
+            <div
+              style="height:20px;border-bottom:2px solid #777777;margin-top:30px;cursor:ns-resize"
+              class="editor-lane-element"
+            >
+            </div>
+            <input
+              class="${TEXTAREA_CLASSNAME}"
+              placeholder="Nome da raia"
+              contenteditable="true"
+              maxlength="70"
+              spellcheck="false"
+            />
+          </div>
+        </div>
+      </foreignObject>
+    `,
+  }),
 
   [CustomElement.END]: joint.dia.Element.define(CustomElement.END, {
     size: {

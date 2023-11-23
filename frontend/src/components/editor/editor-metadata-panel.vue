@@ -15,7 +15,7 @@
         </div>
 
         <div
-          v-if="isActionElement"
+          v-if="isActionElement || isEvaluationElement"
           class="q-pt-sm q-pb-md q-px-md"
         >
           <div><b>Metadados - Blocos Fixos</b></div>
@@ -37,7 +37,7 @@
         </div>
 
         <div
-          v-else-if="isActionElement && totalBlocks"
+          v-else-if="totalBlocks && (isActionElement || isEvaluationElement)"
         >
           <!-- FIXED METADATA -->
           <metadata-fixed-form
@@ -70,9 +70,13 @@ const editor = inject('editor') as Editor;
 
 const totalBlocks = computed(() => editor.metadata.data.totalBlocks);
 
-const showMetadataPanel = computed(() => editor.metadata.data.showPanel);
-
 const isActionElement = computed(() => editor.element.isAction());
+
+const isEvaluationElement = computed(() => editor.element.isEvaluation());
+
+const showMetadataPanel = computed(
+  () => editor.metadata.data.showPanel && (isActionElement.value || isEvaluationElement.value),
+);
 
 const loadingBlocks = computed(() => editor.metadata.data.loadingBlocks);
 

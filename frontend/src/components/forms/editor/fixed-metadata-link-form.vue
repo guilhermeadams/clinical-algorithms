@@ -88,7 +88,7 @@ watch(data, (value) => {
 });
 
 const removeLink = () => {
-  //
+  editor.metadata.fixed.removeLink(props.blockIndex, props.linkIndex);
 };
 
 const setInitialValues = () => {
