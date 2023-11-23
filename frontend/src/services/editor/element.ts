@@ -378,7 +378,6 @@ class Element {
             textareaElement.addEventListener('input', (event: any) => {
               const element = this.input.getEditorElement(event.target);
 
-              console.log(element?.id, event.target.value);
               element?.prop('props/label', event.target.value);
 
               this.editor.graph.notSaved();

@@ -5,15 +5,21 @@
   >
     <q-card>
       <q-card-section
+        v-if="props.title"
         class="row items-center"
         :class="{ 'text-negative': props.negative }"
       >
         <b class="q-px-md q-pt-sm">{{ props.title }}</b>
       </q-card-section>
 
-      <q-card-section class="text-center q-pb-lg">
+      <q-card-section
+        v-if="props.itemName"
+        class="text-center q-pb-lg"
+      >
         {{ props.itemName }}
       </q-card-section>
+
+      <slot />
 
       <q-card-actions align="right" class="q-pa-md">
         <q-btn
@@ -46,11 +52,11 @@ const props = defineProps({
   },
   title: {
     type: String,
-    required: true,
+    default: '',
   },
   itemName: {
     type: String,
-    required: true,
+    default: '',
   },
   negative: {
     type: Boolean,

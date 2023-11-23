@@ -3,7 +3,7 @@ from app.schemas.algorithm import AlgorithmSchema
 from app.db import conn
 from .data_handler import algorithm_to_dict, to_iso_date
 from sqlalchemy import insert, update
-from app.services import algorithms_graphs
+from app.services import graphs
 
 
 def index():
@@ -42,7 +42,7 @@ def store(algorithm: AlgorithmSchema):
         )
     )
 
-    algorithms_graphs.store(algorithm_id=stored_algorithm.lastrowid)
+    graphs.store(algorithm_id=stored_algorithm.lastrowid)
 
     conn.commit()
     return stored_algorithm
@@ -55,7 +55,6 @@ def update_algorithm(algorithm: AlgorithmSchema):
         .values(
             title=algorithm.title,
             description=algorithm.description,
-            # author=algorithm.author,
             version=algorithm.version,
             updated_at=to_iso_date(algorithm.updated_at)
         )
@@ -67,7 +66,7 @@ def update_algorithm(algorithm: AlgorithmSchema):
 
 def delete(algorithm_id: int):
     # delete the graph before...
-    algorithms_graphs.delete(algorithm_id)
+    graphs.delete(algorithm_id)
 
     deleted_algorithm = conn.execute(
         algorithm_model.delete().where(algorithm_model.c.id == algorithm_id)

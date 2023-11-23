@@ -112,7 +112,7 @@
 
             <div class="bg-grey-2">
               <q-btn
-                :label="`Remover o bloco ${blockName}`"
+                :label="`Remover bloco ${blockName}`"
                 class="full-width"
                 color="negative"
                 icon="close"

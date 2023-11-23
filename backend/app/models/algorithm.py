@@ -14,8 +14,8 @@ algorithm_model = Table(
 )
 
 
-algorithm_graph_model = Table(
-    'algorithms_graphs',
+graph_model = Table(
+    'graphs',
     meta,
     Column('id', BIGINT, primary_key=True, index=True),
     Column('algorithm_id', BIGINT, index=True),
