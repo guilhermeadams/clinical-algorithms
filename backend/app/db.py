@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, MetaData
+from sqlalchemy.ext.declarative import declarative_base
 from dotenv import dotenv_values
-# from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker
 
 config = dotenv_values(".env")
 
@@ -17,10 +18,9 @@ DB_URL += db_config['host']+":"+db_config['port']+"/"+db_config['name']
 
 engine = create_engine(DB_URL)
 
-# TODO: Learn how this things works.
-# SessionLocal = sessionmaker(autocommit=True, autoflush=False, bind=engine)
-# Base = declarative_base()
-
 meta = MetaData()
 
 conn = engine.connect()
+
+SessionLocal = sessionmaker(autocommit=True, autoflush=False, bind=engine)
+Base = declarative_base()

@@ -1,4 +1,4 @@
-from app.models.algorithm import algorithms as algorithm_model
+from app.models.algorithm import algorithm_model
 from app.schemas.algorithm import AlgorithmSchema
 from app.db import conn
 from .data_handler import algorithm_to_dict, to_iso_date
@@ -75,4 +75,3 @@ def delete(algorithm_id: int):
 
     conn.commit()
     return deleted_algorithm
-
