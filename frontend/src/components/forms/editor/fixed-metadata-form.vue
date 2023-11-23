@@ -4,23 +4,25 @@
       <q-expansion-item
         :label="blockName"
         default-opened
+        header-class="bg-grey-2 text-primary text-body1"
+        expand-icon-class="text-primary"
       >
         <q-card>
           <q-card-section class="q-pa-none">
-            <div class="q-px-md q-pb-md">
+            <div class="q-px-md q-py-md">
+              <q-select
+                v-model="data.recommendation_type"
+                :options="['Recomendação formal', 'Boa prática', 'Recomendação informal']"
+                class="q-mb-lg"
+                label="Tipo de recomendação"
+                dense
+              />
+
               <q-input
                 v-model="data.description"
                 label="Descrição"
                 type="textarea"
                 spellcheck="false"
-                dense
-              />
-
-              <q-select
-                v-model="data.recommendation_type"
-                :options="['Recomendação formal', 'Boa prática', 'Recomendação informal']"
-                class="q-my-lg"
-                label="Tipo de recomendação"
                 dense
               />
 
@@ -110,7 +112,7 @@
 
             <div class="bg-grey-2">
               <q-btn
-                :label="`Remover o bloco #${props.index}`"
+                :label="`Remover o bloco ${blockName}`"
                 class="full-width"
                 color="negative"
                 icon="close"
@@ -126,7 +128,7 @@
       <!-- REMOVE METADATA BLOCK -->
       <delete-modal
         :show="showDeleteBlockDialog"
-        title="Deseja excluir o bloco de metadados?"
+        title="Tem certeza que deseja excluir estas informações?"
         :item-name="blockName"
         @cancel="showDeleteBlockDialog = false"
         @confirm="deleteBlock"
@@ -179,7 +181,7 @@ const data = reactive({
   links: [],
 });
 
-const blockName = computed(() => `Bloco #${props.index}`);
+const blockName = computed(() => `${props.index}. ${data.recommendation_type}`);
 
 const isFormal = computed(() => data.recommendation_type === 'Recomendação formal');
 
