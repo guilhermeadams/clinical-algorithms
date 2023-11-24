@@ -5,11 +5,11 @@
     </div>
 
     <div class="inline-block q-mr-xl">
-      <b>Versão:</b> {{ algorithm.version }}
+      <b>Versión:</b> {{ algorithm.version }}
     </div>
 
     <div class="inline-block">
-      <b class="q-mr-sm">Categorias:</b>
+      <b class="q-mr-sm">Categorías:</b>
 <!--      <q-chip-->
 <!--        v-for="category of algorithm.categories"-->
 <!--        :key="category"-->
@@ -18,7 +18,7 @@
 <!--        style="padding-left:12px;padding-right:12px;"-->
 <!--        dense-->
 <!--      />-->
-      Nenhuma categoria definida.
+      No hay categorías definidas.
     </div>
   </div>
 </template>

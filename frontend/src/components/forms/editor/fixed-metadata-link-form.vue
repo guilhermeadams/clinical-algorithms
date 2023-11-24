@@ -3,7 +3,7 @@
     <q-card-section class="q-pa-none">
       <div class="q-px-md">
         <div class="q-pt-md q-mb-sm">
-          Link #{{ props.linkIndex }}
+          Enlace #{{ props.linkIndex }}
         </div>
 
         <q-input
@@ -16,9 +16,9 @@
         <div class="q-pb-xs">
           <q-select
             v-model="data.type"
-            :options="['Texto completo', 'Banco de dados BIG', 'Banco de dados BIGREC']"
+            :options="['Texto completo', 'Base de datos BIG', 'Base de datos BIGREC']"
             class="q-mt-lg"
-            label="Tipo de link"
+            label="Tipo de enlace"
             dense
           />
         </div>
@@ -28,7 +28,7 @@
 
       <div class="bg-grey-2">
         <q-btn
-          :label="`Remover este link`"
+          label="Eliminar este enlace"
           class="full-width"
           color="negative"
           icon="close"

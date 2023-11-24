@@ -28,19 +28,19 @@ const emptyFlowchart = {
 
 const resource = 'algorithms';
 
-class Flowcharts {
+class Algorithms {
   public data: {
     loading: boolean,
     showEditDialog: boolean,
-    flowcharts: IFlowchart[],
-    flowchart: IFlowchart,
+    algorithms: IFlowchart[],
+    algorithm: IFlowchart,
     searchResults: IFlowchart[] | null,
     totalSearchResult: number | null,
   } = reactive({
       loading: false,
       showEditDialog: false,
-      flowcharts: [],
-      flowchart: { ...emptyFlowchart },
+      algorithms: [],
+      algorithm: { ...emptyFlowchart },
       searchResults: null,
       totalSearchResult: null,
     });
@@ -48,7 +48,7 @@ class Flowcharts {
   get flowchartsList() {
     if (this.data.totalSearchResult !== null) return this.data.searchResults;
 
-    return this.data.flowcharts;
+    return this.data.algorithms;
   }
 
   public async getAll() {
@@ -58,7 +58,7 @@ class Flowcharts {
       const { data: flowcharts }: { data: IFlowchart[] } = await api.get(resource);
 
       if (flowcharts) {
-        this.data.flowcharts = [...flowcharts];
+        this.data.algorithms = [...flowcharts];
       }
 
       return Promise.resolve(true);
@@ -98,16 +98,16 @@ class Flowcharts {
   }
 
   public startCreating() {
-    this.data.flowchart = { ...emptyFlowchart };
+    this.data.algorithm = { ...emptyFlowchart };
 
     this.toggleEditDialog();
   }
 
   public viewFlowchartData(flowchart: IFlowchart) {
-    this.data.flowchart = { ...flowchart };
+    this.data.algorithm = { ...flowchart };
 
     // convert to brazilian date (DD/MM/YYYY)
-    this.data.flowchart.updated_at = date.toBR(flowchart.updated_at);
+    this.data.algorithm.updated_at = date.toBR(flowchart.updated_at);
 
     this.toggleEditDialog();
   }
@@ -116,10 +116,10 @@ class Flowcharts {
     try {
       this.data.loading = true;
 
-      const finalResource = `${resource}/${this.data.flowchart.id}`;
+      const finalResource = `${resource}/${this.data.algorithm.id}`;
 
       await api.put(finalResource, {
-        ...this.data.flowchart,
+        ...this.data.algorithm,
       });
 
       await this.getAll();
@@ -137,7 +137,7 @@ class Flowcharts {
       this.data.loading = true;
 
       await api.post(resource, {
-        ...this.data.flowchart,
+        ...this.data.algorithm,
       });
 
       await this.getAll();
@@ -152,7 +152,7 @@ class Flowcharts {
 
   public async delete() {
     try {
-      await api.delete(`${resource}/${this.data.flowchart.id}`);
+      await api.delete(`${resource}/${this.data.algorithm.id}`);
 
       await this.getAll();
 
@@ -174,4 +174,4 @@ class Flowcharts {
   }
 }
 
-export default Flowcharts;
+export default Algorithms;

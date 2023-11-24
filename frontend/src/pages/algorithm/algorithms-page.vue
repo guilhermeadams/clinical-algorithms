@@ -3,7 +3,7 @@
     <div class="row q-mx-md q-py-sm">
       <div class="col-3">
         <search-input
-          label="Buscar fluxogramas"
+          label="Buscar algoritmos"
           @search="searchFlowchart"
           @clear="clearSearch"
         />
@@ -11,7 +11,7 @@
 
       <div class="col-9 q-pt-lg q-pr-md text-right">
         <q-btn
-          label="Cadastrar fluxograma"
+          label="Registrar algoritmo"
           color="primary"
           push
           @click="createFlowchart"
@@ -21,11 +21,11 @@
 
     <div class="row q-mx-md q-mb-sm">
       <div class="col-12">
-        <flowcharts-table />
+        <algorithms-table />
       </div>
     </div>
 
-    <edit-flowchart-modal />
+    <edit-algorithm-modal />
   </q-page>
 </template>
 
@@ -38,25 +38,25 @@ import {
 
 import Settings from 'src/services/settings';
 import SearchInput from 'components/inputs/search-input.vue';
-import FlowchartsTable from 'components/tables/flowcharts-table.vue';
-import Flowcharts from 'src/services/flowcharts';
-import EditFlowchartModal from 'components/modals/flowcharts/edit-flowchart-modal.vue';
+import AlgorithmsTable from 'components/tables/algorithms-table.vue';
+import Algorithms from 'src/services/algorithms';
+import EditAlgorithmModal from 'components/modals/algorithms/edit-algorithm-modal.vue';
 import { onBeforeRouteLeave } from 'vue-router';
-import { FLOWCHARTS_EDITOR } from 'src/router/routes/flowcharts';
+import { FLOWCHARTS_EDITOR } from 'src/router/routes/algorithms';
 
-const flowcharts = new Flowcharts();
-provide('flowcharts', flowcharts);
+const algorithms = new Algorithms();
+provide('algorithms', algorithms);
 
 const settings = inject('settings') as Settings;
 
-const searchFlowchart = (keyword: string) => flowcharts.search(keyword);
+const searchFlowchart = (keyword: string) => algorithms.search(keyword);
 
-const clearSearch = () => flowcharts.clearSearch();
+const clearSearch = () => algorithms.clearSearch();
 
-const createFlowchart = () => flowcharts.startCreating();
+const createFlowchart = () => algorithms.startCreating();
 
 onBeforeMount(() => {
-  settings.page.setTitle('Fluxogramas');
+  settings.page.setTitle('Algoritmos');
 });
 
 onBeforeRouteLeave((leaveGuard) => {

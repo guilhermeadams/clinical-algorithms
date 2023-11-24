@@ -3,7 +3,7 @@
     <div class="row q-mx-md q-py-sm">
       <div class="col-3">
         <search-input
-          label="Buscar usuários"
+          label="Buscar usuarios"
           @search="searchUsers"
           @clear="clearSearch"
         />
@@ -11,7 +11,7 @@
 
       <div class="col-9 q-pt-lg q-pr-md text-right">
         <q-btn
-          label="Cadastrar usuário"
+          label="Registrar usuario"
           color="primary"
           push
           @click="createUser"

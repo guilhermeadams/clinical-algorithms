@@ -24,10 +24,10 @@
 
     <simple-modal
       :show="editor.data.showSaveDialog"
-      confirm-label="Salvar"
-      cancel-label="Sair"
-      title="Existem alterações não salvas neste fluxograma"
-      item-name="Deseja salvar antes de sair?"
+      confirm-label="Guardar"
+      cancel-label="Salir"
+      title="Hay cambios no guardados en este algoritmo."
+      item-name="¿Quieres guardar antes de salir?"
       :negative="true"
       @cancel="goFlowchartsPage"
       @confirm="saveGraph"
@@ -54,7 +54,7 @@ import EditorElementsToolbar from 'components/editor/editor-elements-toolbar.vue
 import EditorMetadataPanel from 'components/editor/editor-metadata-panel.vue';
 import EditorActionsButtons from 'components/editor/editor-actions-buttons.vue';
 import SimpleModal from 'components/modals/simple-modal.vue';
-import { FLOWCHARTS_INDEX } from 'src/router/routes/flowcharts';
+import { FLOWCHARTS_INDEX } from 'src/router/routes/algorithms';
 
 const editor = new Editor();
 provide('editor', editor);
@@ -79,7 +79,7 @@ const saveGraph = async () => {
 };
 
 onBeforeMount(() => {
-  settings.page.setTitle('Editor de fluxogramas');
+  settings.page.setTitle('Editor de algoritmos');
 
   settings.page.mainMenu = false;
 

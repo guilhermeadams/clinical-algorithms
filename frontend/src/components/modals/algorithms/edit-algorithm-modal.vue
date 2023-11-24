@@ -1,11 +1,11 @@
 <template>
   <edit-modal
     :show="showEditUserDialog"
-    title="Dados básicos do fluxograma"
+    title="Datos básicos del algoritmo"
     :deleting="data.deleting"
     :saving="data.saving"
     :editing="data.editing"
-    :hide-delete="!flowcharts.data.flowchart.id"
+    :hide-delete="!algorithms.data.algorithm.id"
     @delete="showDeleteDialog"
     @edit="setEditing"
     @save="submitFlowchartForm"
@@ -19,30 +19,30 @@
       <!-- TITLE -->
       <q-input
         v-if="canEdit"
-        v-model="flowcharts.data.flowchart.title"
+        v-model="algorithms.data.algorithm.title"
         ref="inputFlowchartTitle"
-        label="Título do fluxograma"
-        :rules="[val => !!val || 'Informe o título do fluxograma']"
+        label="Título"
+        :rules="[val => !!val || 'Introduzca el título del algoritmo']"
         lazy-rules
       />
       <div v-else>
-        <div class="text-caption text-grey-7">Título do fluxograma:</div>
-        <div>{{ flowcharts.data.flowchart.title }}</div>
+        <div class="text-caption text-grey-7">Título:</div>
+        <div>{{ algorithms.data.algorithm.title }}</div>
       </div>
 
       <!-- DESCRIPTION -->
       <q-input
         v-if="canEdit"
-        v-model="flowcharts.data.flowchart.description"
-        label="Síntese do fluxograma"
+        v-model="algorithms.data.algorithm.description"
+        label="Resumen"
         type="textarea"
-        :rules="[val => !!val || 'Informe a síntese do fluxograma']"
+        :rules="[val => !!val || 'Proporcione un resumen del algoritmo']"
         lazy-rules
         rows="4"
       />
       <div v-else>
-        <div class="text-caption text-grey-7">Síntese do fluxograma:</div>
-        <div>{{ flowcharts.data.flowchart.description }}</div>
+        <div class="text-caption text-grey-7">Resumen:</div>
+        <div>{{ algorithms.data.algorithm.description }}</div>
       </div>
 
       <!-- AUTHOR / VERSION  -->
@@ -50,24 +50,24 @@
         <div class="col-8 q-pr-lg">
           <q-input
             v-if="canEdit"
-            v-model="flowcharts.data.flowchart.author"
-            label="Autor do fluxograma"
+            v-model="algorithms.data.algorithm.author"
+            label="Autor"
             disable
           />
           <div v-else>
-            <div class="text-caption text-grey-7">Autor do fluxograma:</div>
-            <div>{{ flowcharts.data.flowchart.author || 'Não definido' }}</div>
+            <div class="text-caption text-grey-7">Autor:</div>
+            <div>{{ algorithms.data.algorithm.author || 'No definido' }}</div>
           </div>
         </div>
 
         <div class="col-4">
           <q-input
             v-if="canEdit"
-            v-model="flowcharts.data.flowchart.updated_at"
-            label="Última atualização"
+            v-model="algorithms.data.algorithm.updated_at"
+            label="Última actualización"
             maxlength="10"
             clearable
-            :rules="[val => !!val || 'Informe data da atualização']"
+            :rules="[val => !!val || 'Introduce la fecha de actualización']"
             lazy-rules
           >
             <template v-slot:append>
@@ -81,7 +81,7 @@
                   transition-hide="scale"
                 >
                   <q-date
-                    v-model="flowcharts.data.flowchart.updated_at"
+                    v-model="algorithms.data.algorithm.updated_at"
                     :locale="myLocale"
                     mask="DD/MM/YYYY"
                   >
@@ -99,8 +99,8 @@
             </template>
           </q-input>
           <div v-else>
-            <div class="text-caption text-grey-7">Última atualização:</div>
-            <div>{{ flowcharts.data.flowchart.updated_at }}</div>
+            <div class="text-caption text-grey-7">Última actualización:</div>
+            <div>{{ algorithms.data.algorithm.updated_at }}</div>
           </div>
         </div>
       </div>
@@ -110,11 +110,11 @@
           <!-- CATEGORIES -->
           <q-select
             v-if="canEdit"
-            v-model="flowcharts.data.flowchart.categories"
+            v-model="algorithms.data.algorithm.categories"
             :options="categoriesMocked"
             :option-label="opt => Object(opt) === opt && 'name' in opt ? opt.name : '- Null -'"
             bg-color="white"
-            label="Categorias"
+            label="Categorías"
             class="q-mb-md"
             multiple
             use-chips
@@ -133,16 +133,16 @@
             </template>
           </q-select>
           <div v-else>
-            <div class="text-caption text-grey-7">Categorias:</div>
+            <div class="text-caption text-grey-7">Categorías:</div>
             <div v-if="hasCategories">
               <q-chip
-                v-for="category of flowcharts.data.flowchart.categories"
+                v-for="category of algorithms.data.algorithm.categories"
                 :key="category.name"
                 :label="category.name"
               />
             </div>
             <div v-else>
-              Nenhuma categoria.
+              Sin categorías.
             </div>
           </div>
         </div>
@@ -150,14 +150,14 @@
         <div class="col-2">
           <q-input
             v-if="canEdit"
-            v-model="flowcharts.data.flowchart.version"
-            label="Versão"
-            :rules="[val => !!val || 'Informe a versão']"
+            v-model="algorithms.data.algorithm.version"
+            label="Versión"
+            :rules="[val => !!val || 'Ingrese la versión']"
             lazy-rules
           />
           <div v-else>
-            <div class="text-caption text-grey-7">Versão:</div>
-            <div>{{ flowcharts.data.flowchart.version }}</div>
+            <div class="text-caption text-grey-7">Versión:</div>
+            <div>{{ algorithms.data.algorithm.version }}</div>
           </div>
         </div>
       </div>
@@ -165,8 +165,8 @@
 
     <delete-modal
       :show="data.confirmDeleting"
-      title="Tem certeza que deseja excluir o fluxograma?"
-      :item-name="flowcharts.data.flowchart.title"
+      title="¿Está seguro de que desea eliminar el algoritmo?"
+      :item-name="algorithms.data.algorithm.title"
       @cancel="showDeleteDialog(false)"
       @confirm="deleteAndClose"
     />
@@ -182,21 +182,21 @@ import {
   ref,
 } from 'vue';
 
-import Flowcharts from 'src/services/flowcharts';
+import Algorithms from 'src/services/algorithms';
 import EditModal from 'components/modals/edit-modal.vue';
 import { QForm, QInput, useQuasar } from 'quasar';
 import { myLocale } from 'src/services/locale';
 import DeleteModal from 'components/modals/simple-modal.vue';
 
-const flowcharts = inject('flowcharts') as Flowcharts;
+const algorithms = inject('algorithms') as Algorithms;
 const $q = useQuasar();
 
 const refFlowchartForm = ref<QForm>();
 
-const showEditUserDialog = computed(() => flowcharts.data.showEditDialog);
+const showEditUserDialog = computed(() => algorithms.data.showEditDialog);
 
 const hasCategories = computed(
-  () => flowcharts.data.flowchart.categories && flowcharts.data.flowchart.categories.length,
+  () => algorithms.data.algorithm.categories && algorithms.data.algorithm.categories.length,
 );
 
 const inputFlowchartTitle = ref<QInput>();
@@ -209,7 +209,7 @@ const data = reactive({
   saving: false,
 });
 
-const canEdit = computed(() => data.editing || !flowcharts.data.flowchart.id);
+const canEdit = computed(() => data.editing || !algorithms.data.algorithm.id);
 
 const categoriesMocked = ref([
   { name: 'Doenças' },
@@ -231,7 +231,7 @@ const deleteAndClose = async () => {
 
     data.deleting = true;
 
-    await flowcharts.delete();
+    await algorithms.delete();
   } catch (error) {
     $q.notify({
       message: 'Erro ao excluir os dados básicos do fluxograma',
@@ -241,16 +241,16 @@ const deleteAndClose = async () => {
   }
 };
 
-const closeDialog = () => flowcharts.toggleEditDialog();
+const closeDialog = () => algorithms.toggleEditDialog();
 
 const saveAndClose = async () => {
   try {
     data.saving = true;
 
-    if (flowcharts.data.flowchart.id) {
-      await flowcharts.update();
+    if (algorithms.data.algorithm.id) {
+      await algorithms.update();
     } else {
-      await flowcharts.save();
+      await algorithms.save();
     }
   } catch (error) {
     $q.notify({

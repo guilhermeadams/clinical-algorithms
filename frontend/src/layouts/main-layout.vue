@@ -40,7 +40,7 @@ import { computed, inject } from 'vue';
 import Settings from 'src/services/settings';
 import MainMenu from 'components/menus/main-menu.vue';
 import { useRoute } from 'vue-router';
-import { FLOWCHARTS_EDITOR } from 'src/router/routes/flowcharts';
+import { FLOWCHARTS_EDITOR } from 'src/router/routes/algorithms';
 
 const route = useRoute();
 

@@ -64,7 +64,7 @@ const props = defineProps({
   },
   confirmLabel: {
     type: String,
-    default: 'Excluir',
+    default: 'Borrar',
   },
   cancelLabel: {
     type: String,
