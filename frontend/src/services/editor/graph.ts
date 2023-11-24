@@ -114,10 +114,10 @@ class Graph {
       await this.setGraph(graphId);
 
       await this.setAlgorithm();
-    } catch (error) {
-      console.error(error);
 
-      // TODO: $q. notify
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
     } finally {
       this.data.loading = false;
     }
@@ -137,17 +137,17 @@ class Graph {
 
       const { data } = await api.put(`${RESOURCE}/${this.data.graph.id}`, {
         id: this.data.graph.id,
-        graph: JSON.stringify(this.editor.data.graph),
+        graph: JSON.stringify(this.editor.data.graph.toJSON()),
         algorithm_id: this.data.graph.algorithm_id,
       });
 
       this.data.graph.updated_at = data.updated_at;
 
       this.saved();
-    } catch (error) {
-      console.error(error);
 
-      // TODO: $q. notify
+      return Promise.resolve(data);
+    } catch (error) {
+      return Promise.reject(error);
     } finally {
       setTimeout(() => {
         this.data.saving = false;

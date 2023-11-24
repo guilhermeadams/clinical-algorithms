@@ -85,7 +85,7 @@ class Editor {
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        this.data.graph.on('change:position', (cell: dia.Cell) => {
+        this.data.graph.on('change:position', (/* cell: dia.Cell */) => {
           this.graph.notSaved();
 
           deselectAllTexts();
@@ -104,8 +104,8 @@ class Editor {
           // @ts-ignore
           this.element.data.selectedId = elementView.model.id;
 
-          console.log('SELECTED ELEMENT:');
-          console.log(this.element.getSelected());
+          // console.log('SELECTED ELEMENT:');
+          // console.log(this.element.getSelected());
 
           const selectedElement = this.element.getSelected();
 

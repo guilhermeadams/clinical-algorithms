@@ -100,8 +100,10 @@ async function tryLogin() {
         message: 'Nome ou senha inválidos.',
       });
     }
+
+    return Promise.resolve(data);
   } catch (error) {
-    console.error(error);
+    return Promise.reject(error);
   } finally {
     user.loggingIn = false;
   }
