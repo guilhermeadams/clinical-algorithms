@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from app.services import algorithms, algorithms_graphs
+from app.services import algorithms, graphs
 from app.schemas.algorithm import AlgorithmSchema, AlgorithmGraphSchema
 from app.dependencies import get_token_header
 
@@ -35,12 +35,12 @@ def search(keyword: str | None = None):
 
 @router.put("/graph/{algorithm_id}")
 def update_graph(algorithm_graph: AlgorithmGraphSchema):
-    return algorithms_graphs.update_graph(algorithm_graph)
+    return graphs.update_graph(algorithm_graph)
 
 
 @router.get("/graph/{algorithm_id}")
 def search(algorithm_id: int):
-    return algorithms_graphs.show(algorithm_id)
+    return graphs.show(algorithm_id)
 
 
 @router.get("/{algorithm_id}")

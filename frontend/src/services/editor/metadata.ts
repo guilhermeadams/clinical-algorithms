@@ -1,6 +1,6 @@
 import Editor from 'src/services/editor/index';
 import { dia } from 'jointjs';
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 
 export interface IFixedMetadataLink {
   index: number,

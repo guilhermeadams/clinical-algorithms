@@ -32,7 +32,7 @@
               :loading="props.deleting"
               class="float-right"
               style="padding: 0 30px"
-              label="Excluir"
+              label="Borrar"
               color="negative"
               push
               @click="emitEvent('delete', true)"
@@ -54,7 +54,7 @@
               :loading="props.saving"
               style="padding: 0 30px"
               class="float-right"
-              label="Salvar"
+              label="Guardar"
               color="positive"
               push
               @click="emitEvent('save')"

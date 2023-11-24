@@ -7,15 +7,15 @@
       v-model="user.username"
       type="text"
       label="Login"
-      :rules="[val => !!val || 'Informe o nome de usuário']"
+      :rules="[val => !!val || 'Ingrese su inicio de sesión']"
       lazy-rules
       no-error-icon
     />
 
     <q-input
       v-model="user.password"
-      label="Senha"
-      :rules="[val => !!val || 'Informe sua senha']"
+      label="Contraseña"
+      :rules="[val => !!val || 'Informa tu contraseña']"
       lazy-rules
       no-error-icon
       :type="isPwd ? 'password' : 'text'"
@@ -30,15 +30,6 @@
     </q-input>
 
     <div class="row q-mb-md">
-<!--        <div class="col-6 q-pr-xs q-pt-sm">-->
-<!--          <a-->
-<!--            class="cursor-pointer text-body2"-->
-<!--            @click="goForgotPass"-->
-<!--          >-->
-<!--            {{ $t('components.login.forgotPass') }}-->
-<!--          </a>-->
-<!--        </div>-->
-
       <div class="col-6"></div>
 
       <div class="col-6 q-pl-sm text-right">
@@ -46,7 +37,7 @@
           :loading="user.loggingIn"
           class="full-width"
           color="primary"
-          label="Entrar"
+          label="Iniciar sesión"
           push
           type="submit"
         />
@@ -97,11 +88,13 @@ async function tryLogin() {
     } else {
       $q.notify({
         type: 'warning',
-        message: 'Nome ou senha inválidos.',
+        message: 'Login o la contraseña no son válidos.',
       });
     }
+
+    return Promise.resolve(data);
   } catch (error) {
-    console.error(error);
+    return Promise.reject(error);
   } finally {
     user.loggingIn = false;
   }

@@ -27,7 +27,7 @@
         size="34px"
       />
       <div class="inline-block q-mt-sm text-positive">
-        <b>Início</b>
+        <b>Inicio</b>
       </div>
     </div>
 
@@ -38,7 +38,7 @@
       @dragstart="setCreatingElement(CustomElement.ACTION)"
     >
       <div style="margin-top:8px;color:#09F">
-        <b>Ação</b>
+        <b>Acción</b>
       </div>
     </div>
 
@@ -47,6 +47,13 @@
       draggable="true"
       @dragstart="setCreatingElement(CustomElement.EVALUATION)"
     >
+      <div
+        class="absolute"
+        style="margin-top:20px;margin-left:30px;color:#caaf4e"
+      >
+        <b>Evaluación</b>
+      </div>
+
       <img src="../../assets/imgs/elements/action_element.png" />
     </div>
 
@@ -62,7 +69,7 @@
         size="34px"
       />
       <div class="inline-block q-mt-sm text-red">
-        <b>Término</b>
+        <b>Fin</b>
       </div>
     </div>
 
@@ -78,7 +85,7 @@
         size="34px"
       />
       <div class="inline-block q-mt-sm text-black">
-        <b>Raia</b>
+        <b>Tiempo</b>
       </div>
     </div>
   </div>

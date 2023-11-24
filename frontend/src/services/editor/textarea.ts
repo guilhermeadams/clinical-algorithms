@@ -1,10 +1,11 @@
+/*
 function initTextarea(textarea: HTMLTextAreaElement) {
   const resize = () => {
     textarea.style.height = 'auto';
     textarea.style.height = `${textarea.scrollHeight}px`;
   };
 
-  /* 0-timeout to get the already changed text */
+  /!* 0-timeout to get the already changed text *!/
   const delayedResize = () => {
     window.setTimeout(resize, 0);
   };
@@ -30,3 +31,4 @@ function initTextarea(textarea: HTMLTextAreaElement) {
   textarea.select();
   resize();
 }
+*/

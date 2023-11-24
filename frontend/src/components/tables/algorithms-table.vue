@@ -1,20 +1,20 @@
 <template>
   <q-table
-    :rows="flowcharts.flowchartsList"
+    :rows="algorithms.flowchartsList"
     :columns="columns"
-    :loading="flowcharts.data.loading"
-    title="Fluxogramas"
+    :loading="algorithms.data.loading"
+    title="Algoritmos"
     :rows-per-page-options="[0]"
     row-key="name"
     flat
-    :hide-bottom="!(flowcharts.flowchartsList && !flowcharts.flowchartsList.length)"
+    :hide-bottom="!(algorithms.flowchartsList && !algorithms.flowchartsList.length)"
   >
     <template v-slot:loading>
       <q-inner-loading showing color="primary" />
     </template>
 
     <template v-slot:no-data>
-      <b>Nenhum fluxograma encontrado.</b>
+      <b>No se encontraron algoritmos.</b>
     </template>
 
     <template v-slot:body="props">
@@ -32,13 +32,13 @@
         </q-td>
 
         <q-td key="author" :props="props">
-          {{ props.row.author || 'Não definido' }}
+          {{ props.row.author || 'No definido' }}
         </q-td>
 
         <q-td key="action" :props="props">
           <q-btn
             class="q-px-md q-mr-md"
-            label="Ver dados básicos"
+            label="Ver datos básicos"
             color="primary"
             no-caps
             push
@@ -47,7 +47,7 @@
 
           <q-btn
             class="q-px-md"
-            label="Editar fluxograma"
+            label="Editar algoritmo"
             color="primary"
             no-caps
             push
@@ -62,10 +62,10 @@
 <script setup lang="ts">
 import { inject, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
-import Flowcharts, { IFlowchart } from 'src/services/flowcharts';
-import { FLOWCHARTS_EDITOR } from 'src/router/routes/flowcharts';
+import Algorithms, { IFlowchart } from 'src/services/algorithms';
+import { FLOWCHARTS_EDITOR } from 'src/router/routes/algorithms';
 
-const flowcharts = inject('flowcharts') as Flowcharts;
+const algorithms = inject('algorithms') as Algorithms;
 
 const router = useRouter();
 
@@ -80,7 +80,7 @@ const columns = [
   {
     name: 'version',
     align: 'center',
-    label: 'Versão',
+    label: 'Versión',
     field: 'version',
     style: 'width:100px',
   },
@@ -108,9 +108,9 @@ const editFlowchart = (flowchartId: number) => {
   });
 };
 
-const viewFlowchartData = (flowchart: IFlowchart) => flowcharts.viewFlowchartData(flowchart);
+const viewFlowchartData = (flowchart: IFlowchart) => algorithms.viewFlowchartData(flowchart);
 
 onBeforeMount(() => {
-  flowcharts.getAll();
+  algorithms.getAll();
 });
 </script>

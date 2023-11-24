@@ -14,19 +14,19 @@
         v-else-if="saved"
         class="text-grey-8"
       >
-        Fluxograma e metadados salvos em {{ formatDatetime(lastUpdate) }}
+        Algoritmo guardado el {{ formatDatetime(lastUpdate) }}
       </div>
 
       <div
         v-else
         class="text-negative"
       >
-        Pendente de salvamento
+        Algoritmo pendiente de guardar
       </div>
     </div>
 
     <q-btn
-      label="Voltar à lista de fluxogramas"
+      label="Volver a la lista de algoritmos"
       icon="arrow_back"
       class="float-right q-ml-md"
       color="primary"
@@ -37,7 +37,7 @@
 
     <q-btn
       :loading="savingGraph"
-      label="Salvar"
+      label="Guardar"
       class="float-right"
       style="width:120px"
       color="primary"
@@ -52,7 +52,7 @@ import { computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
 
 import Editor from 'src/services/editor';
-import { FLOWCHARTS_INDEX } from 'src/router/routes/flowcharts';
+import { FLOWCHARTS_INDEX } from 'src/router/routes/algorithms';
 import { formatDatetime } from 'src/services/date';
 
 const router = useRouter();

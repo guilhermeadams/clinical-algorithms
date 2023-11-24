@@ -2,7 +2,7 @@ import { RouteRecordRaw } from 'vue-router';
 import Account, { ACCOUNT } from './routes/account';
 import Home from './routes/home';
 import Users, { USERS_INDEX } from './routes/users';
-import Flowcharts, { FLOWCHARTS_INDEX } from './routes/flowcharts';
+import Flowcharts, { FLOWCHARTS_INDEX } from './routes/algorithms';
 // import FlowchartCategories from './routes/flowchart_categories';
 
 const routes: RouteRecordRaw[] = [

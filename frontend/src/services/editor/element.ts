@@ -267,7 +267,6 @@ class Element {
   public async setProp(
     propName: string,
     value: boolean | string | number | object | undefined | null,
-    commitChanges = true,
   ) {
     this.getSelected()?.prop(`props/${propName}`, value);
 
@@ -355,8 +354,8 @@ class Element {
           }
         });
       },
-      getEditorElement: (textarea: HTMLElement) => {
-        const father = textarea.parentElement;
+      getEditorElement: (input: HTMLElement) => {
+        const father = input.parentElement;
         const grandfather = father?.parentElement;
         const grandGrandfather = grandfather?.parentElement;
         const element = grandGrandfather?.parentElement;
@@ -370,16 +369,17 @@ class Element {
         return undefined;
       },
       createEventHandlers: () => {
-        const inputElements = document.getElementsByClassName(TEXTAREA_CLASSNAME);
+        const inputs = document.getElementsByClassName(TEXTAREA_CLASSNAME);
 
-        if (inputElements.length) {
+        if (inputs.length) {
           // eslint-disable-next-line no-restricted-syntax
-          for (const textareaElement of inputElements) {
-            textareaElement.addEventListener('input', (event: any) => {
-              const element = this.input.getEditorElement(event.target);
+          for (const input of inputs) {
+            input.addEventListener('input', (event) => {
+              const element = this.input.getEditorElement(event.target as HTMLElement);
 
-              console.log(element?.id, event.target.value);
-              element?.prop('props/label', event.target.value);
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              element?.prop('props/label', event.target?.value);
 
               this.editor.graph.notSaved();
             });

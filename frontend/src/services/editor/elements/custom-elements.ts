@@ -14,12 +14,12 @@ export const elementName: {
   [key: string]: string,
 } = {
   [CustomElement.START]: 'Início',
-  [CustomElement.ACTION]: 'Ação',
-  [CustomElement.EVALUATION]: 'Avaliação',
-  [CustomElement.END]: 'Fim',
-  [CustomElement.LINK]: 'Link',
+  [CustomElement.ACTION]: 'Acción',
+  [CustomElement.EVALUATION]: 'Evaluación',
+  [CustomElement.END]: 'Fin',
+  [CustomElement.LINK]: 'Enlace',
   // [CustomElement.CARD]: 'Card interativo',
-  [CustomElement.LANE]: 'Raia',
+  [CustomElement.LANE]: 'Tiempo',
 };
 
 export const PORT = {
@@ -119,7 +119,7 @@ const customElements = {
           <div class="element-textarea-container">
             <input
               class="${TEXTAREA_CLASSNAME}"
-              placeholder="Ação"
+              placeholder="Acción"
               contenteditable="true"
               maxlength="70"
               spellcheck="false"
@@ -159,7 +159,7 @@ const customElements = {
           <div>
             <input
               class="${TEXTAREA_CLASSNAME}"
-              placeholder="Avaliação"
+              placeholder="Evaluación"
               contenteditable="true"
               maxlength="70"
               spellcheck="false"
@@ -244,7 +244,7 @@ const customElements = {
             </div>
             <input
               class="${TEXTAREA_CLASSNAME}"
-              placeholder="Nome da raia"
+              placeholder="Título"
               contenteditable="true"
               maxlength="70"
               spellcheck="false"

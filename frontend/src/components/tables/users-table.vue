@@ -3,7 +3,7 @@
     :rows="users.usersList"
     :columns="columns"
     :loading="users.data.loading"
-    title="Usuários"
+    title="Usuarios"
     row-key="name"
     flat
     hide-bottom
@@ -41,7 +41,7 @@
         <q-td key="actions" :props="props">
           <q-btn
             class="q-px-md q-mr-md"
-            label="Ver detalhes"
+            label="Ver usuario"
             color="primary"
             no-caps
             dense
@@ -64,7 +64,7 @@ const users = inject('users') as Users;
 const columns = [
   {
     name: 'name',
-    label: 'Nome',
+    label: 'Nombre',
     align: 'left',
     field: 'name',
   },
@@ -77,7 +77,7 @@ const columns = [
   {
     name: 'phone',
     align: 'left',
-    label: 'Telefone',
+    label: 'Teléfono',
     field: 'phone',
   },
   {

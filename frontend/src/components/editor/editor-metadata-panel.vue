@@ -18,11 +18,11 @@
           v-if="isActionElement || isEvaluationElement"
           class="q-pt-sm q-pb-md q-px-md"
         >
-          <div><b>Metadados - Blocos Fixos</b></div>
+          <div><b>Recomendaciones / Buenas prácticas</b></div>
 
           <q-btn
             class="q-mt-sm full-width"
-            label="Inserir bloco fixo"
+            label="Nueva recomendación"
             color="primary"
             no-caps
             push

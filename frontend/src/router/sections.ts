@@ -1,22 +1,22 @@
 import { USERS_INDEX } from 'src/router/routes/users';
-import { FLOWCHARTS_INDEX } from 'src/router/routes/flowcharts';
+import { FLOWCHARTS_INDEX } from 'src/router/routes/algorithms';
 
 const sections = [
   {
-    name: 'Cadastros básicos',
+    name: 'Registros básicos',
     items: [
       {
         name: USERS_INDEX,
-        label: 'Usuários',
+        label: 'Usuarios',
       },
     ],
   },
   {
-    name: 'Fluxogramas',
+    name: 'Algoritmos',
     items: [
       {
         name: FLOWCHARTS_INDEX,
-        label: 'Manutenção',
+        label: 'Mantenimiento',
       },
     ],
   },

@@ -4,38 +4,40 @@
       <q-expansion-item
         :label="blockName"
         default-opened
+        header-class="bg-grey-2 text-primary text-body1"
+        expand-icon-class="text-primary"
       >
         <q-card>
           <q-card-section class="q-pa-none">
-            <div class="q-px-md q-pb-md">
+            <div class="q-px-md q-py-md">
+              <q-select
+                v-model="data.recommendation_type"
+                :options="['Recomendación formal', 'Boa prática', 'Recomendación informal']"
+                class="q-mb-lg"
+                label="Tipo de recomendación"
+                dense
+              />
+
               <q-input
                 v-model="data.description"
-                label="Descrição"
+                label="Descripción"
                 type="textarea"
                 spellcheck="false"
                 dense
               />
 
               <q-select
-                v-model="data.recommendation_type"
-                :options="['Recomendação formal', 'Boa prática', 'Recomendação informal']"
-                class="q-my-lg"
-                label="Tipo de recomendação"
-                dense
-              />
-
-              <q-select
                 v-model="data.intervention_type"
-                :options="['Tratamento', 'Diagnóstico', 'Classificação de população']"
+                :options="['Tratamiento', 'Diagnóstico', 'Clasificación de la población']"
                 class="q-my-lg"
-                label="Tipo de intervenção"
+                label="Tipo de intervención"
                 dense
               />
 
               <q-input
                 v-model="data.intervention"
                 class="q-mt-md"
-                label="Intervenção"
+                label="Intervención"
                 spellcheck="false"
                 dense
               />
@@ -50,33 +52,33 @@
 
               <q-select
                 v-model="data.direction"
-                :options="['A favor da intervenção', 'Contra a intervenção', 'Ambas']"
+                :options="['A favor de la intervención', 'En contra de la intervención', 'Ambos']"
                 class="q-my-lg"
-                label="Direção"
+                label="Dirección"
                 dense
               />
 
               <q-select
                 v-if="isFormal"
                 v-model="data.strength"
-                :options="['Forte', 'Fraca']"
+                :options="['Fuerte', 'Débil']"
                 class="q-my-lg"
-                label="Força da evidência"
+                label="Fuerza de la evidencia"
                 dense
               />
 
               <q-select
                 v-if="isFormal"
                 v-model="data.certainty_of_the_evidence"
-                :options="['Alta', 'Moderada', 'Baixa', 'Não especificada']"
+                :options="['Alta', 'Moderada', 'Baja', 'No especificada']"
                 class="q-my-lg"
-                label="Certeza da evidência"
+                label="Certeza de la evidencia"
                 dense
               />
 
               <q-input
                 v-model="data.implementation_considerations"
-                label="Considerações de implementação"
+                label="Consideraciones de implementación"
                 class="q-my-lg"
                 type="textarea"
                 spellcheck="false"
@@ -85,7 +87,7 @@
 
               <q-input
                 v-model="data.additional_comments"
-                label="Comentários adicionais"
+                label="Comentarios adicionales"
                 class="q-my-lg"
                 type="textarea"
                 spellcheck="false"
@@ -94,7 +96,7 @@
 
               <q-input
                 v-model="data.recommendation_source"
-                label="Fonte da recomendação"
+                label="Fuente de recomendación"
                 class="q-my-lg"
                 type="textarea"
                 spellcheck="false"
@@ -110,7 +112,7 @@
 
             <div class="bg-grey-2">
               <q-btn
-                :label="`Remover o bloco #${props.index}`"
+                :label="`Eliminar ${blockName}`"
                 class="full-width"
                 color="negative"
                 icon="close"
@@ -126,7 +128,7 @@
       <!-- REMOVE METADATA BLOCK -->
       <delete-modal
         :show="showDeleteBlockDialog"
-        title="Deseja excluir o bloco de metadados?"
+        title="¿Tienes certeza de que deseas eliminar estas informaciones?"
         :item-name="blockName"
         @cancel="showDeleteBlockDialog = false"
         @confirm="deleteBlock"
@@ -179,9 +181,9 @@ const data = reactive({
   links: [],
 });
 
-const blockName = computed(() => `Bloco #${props.index}`);
+const blockName = computed(() => `${props.index}. ${data.recommendation_type}`);
 
-const isFormal = computed(() => data.recommendation_type === 'Recomendação formal');
+const isFormal = computed(() => data.recommendation_type === 'Recomendación formal');
 
 watch(data, (value) => {
   editor.metadata.fixed.set(props.index, { ...value });

@@ -15,34 +15,34 @@
       v-if="canEdit"
       v-model="users.data.user.name"
       ref="inputUserName"
-      label="Nome do usuário"
+      label="Nombre"
       class="q-mb-md"
     />
     <div class="q-mb-lg" v-else>
-      <div class="text-caption text-grey-7">Nome do usuário:</div>
+      <div class="text-caption text-grey-7">Nombre:</div>
       <div>{{ users.data.user.name }}</div>
     </div>
 
     <q-input
       v-if="canEdit"
       v-model="users.data.user.email"
-      label="E-mail do usuário"
+      label="E-mail"
       class="q-mb-md"
     />
     <div class="q-mb-lg" v-else>
-      <div class="text-caption text-grey-7">E-mail do usuário:</div>
+      <div class="text-caption text-grey-7">E-mail:</div>
       <div>{{ users.data.user.email }}</div>
     </div>
 
     <q-input
       v-if="canEdit"
       v-model="users.data.user.phone"
-      label="Telefone de contato do usuário"
+      label="Teléfono"
       class="q-mb-md"
       mask="(##) #####-####"
     />
     <div class="q-mb-lg" v-else>
-      <div class="text-caption text-grey-7">Telefone de contato do usuário:</div>
+      <div class="text-caption text-grey-7">Teléfono:</div>
       <div>{{ users.data.user.phone }}</div>
     </div>
 
@@ -51,12 +51,15 @@
         <q-checkbox
           v-if="canEdit"
           v-model="users.data.user.maintainer"
-          label="É mantenedor de fluxogramas / metadados"
+          label="¿Eres mantenedor de algoritmos?"
         />
         <div v-else>
           <div>
-            <check-or-not-icon :check="users.data.user.maintainer" />
-            É mantenedor de fluxogramas / metadados
+            ¿Eres mantenedor de algoritmos?
+            <check-or-not-icon
+              class="q-ml-sm"
+              :check="users.data.user.maintainer"
+            />
           </div>
         </div>
       </div>
@@ -65,12 +68,15 @@
         <q-checkbox
           v-if="canEdit"
           v-model="users.data.user.master"
-          label="É usuário master"
+          label="¿Eres un usuario master?"
         />
         <div v-else>
           <div>
-            <check-or-not-icon :check="users.data.user.master" />
-            É usuário master
+            ¿Eres un usuario master?
+            <check-or-not-icon
+              class="q-ml-sm"
+              :check="users.data.user.master"
+            />
           </div>
         </div>
       </div>

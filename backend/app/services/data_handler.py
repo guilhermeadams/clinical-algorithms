@@ -4,17 +4,16 @@ from typing import Sequence
 
 def algorithm_to_dict(rows: Sequence[Row]):
     items = []
-    item = {}
-    for row in rows:
-        item = {
-            'id': row[0],
-            'title': row[1],
-            'description': row[2],
-            'version': row[3],
-            'updated_at': row[4]
-        }
-        items.append(item)
-        item = {}
+
+    if len(rows):
+        for row in rows:
+            items.append({
+                'id': row[0],
+                'title': row[1],
+                'description': row[2],
+                'version': row[3],
+                'updated_at': row[4]
+            })
 
     return items
 

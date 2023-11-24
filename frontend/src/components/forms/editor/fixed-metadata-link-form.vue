@@ -3,7 +3,7 @@
     <q-card-section class="q-pa-none">
       <div class="q-px-md">
         <div class="q-pt-md q-mb-sm">
-          Link #{{ props.linkIndex }}
+          Enlace #{{ props.linkIndex }}
         </div>
 
         <q-input
@@ -16,9 +16,9 @@
         <div class="q-pb-xs">
           <q-select
             v-model="data.type"
-            :options="['Texto completo', 'Banco de dados BIG', 'Banco de dados BIGREC']"
+            :options="['Texto completo', 'Base de datos BIG', 'Base de datos BIGREC']"
             class="q-mt-lg"
-            label="Tipo de link"
+            label="Tipo de enlace"
             dense
           />
         </div>
@@ -28,7 +28,7 @@
 
       <div class="bg-grey-2">
         <q-btn
-          :label="`Remover o link #${props.linkIndex}`"
+          label="Eliminar este enlace"
           class="full-width"
           color="negative"
           icon="close"
@@ -40,11 +40,20 @@
 
       <simple-modal
         :show="showRemoveLinkDialog"
-        :title="`Deseja remover o link do bloco #${props.blockIndex}?`"
-        :item-name="`Link #${props.linkIndex}`"
         @cancel="showRemoveLinkDialog = false"
         @confirm="removeLink"
-      />
+      >
+        <q-card-section class="text-center q-py-lg">
+          <b class="q-mb-md">
+            Deseja remover o link do bloco #{{ props.blockIndex }}?
+          </b>
+
+          <div class="text-left">
+            <div class="q-px-lg q-mt-lg"><b>URL:</b> {{ data.url }}</div>
+            <div class="q-px-lg q-mt-sm"><b>Tipo:</b> {{ data.type }}</div>
+          </div>
+        </q-card-section>
+      </simple-modal>
     </q-card-section>
   </q-card>
 </template>

@@ -2,7 +2,7 @@ from sqlalchemy import Table, Column, DATE, TEXT, VARCHAR, BIGINT
 from app.db import meta
 
 
-algorithms = Table(
+algorithm_model = Table(
     'algorithms',
     meta,
     Column('id', BIGINT, primary_key=True, index=True),
@@ -14,11 +14,11 @@ algorithms = Table(
 )
 
 
-algorithms_graphs = Table(
-    'algorithms_graphs',
+graph_model = Table(
+    'graphs',
     meta,
     Column('id', BIGINT, primary_key=True, index=True),
-    Column('algorithm_id', BIGINT, primary_key=True, index=True),
+    Column('algorithm_id', BIGINT, index=True),
     Column('graph', TEXT),
     Column('updated_at', DATE)
 )
