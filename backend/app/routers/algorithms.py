@@ -33,7 +33,7 @@ def search(keyword: str | None = None):
     return None
 
 
-@router.put("/graph/{algorithm_id}")
+@router.put("/graph/{graph_id}")
 def update_graph(algorithm_graph: AlgorithmGraphSchema):
     return graphs.update_graph(algorithm_graph)
 

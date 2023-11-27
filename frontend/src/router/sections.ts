@@ -16,7 +16,7 @@ const sections = [
     items: [
       {
         name: FLOWCHARTS_INDEX,
-        label: 'Mantenimiento',
+        label: 'Mantenimiento y publicación',
       },
     ],
   },

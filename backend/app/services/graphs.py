@@ -4,7 +4,7 @@ from app.models.algorithm import graph_model
 from sqlalchemy import insert, update, exc
 from .data_handler import algorithm_graph_to_dict
 from app.schemas.algorithm import AlgorithmGraphSchema
-# from app.services import nodes
+from app.services import nodes
 
 
 def update_graph(algorithm_graph: AlgorithmGraphSchema):
@@ -20,7 +20,7 @@ def update_graph(algorithm_graph: AlgorithmGraphSchema):
 
         conn.commit()
 
-        # nodes.map_nodes(algorithm_graph.graph, algorithm_graph.id)
+        nodes.map_nodes(algorithm_graph.graph, algorithm_graph.algorithm_id)
 
         return show(algorithm_graph.algorithm_id)
     # except exc.SQLAlchemyError as e:
