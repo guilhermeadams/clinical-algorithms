@@ -31,12 +31,16 @@ def update_graph(algorithm_graph: AlgorithmGraphSchema):
 
 
 def show(algorithm_id: int):
-    algorithm_graph = conn.execute(
-        graph_model.select().where(graph_model.c.algorithm_id == algorithm_id)
-    ).fetchall()
+    try:
+        algorithm_graph = conn.execute(
+            graph_model.select().where(graph_model.c.algorithm_id == algorithm_id)
+        ).fetchall()
 
-    if len(algorithm_graph):
-        return algorithm_graph_to_dict(algorithm_graph)[0]
+        if len(algorithm_graph):
+            return algorithm_graph_to_dict(algorithm_graph)[0]
+    except exc.SQLAlchemyError:
+        conn.rollback()
+        raise
 
 
 def store(algorithm_id: int):
