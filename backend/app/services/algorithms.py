@@ -47,8 +47,11 @@ def store(algorithm: AlgorithmSchema):
         graphs.store(algorithm_id=stored_algorithm.lastrowid)
 
         return stored_algorithm
-    except exc.SQLAlchemyError as e:
-        return e.__dict__['orig']
+    # except exc.SQLAlchemyError as e:
+    except exc.SQLAlchemyError:
+        conn.rollback()
+        raise
+        # return e.__dict__['orig']
 
 
 def update_algorithm(algorithm: AlgorithmSchema):
@@ -67,8 +70,11 @@ def update_algorithm(algorithm: AlgorithmSchema):
         conn.commit()
 
         return updated_algorithm
-    except exc.SQLAlchemyError as e:
-        return e.__dict__['orig']
+    # except exc.SQLAlchemyError as e:
+    #     return e.__dict__['orig']
+    except exc.SQLAlchemyError:
+        conn.rollback()
+        raise
 
 
 def delete(algorithm_id: int):
@@ -83,5 +89,8 @@ def delete(algorithm_id: int):
         conn.commit()
 
         return deleted_algorithm
-    except exc.SQLAlchemyError as e:
-        return e.__dict__['orig']
+    # except exc.SQLAlchemyError as e:
+    #     return e.__dict__['orig']
+    except exc.SQLAlchemyError:
+        conn.rollback()
+        raise
