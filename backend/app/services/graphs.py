@@ -23,17 +23,24 @@ def update_graph(algorithm_graph: AlgorithmGraphSchema):
         # nodes.map_nodes(algorithm_graph.graph, algorithm_graph.id)
 
         return show(algorithm_graph.algorithm_id)
-    except exc.SQLAlchemyError as e:
-        return e.__dict__['orig']
+    # except exc.SQLAlchemyError as e:
+    #     return e.__dict__['orig']
+    except exc.SQLAlchemyError:
+        conn.rollback()
+        raise
 
 
 def show(algorithm_id: int):
-    algorithm_graph = conn.execute(
-        graph_model.select().where(graph_model.c.algorithm_id == algorithm_id)
-    ).fetchall()
+    try:
+        algorithm_graph = conn.execute(
+            graph_model.select().where(graph_model.c.algorithm_id == algorithm_id)
+        ).fetchall()
 
-    if len(algorithm_graph):
-        return algorithm_graph_to_dict(algorithm_graph)[0]
+        if len(algorithm_graph):
+            return algorithm_graph_to_dict(algorithm_graph)[0]
+    except exc.SQLAlchemyError:
+        conn.rollback()
+        raise
 
 
 def store(algorithm_id: int):
@@ -50,8 +57,11 @@ def store(algorithm_id: int):
 
         # query being committed by its caller
         return stored_algorithm_graph
-    except exc.SQLAlchemyError as e:
-        return e.__dict__['orig']
+    # except exc.SQLAlchemyError as e:
+    #     return e.__dict__['orig']
+    except exc.SQLAlchemyError:
+        conn.rollback()
+        raise
 
 
 def delete(algorithm_id: int):
@@ -63,5 +73,8 @@ def delete(algorithm_id: int):
         conn.commit()
 
         return deleted_algorithm_graph
-    except exc.SQLAlchemyError as e:
-        return e.__dict__['orig']
+    # except exc.SQLAlchemyError as e:
+    #     return e.__dict__['orig']
+    except exc.SQLAlchemyError:
+        conn.rollback()
+        raise

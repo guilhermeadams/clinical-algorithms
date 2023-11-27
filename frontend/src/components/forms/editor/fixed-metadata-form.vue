@@ -12,7 +12,7 @@
             <div class="q-px-md q-py-md">
               <q-select
                 v-model="data.recommendation_type"
-                :options="['Recomendación formal', 'Boa prática', 'Recomendación informal']"
+                :options="['Recomendación formal', 'Buenas practicas', 'Recomendación informal']"
                 class="q-mb-lg"
                 label="Tipo de recomendación"
                 dense
