@@ -1,7 +1,8 @@
 from app.models.algorithm import algorithm_model
+from app.services.nodes import search_nodes
 from app.schemas.algorithm import AlgorithmSchema
 from app.db import conn
-from .data_handler import algorithm_to_dict, to_iso_date
+from .data_handler import result_to_dict, to_iso_date
 from sqlalchemy import insert, update, exc
 from app.services import graphs
 
@@ -12,7 +13,7 @@ def index():
             algorithm_model.select()
         ).fetchall()
 
-        return algorithm_to_dict(all_algorithms)
+        return result_to_dict(all_algorithms)
     except exc.SQLAlchemyError:
         conn.rollback()
         raise
@@ -24,7 +25,36 @@ def search(keyword: str):
             algorithm_model.select().where(algorithm_model.c.title.like("%"+keyword+"%"))
         ).fetchall()
 
-        return algorithm_to_dict(algorithms_found)
+        return result_to_dict(algorithms_found)
+    except exc.SQLAlchemyError:
+        conn.rollback()
+        raise
+
+
+def thorough_search(keyword: str):
+    try:
+        nodes_found = search_nodes(keyword)
+
+        results = {}
+
+        for node_found in nodes_found:
+            results[node_found['algorithm_id']] = {
+                "title": "",
+                "description": "",
+                "nodes": []
+            }
+
+        for node_found in nodes_found:
+            results[node_found['algorithm_id']]['nodes'].append(node_found)
+            if not results[node_found['algorithm_id']]['title']:
+                algorithm_found = conn.execute(
+                    algorithm_model.select().where(algorithm_model.c.id == node_found['algorithm_id'])
+                ).fetchone()
+
+                results[node_found['algorithm_id']]['title'] = algorithm_found[1]
+                results[node_found['algorithm_id']]['description'] = algorithm_found[2]
+
+        return results
     except exc.SQLAlchemyError:
         conn.rollback()
         raise
@@ -37,7 +67,7 @@ def show(algorithm_id: int):
         ).fetchall()
 
         if len(algorithm):
-            return algorithm_to_dict(algorithm)[0]
+            return result_to_dict(algorithm)[0]
     except exc.SQLAlchemyError:
         conn.rollback()
         raise

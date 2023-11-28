@@ -1,8 +1,10 @@
 import json
 from datetime import datetime
 from app.db import conn
+from app.models.algorithm import algorithm_model
 from app.models.nodes import node_model
-from sqlalchemy import insert
+from sqlalchemy import insert, exc, select
+from app.services.data_handler import result_to_dict
 
 
 def map_nodes(graph_string: str, algorithm_id: int):
@@ -43,3 +45,21 @@ def map_nodes(graph_string: str, algorithm_id: int):
     conn.commit()
 
     return True
+
+
+def search_nodes(keyword: str):
+    try:
+        nodes_found = conn.execute(
+            select(node_model).join(
+                algorithm_model, algorithm_model.c.id == node_model.c.algorithm_id
+            ).where(
+                node_model.c.label.like("%"+keyword+"%")
+            )
+        ).fetchall()
+
+        print(nodes_found)
+
+        return result_to_dict(nodes_found, ['id', 'algorithm_id', 'node_id', 'node_type', 'label'])
+    except exc.SQLAlchemyError:
+        conn.rollback()
+        raise

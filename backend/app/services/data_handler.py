@@ -1,20 +1,18 @@
 from sqlite3 import Row
-from typing import Sequence
+from typing import Sequence, List
 
 
-def algorithm_to_dict(rows: Sequence[Row]):
+def result_to_dict(rows: Sequence[Row], fields: List[str]):
     items = []
 
     if len(rows):
         for row in rows:
-            items.append({
-                'id': row[0],
-                'title': row[1],
-                'description': row[2],
-                'version': row[3],
-                'updated_at': row[4]
-            })
+            new_item = {}
+            for index, field in enumerate(fields):
+                new_item[field] = row[index]
+            items.append(new_item)
 
+        print(items)
     return items
 
 

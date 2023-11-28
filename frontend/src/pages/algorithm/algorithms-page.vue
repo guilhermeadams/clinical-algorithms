@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page class="bg-grey-1">
     <div class="row q-mx-md q-py-sm">
       <div class="col-3">
         <search-input
@@ -19,10 +19,12 @@
       </div>
     </div>
 
-    <div class="row q-mx-md q-mb-sm">
-      <div class="col-12">
-        <algorithms-table />
-      </div>
+    <div class="q-px-md">
+      <q-card class="shadow-light">
+        <q-card-section>
+          <algorithms-table />
+        </q-card-section>
+      </q-card>
     </div>
 
     <edit-algorithm-modal />

@@ -71,6 +71,26 @@ class Algorithms {
     }
   }
 
+  public async thorough_search(keyword: string) {
+    try {
+      this.data.loading = true;
+
+      const { data: algorithmsFound }: { data: IFlowchart[] } = await api.get(`${resource}/thorough-search?keyword=${keyword}`);
+
+      console.log(algorithmsFound);
+
+      this.data.totalSearchResult = 0;
+
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
+    } finally {
+      setTimeout(() => {
+        this.data.loading = false;
+      }, 1000);
+    }
+  }
+
   public async search(keyword: string) {
     try {
       this.data.loading = true;

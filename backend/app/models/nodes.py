@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, DATE, TEXT, VARCHAR, BIGINT, Enum
+from sqlalchemy import Table, Column, DATE, VARCHAR, BIGINT, Enum
 from app.db import meta
 from app.models.models_enums import NodesTypes
 
