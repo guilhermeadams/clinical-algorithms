@@ -28,16 +28,17 @@
         >
           <q-card-section
             v-if="data.results"
+            class="search-result-item"
           >
-            <div class="text-body1">
-              <b>Algoritmo:</b> {{ getResultText(data.results[key].title) }}
-            </div>
+            <div
+              class="text-body1"
+              v-html="`<b>Algoritmo:</b> ${getResultText(data.results[key].title)}`"
+            />
 
             <q-list separator>
               <q-item
                 v-for="node of data.results[key].nodes"
                 :key="`node-${node.id}`"
-                class="search-result-item"
                 clickable
                 v-ripple
               >
@@ -121,7 +122,7 @@ const clearSearch = () => {
   data.keyword = '';
 };
 
-const getResultText = (text: string) => text.replace(data.keyword, `<b>${data.keyword}</b>`);
+const getResultText = (text: string) => text.replace(data.keyword, `<span class="highlight-text">${data.keyword}</span>`);
 
 onBeforeMount(() => {
   settings.page.setTitle('Búsqueda por algoritmos');
@@ -129,6 +130,6 @@ onBeforeMount(() => {
 </script>
 
 <style lang="sass">
-.search-result-item b
-  color: #FF0000
+.search-result-item .highlight-text
+  color: #FF0000 !important
 </style>
