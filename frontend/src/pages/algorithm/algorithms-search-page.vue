@@ -4,39 +4,45 @@
       <div class="col-3">
         <search-input
           label="Buscar algoritmos"
-          @search="searchFlowchart"
           @clear="clearSearch"
+          @search="searchFlowchart"
         />
       </div>
     </div>
 
     <loading-spinner
-      v-if="searching"
+      v-if="data.searching"
     />
 
     <div
-      v-else-if="showResults"
+      v-else-if="hasResults"
       class="row q-mx-md"
     >
       <div class="col-12">
         <div class="text-body1 text-grey-7 q-mb-md">Resultados de la búsqueda:</div>
 
-        <q-card class="shadow-light">
-          <q-card-section>
+        <q-card
+          v-for="key of Object.keys(data.results)"
+          :key="`result-${key}`"
+          class="shadow-light"
+        >
+          <q-card-section
+            v-if="data.results"
+          >
             <div class="text-body1">
-              <b>Algoritmo:</b> Arboviroses
+              <b>Algoritmo:</b> {{ getResultText(data.results[key].title) }}
             </div>
 
             <q-list separator>
               <q-item
-                v-for="item of items"
-                :key="item"
+                v-for="node of data.results[key].nodes"
+                :key="`node-${node.id}`"
                 class="search-result-item"
                 clickable
                 v-ripple
               >
                 <div
-                  v-html="item"
+                  v-html="getResultText(node.label)"
                   class="q-mt-sm"
                 />
               </q-item>
@@ -45,21 +51,28 @@
         </q-card>
       </div>
     </div>
+
+    <div
+      v-else-if="data.results !== null"
+      class="q-px-md text-grey-7"
+    >
+      No se encontraron resultados en la búsqueda.
+    </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
 import {
   onBeforeMount,
+  reactive,
   provide,
-  inject,
-  ref,
+  inject, computed,
 } from 'vue';
 
 import SearchInput from 'components/inputs/search-input.vue';
 import Settings from 'src/services/settings';
 import LoadingSpinner from 'components/spinners/loading-spinner.vue';
-import Algorithms from 'src/services/algorithms';
+import Algorithms, { IAlgorithmThoroughSearchResult } from 'src/services/algorithms';
 
 const settings = inject('settings') as Settings;
 
@@ -72,25 +85,43 @@ const items = [
   'Nó: Positivo confirma <b>dengue</b>',
 ];
 
-const searching = ref(false);
-const showResults = ref(false);
+const data: {
+  searching: boolean,
+  results: IAlgorithmThoroughSearchResult[] | null,
+  keyword: string,
+} = reactive({
+  searching: false,
+  results: null,
+  keyword: '',
+});
 
-const searchFlowchart = (keyword: string) => {
+const hasResults = computed(() => {
+  if (data.results === null) return false;
+
+  return Object.keys(data.results).length > 0;
+});
+
+const searchFlowchart = async (keyword: string) => {
   try {
-    searching.value = true;
+    data.searching = true;
+    data.keyword = keyword;
 
-    algorithms.thorough_search(keyword);
+    const results = await algorithms.thorough_search(keyword);
+
+    data.results = { ...results };
   } finally {
     setTimeout(() => {
-      searching.value = false;
-      showResults.value = true;
+      data.searching = false;
     }, 1000);
   }
 };
 
 const clearSearch = () => {
-  showResults.value = false;
+  data.results = null;
+  data.keyword = '';
 };
+
+const getResultText = (text: string) => text.replace(data.keyword, `<b>${data.keyword}</b>`);
 
 onBeforeMount(() => {
   settings.page.setTitle('Búsqueda por algoritmos');

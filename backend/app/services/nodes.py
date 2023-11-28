@@ -6,6 +6,8 @@ from app.models.nodes import node_model
 from sqlalchemy import insert, exc, select
 from app.services.data_handler import result_to_dict
 
+node_fields = ['id', 'algorithm_id', 'node_id', 'node_type', 'label']
+
 
 def map_nodes(graph_string: str, algorithm_id: int):
     conn.execute(
@@ -57,9 +59,7 @@ def search_nodes(keyword: str):
             )
         ).fetchall()
 
-        print(nodes_found)
-
-        return result_to_dict(nodes_found, ['id', 'algorithm_id', 'node_id', 'node_type', 'label'])
+        return result_to_dict(nodes_found, node_fields)
     except exc.SQLAlchemyError:
         conn.rollback()
         raise

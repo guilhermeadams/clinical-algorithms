@@ -11,8 +11,6 @@ def result_to_dict(rows: Sequence[Row], fields: List[str]):
             for index, field in enumerate(fields):
                 new_item[field] = row[index]
             items.append(new_item)
-
-        print(items)
     return items
 
 

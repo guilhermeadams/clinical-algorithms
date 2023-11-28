@@ -6,6 +6,8 @@ from .data_handler import result_to_dict, to_iso_date
 from sqlalchemy import insert, update, exc
 from app.services import graphs
 
+algorithm_fields = ['id', 'title', 'description', 'version', 'updated_at']
+
 
 def index():
     try:
@@ -13,7 +15,7 @@ def index():
             algorithm_model.select()
         ).fetchall()
 
-        return result_to_dict(all_algorithms)
+        return result_to_dict(all_algorithms, algorithm_fields)
     except exc.SQLAlchemyError:
         conn.rollback()
         raise
@@ -25,7 +27,7 @@ def search(keyword: str):
             algorithm_model.select().where(algorithm_model.c.title.like("%"+keyword+"%"))
         ).fetchall()
 
-        return result_to_dict(algorithms_found)
+        return result_to_dict(algorithms_found, algorithm_fields)
     except exc.SQLAlchemyError:
         conn.rollback()
         raise
@@ -35,17 +37,28 @@ def thorough_search(keyword: str):
     try:
         nodes_found = search_nodes(keyword)
 
+        algorithms_found = search(keyword)
+
         results = {}
 
-        for node_found in nodes_found:
-            results[node_found['algorithm_id']] = {
-                "title": "",
-                "description": "",
+        for algorithm_found in algorithms_found:
+            results[algorithm_found['id']] = {
+                "title": algorithm_found['title'],
+                "description": algorithm_found['description'],
                 "nodes": []
             }
 
         for node_found in nodes_found:
+            if node_found['algorithm_id'] not in node_found:
+                results[node_found['algorithm_id']] = {
+                    "title": "",
+                    "description": "",
+                    "nodes": []
+                }
+
+        for node_found in nodes_found:
             results[node_found['algorithm_id']]['nodes'].append(node_found)
+
             if not results[node_found['algorithm_id']]['title']:
                 algorithm_found = conn.execute(
                     algorithm_model.select().where(algorithm_model.c.id == node_found['algorithm_id'])
@@ -67,7 +80,7 @@ def show(algorithm_id: int):
         ).fetchall()
 
         if len(algorithm):
-            return result_to_dict(algorithm)[0]
+            return result_to_dict(algorithm, algorithm_fields)[0]
     except exc.SQLAlchemyError:
         conn.rollback()
         raise
