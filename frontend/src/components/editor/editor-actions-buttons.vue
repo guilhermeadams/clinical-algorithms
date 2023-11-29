@@ -32,7 +32,7 @@
       color="primary"
       flat
       no-caps
-      @click="goFlowchartsPage"
+      @click="goAlgorithmsPage"
     />
 
     <q-btn
@@ -49,12 +49,13 @@
 
 <script setup lang="ts">
 import { computed, inject } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import Editor from 'src/services/editor';
-import { FLOWCHARTS_INDEX } from 'src/router/routes/algorithms';
+import { FLOWCHARTS_INDEX, FLOWCHARTS_SEARCH } from 'src/router/routes/algorithms';
 import { formatDatetime } from 'src/services/date';
 
+const route = useRoute();
 const router = useRouter();
 
 const editor = inject('editor') as Editor;
@@ -63,9 +64,22 @@ const saved = computed(() => editor.graph.data.saved);
 const savingGraph = computed(() => editor.graph.data.saving);
 const lastUpdate = computed(() => editor.graph.lastUpdate);
 
-const goFlowchartsPage = () => {
+const exitEditor = () => {
+  if (route.query.search) {
+    return router.push({
+      name: FLOWCHARTS_SEARCH,
+      query: {
+        keyword: route.query.search,
+      },
+    });
+  }
+
+  return router.push({ name: FLOWCHARTS_INDEX });
+};
+
+const goAlgorithmsPage = () => {
   if (editor.graph.isSaved) {
-    router.push({ name: FLOWCHARTS_INDEX });
+    exitEditor();
   } else {
     editor.toggleSaveDialog();
   }

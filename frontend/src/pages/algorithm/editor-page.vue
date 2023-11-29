@@ -29,7 +29,7 @@
       title="Hay cambios no guardados en este algoritmo."
       item-name="¿Quieres guardar antes de salir?"
       :negative="true"
-      @cancel="goFlowchartsPage"
+      @cancel="exitEditor"
       @confirm="saveGraph"
     />
   </div>
@@ -54,7 +54,7 @@ import EditorElementsToolbar from 'components/editor/editor-elements-toolbar.vue
 import EditorMetadataPanel from 'components/editor/editor-metadata-panel.vue';
 import EditorActionsButtons from 'components/editor/editor-actions-buttons.vue';
 import SimpleModal from 'components/modals/simple-modal.vue';
-import { FLOWCHARTS_INDEX } from 'src/router/routes/algorithms';
+import { FLOWCHARTS_INDEX, FLOWCHARTS_SEARCH } from 'src/router/routes/algorithms';
 
 const editor = new Editor();
 provide('editor', editor);
@@ -68,14 +68,23 @@ const width = computed(
   () => (settings.page.mainMenu ? 'calc(100% - 300px)' : '100%'),
 );
 
-const goFlowchartsPage = () => {
-  router.push({ name: FLOWCHARTS_INDEX });
-};
-
-const saveGraph = async () => {
-  await editor.graph.save();
+const exitEditor = () => {
+  if (route.query.search) {
+    return router.push({
+      name: FLOWCHARTS_SEARCH,
+      query: {
+        keyword: route.query.search,
+      },
+    });
+  }
 
   return router.push({ name: FLOWCHARTS_INDEX });
+};
+
+const saveGraph = () => {
+  editor.graph.save();
+
+  exitEditor();
 };
 
 onBeforeMount(() => {

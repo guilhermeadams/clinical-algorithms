@@ -3,14 +3,14 @@ import { dia } from 'jointjs';
 
 import { IJointData } from 'src/services/editor/types';
 import { reactive } from 'vue';
-import customElements, { CustomElement } from 'src/services/editor/elements/custom-elements';
+import customElements from 'src/services/editor/elements/custom-elements';
 import Element from 'src/services/editor/element';
 import Graph from 'src/services/editor/graph';
 import Metadata from 'src/services/editor/metadata';
 
 const graph = new joint.dia.Graph({}, { cellNamespace: customElements });
 
-const deselectAllTexts = () => {
+export const deselectAllTexts = () => {
   window.getSelection()?.removeAllRanges();
 };
 
@@ -75,6 +75,7 @@ class Editor {
         this.data.paper.on('blank:pointerdown cell:pointerdown', () => {
           if (document.activeElement && document.activeElement instanceof HTMLElement) {
             document.activeElement.blur();
+
             deselectAllTexts();
           }
         });
@@ -96,30 +97,7 @@ class Editor {
         });
 
         this.data.paper.on('element:pointerup', (elementView: dia.ElementView) => {
-          this.element.deselectAll();
-
-          elementView.showTools();
-
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          this.element.data.selectedId = elementView.model.id;
-
-          // console.log('SELECTED ELEMENT:');
-          // console.log(this.element.getSelected());
-
-          const selectedElement = this.element.getSelected();
-
-          if (selectedElement && selectedElement.prop('type') === CustomElement.LANE) {
-            const { y } = selectedElement.position();
-
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            selectedElement.position(0, y);
-
-            if (document.activeElement?.tagName !== 'INPUT') {
-              deselectAllTexts();
-            }
-          }
+          this.element.select(elementView.options.model.id);
         });
 
         this.data.paper.on('link:snap:connect', () => {

@@ -3,6 +3,7 @@
     <div class="row q-mx-md q-py-sm">
       <div class="col-3">
         <search-input
+          :value="data.initialKeyword"
           label="Palabra clave para la búsqueda de algoritmos"
           @clear="clearSearch"
           @search="searchFlowchart"
@@ -43,6 +44,7 @@
                 :key="`node-${node.id}`"
                 clickable
                 v-ripple
+                @click="goEditor(node)"
               >
                 <div
                   v-html="`<b>Nodo:</b> ${highlightKeyword(node.label, data.keyword)}`"
@@ -78,7 +80,12 @@ import { highlightKeyword } from 'src/services/texts';
 
 import SearchInput from 'components/inputs/search-input.vue';
 import LoadingSpinner from 'components/spinners/loading-spinner.vue';
-import Algorithms, { IAlgorithmThoroughSearchResult } from 'src/services/algorithms';
+import Algorithms, { IAlgorithmThoroughSearchResult, INode } from 'src/services/algorithms';
+import { useRoute, useRouter } from 'vue-router';
+import { FLOWCHARTS_EDITOR } from 'src/router/routes/algorithms';
+
+const route = useRoute();
+const router = useRouter();
 
 const settings = inject('settings') as Settings;
 
@@ -88,10 +95,12 @@ provide('algorithms', algorithms);
 const data: {
   searching: boolean,
   results: IAlgorithmThoroughSearchResult[] | null,
+  initialKeyword: string,
   keyword: string,
 } = reactive({
   searching: false,
   results: null,
+  initialKeyword: '',
   keyword: '',
 });
 
@@ -121,7 +130,20 @@ const clearSearch = () => {
   data.keyword = '';
 };
 
+const goEditor = (node: INode) => router.push({
+  name: FLOWCHARTS_EDITOR,
+  query: {
+    id: node.algorithm_id,
+    node: node.node_id,
+    search: data.keyword,
+  },
+});
+
 onBeforeMount(() => {
+  if (route.query.keyword) {
+    data.initialKeyword = String(route.query.keyword);
+  }
+
   settings.page.setTitle('Publicación de algoritmos (visualización para uso de usuarios finales)');
 });
 </script>

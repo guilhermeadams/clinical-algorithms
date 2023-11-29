@@ -23,9 +23,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const props = defineProps({
+  value: {
+    type: String,
+    default: '',
+  },
   label: {
     type: String,
     default: '',
@@ -45,4 +49,12 @@ function emitClear() {
 
   emit('clear', '');
 }
+
+onMounted(() => {
+  if (props.value) {
+    text.value = props.value;
+
+    emitSearch();
+  }
+});
 </script>
