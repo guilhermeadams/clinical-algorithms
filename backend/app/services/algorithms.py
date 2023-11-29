@@ -67,7 +67,7 @@ def thorough_search(keyword: str):
 
 def show(algorithm_id: int):
     try:
-        return select("SELECT * FROM algorithms WHERE id = %s", algorithm_id)
+        return select("SELECT * FROM algorithms WHERE id = %s", algorithm_id)[0]
     except Error as e:
         db_error(e)
 
