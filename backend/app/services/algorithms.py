@@ -38,6 +38,7 @@ def thorough_search(keyword: str):
 
         for algorithm_found in algorithms_found:
             results[algorithm_found['id']] = {
+                "id": algorithm_found['id'],
                 "title": algorithm_found['title'],
                 "description": algorithm_found['description'],
                 "nodes": []
@@ -46,6 +47,7 @@ def thorough_search(keyword: str):
         for node_found in nodes_found:
             if node_found['algorithm_id'] not in results:
                 results[node_found['algorithm_id']] = {
+                    "id": "",
                     "title": "",
                     "description": "",
                     "nodes": []
@@ -57,6 +59,7 @@ def thorough_search(keyword: str):
             if not results[node_found['algorithm_id']]['title']:
                 algorithm_found = select("SELECT * FROM algorithms WHERE id = %s", node_found['algorithm_id'])[0]
 
+                results[node_found['algorithm_id']]['id'] = algorithm_found['id']
                 results[node_found['algorithm_id']]['title'] = algorithm_found['title']
                 results[node_found['algorithm_id']]['description'] = algorithm_found['description']
 

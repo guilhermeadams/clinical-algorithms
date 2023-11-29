@@ -31,20 +31,43 @@
             v-if="data.results"
             class="search-result-item"
           >
+            <q-list
+              v-if="!data.results[key].nodes.length"
+              separator
+            >
+              <q-item
+                clickable
+                v-ripple
+                @click="goEditor(data.results[key].id, null)"
+              >
+                <div
+                  class="text-body1"
+                  style="margin-top:5px"
+                  v-html="`<b>Algoritmo:</b> ${
+                    highlightKeyword(data.results[key].title, data.keyword)
+                  }`"
+                />
+              </q-item>
+            </q-list>
+
             <div
+              v-else
               class="text-body1"
               v-html="`<b>Algoritmo:</b> ${
                 highlightKeyword(data.results[key].title, data.keyword)
               }`"
             />
 
-            <q-list separator>
+            <q-list
+              v-if="data.results"
+              separator
+            >
               <q-item
                 v-for="node of data.results[key].nodes"
                 :key="`node-${node.id}`"
                 clickable
                 v-ripple
-                @click="goEditor(node)"
+                @click="goEditor(data.results[key].id, node)"
               >
                 <div
                   v-html="`<b>Nodo:</b> ${highlightKeyword(node.label, data.keyword)}`"
@@ -130,14 +153,26 @@ const clearSearch = () => {
   data.keyword = '';
 };
 
-const goEditor = (node: INode) => router.push({
-  name: FLOWCHARTS_EDITOR,
-  query: {
-    id: node.algorithm_id,
-    node: node.node_id,
-    search: data.keyword,
-  },
-});
+const goEditor = (algorithmId: string, node: INode | null) => {
+  if (node) {
+    router.push({
+      name: FLOWCHARTS_EDITOR,
+      query: {
+        id: node.algorithm_id,
+        node: node.node_id,
+        search: data.keyword,
+      },
+    });
+  } else if (algorithmId) {
+    router.push({
+      name: FLOWCHARTS_EDITOR,
+      query: {
+        id: algorithmId,
+        search: data.keyword,
+      },
+    });
+  }
+};
 
 onBeforeMount(() => {
   if (route.query.keyword) {
