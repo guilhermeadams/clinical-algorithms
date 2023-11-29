@@ -1,5 +1,5 @@
 import { USERS_INDEX } from 'src/router/routes/users';
-import { FLOWCHARTS_INDEX } from 'src/router/routes/algorithms';
+import { FLOWCHARTS_INDEX, FLOWCHARTS_SEARCH } from 'src/router/routes/algorithms';
 
 const sections = [
   {
@@ -16,7 +16,11 @@ const sections = [
     items: [
       {
         name: FLOWCHARTS_INDEX,
-        label: 'Mantenimiento y publicación',
+        label: 'Mantenimiento',
+      },
+      {
+        name: FLOWCHARTS_SEARCH,
+        label: 'Búsqueda y publicación',
       },
     ],
   },

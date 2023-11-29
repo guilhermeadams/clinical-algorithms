@@ -3,7 +3,7 @@
     <div class="row q-mx-md q-py-sm">
       <div class="col-3">
         <search-input
-          label="Buscar algoritmos"
+          label="Palabra clave para la búsqueda de algoritmos"
           @clear="clearSearch"
           @search="searchFlowchart"
         />
@@ -24,7 +24,7 @@
         <q-card
           v-for="key of Object.keys(data.results)"
           :key="`result-${key}`"
-          class="shadow-light"
+          class="shadow-light q-my-lg"
         >
           <q-card-section
             v-if="data.results"
@@ -43,7 +43,7 @@
                 v-ripple
               >
                 <div
-                  v-html="getResultText(node.label)"
+                  v-html="`<b>Nodo:</b> ${getResultText(node.label)}`"
                   class="q-mt-sm"
                 />
               </q-item>
@@ -64,10 +64,11 @@
 
 <script setup lang="ts">
 import {
+  computed,
   onBeforeMount,
   reactive,
   provide,
-  inject, computed,
+  inject,
 } from 'vue';
 
 import SearchInput from 'components/inputs/search-input.vue';
@@ -79,12 +80,6 @@ const settings = inject('settings') as Settings;
 
 const algorithms = new Algorithms();
 provide('algorithms', algorithms);
-
-const items = [
-  'Nó: <b>Dengue</b>',
-  'Nó: PCT reverso <b>dengue</b>',
-  'Nó: Positivo confirma <b>dengue</b>',
-];
 
 const data: {
   searching: boolean,
@@ -125,7 +120,7 @@ const clearSearch = () => {
 const getResultText = (text: string) => text.replace(data.keyword, `<span class="highlight-text">${data.keyword}</span>`);
 
 onBeforeMount(() => {
-  settings.page.setTitle('Búsqueda por algoritmos');
+  settings.page.setTitle('Publicación de algoritmos (visualización para uso de usuarios finales)');
 });
 </script>
 

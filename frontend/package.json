@@ -6,9 +6,11 @@
   "author": "Gabriel <gabriel@gabrielsilveira.com.br>",
   "private": true,
   "scripts": {
+    "dev": "quasar dev -m spa",
     "docker:start": "systemctl start docker",
     "docker:run": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up",
     "docker:build": "docker compose -f docker-compose.yml -f docker-compose.build.yml build",
+    "docker:exec": "systemctl start docker && docker compose -f docker-compose.yml -f docker-compose.dev.yml up",
     "lint": "eslint --ext .js,.ts,.vue ./",
     "test": "echo \"No test specified\" && exit 0"
   },

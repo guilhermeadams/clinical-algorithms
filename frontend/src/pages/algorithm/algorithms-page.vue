@@ -3,7 +3,7 @@
     <div class="row q-mx-md q-py-sm">
       <div class="col-3">
         <search-input
-          label="Buscar algoritmos"
+          label="Palabra clave para la búsqueda de algoritmos"
           @search="searchFlowchart"
           @clear="clearSearch"
         />
@@ -58,7 +58,7 @@ const clearSearch = () => algorithms.clearSearch();
 const createFlowchart = () => algorithms.startCreating();
 
 onBeforeMount(() => {
-  settings.page.setTitle('Algoritmos');
+  settings.page.setTitle('Mantenimiento de algoritmos');
 });
 
 onBeforeRouteLeave((leaveGuard) => {

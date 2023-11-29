@@ -1,65 +1,55 @@
 import json
 from datetime import datetime
-from app.db import conn
-from app.models.algorithm import algorithm_model
-from app.models.nodes import node_model
-from sqlalchemy import insert, exc, select
-from app.services.data_handler import result_to_dict
+from app.pymsql import conn, select, delete, db_error
+from pymysql import Error
 
 node_fields = ['id', 'algorithm_id', 'node_id', 'node_type', 'label']
 
 
-def map_nodes(graph_string: str, algorithm_id: int):
-    conn.execute(
-        node_model.delete().where(node_model.c.algorithm_id == algorithm_id)
-    )
+def map_nodes(graph_string: str, algorithm_id: str):
+    try:
+        delete("nodes", "algorithm_id", algorithm_id)
 
-    graph = json.loads(graph_string)['cells']
+        graph = json.loads(graph_string)['cells']
 
-    nodes = []
-    for node in graph:
-        data = {
-            "algorithm_id": algorithm_id,
-            "node_id": node['id'],
-            "node_type": node['type'],
-            "label": "",
-        }
+        nodes = []
+        for node in graph:
+            data = {
+                "algorithm_id": algorithm_id,
+                "node_id": node['id'],
+                "node_type": node['type'],
+                "label": "",
+            }
 
-        if "props" in node:
-            if "label" in node['props']:
-                data['label'] = node['props']['label']
+            if "props" in node:
+                if "label" in node['props']:
+                    data['label'] = node['props']['label']
 
-        nodes.append(data)
+            nodes.append(data)
 
-        print('nodes')
-        print(json.dumps(nodes, indent=2))
+            print('nodes')
+            print(json.dumps(nodes, indent=2))
 
-        conn.execute(
-            insert(node_model).values(
-                algorithm_id=data['algorithm_id'],
-                node_id=data['node_id'],
-                node_type=data['node_type'],
-                label=data['label'],
-                updated_at=datetime.now(),
-            )
-        )
+            fields = "algorithm_id, node_id, node_type, label, updated_at"
+            insert_stmt = "INSERT INTO nodes ("+fields+") VALUES (%s, %s, %s, %s, %s)"
 
-    conn.commit()
+            db = conn()
+            with db:
+                with db.cursor() as cursor:
+                    cursor.execute(
+                        insert_stmt,
+                        (data['algorithm_id'], data['node_id'], data['node_type'], data['label'], datetime.now())
+                    )
 
-    return True
+                    db.commit()
+
+        return True
+    except Error as e:
+        db_error(e)
 
 
 def search_nodes(keyword: str):
     try:
-        nodes_found = conn.execute(
-            select(node_model).join(
-                algorithm_model, algorithm_model.c.id == node_model.c.algorithm_id
-            ).where(
-                node_model.c.label.like("%"+keyword+"%")
-            )
-        ).fetchall()
-
-        return result_to_dict(nodes_found, node_fields)
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+        return select("SELECT * FROM nodes WHERE label REGEXP %s", "[[:<:]]"+keyword+"[[:>:]]")
+    except Error as e:
+        db_error(e)
