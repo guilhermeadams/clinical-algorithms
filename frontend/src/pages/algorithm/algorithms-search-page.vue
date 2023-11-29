@@ -44,7 +44,7 @@
                   class="text-body1"
                   style="margin-top:5px"
                   v-html="`<b>Algoritmo:</b> ${
-                    highlightKeyword(data.results[key].title, data.keyword)
+                    highlightSearchKeyword(data.results[key].title, data.keyword)
                   }`"
                 />
               </q-item>
@@ -54,7 +54,7 @@
               v-else
               class="text-body1"
               v-html="`<b>Algoritmo:</b> ${
-                highlightKeyword(data.results[key].title, data.keyword)
+                highlightSearchKeyword(data.results[key].title, data.keyword)
               }`"
             />
 
@@ -70,7 +70,7 @@
                 @click="goEditor(data.results[key].id, node)"
               >
                 <div
-                  v-html="`<b>Nodo:</b> ${highlightKeyword(node.label, data.keyword)}`"
+                  v-html="`<b>Nodo:</b> ${highlightSearchKeyword(node.label, data.keyword)}`"
                   class="q-mt-sm"
                 />
               </q-item>
@@ -99,7 +99,7 @@ import {
 } from 'vue';
 
 import Settings from 'src/services/settings';
-import { highlightKeyword } from 'src/services/texts';
+import { highlightSearchKeyword } from 'src/services/texts';
 
 import SearchInput from 'components/inputs/search-input.vue';
 import LoadingSpinner from 'components/spinners/loading-spinner.vue';
