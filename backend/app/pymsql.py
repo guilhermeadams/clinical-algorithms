@@ -22,37 +22,31 @@ def conn():
         db_error(e)
 
 
-def select(stmt: str, params: List[str] | str):
+def select(stmt: str, params: List[str] | str | int = None):
     try:
         db = conn()
 
         with db:
             with db.cursor() as cursor:
-                cursor.execute(
-                    stmt,
-                    params,
-                )
+                if params:
+                    cursor.execute(stmt, params)
+                else:
+                    cursor.execute(stmt)
 
                 result = cursor.fetchall()
 
                 return result
-
     except Error as e:
         db_error(e)
 
 
 def delete(table: str, field: str, value: str):
-
     try:
         db = conn()
         with db:
             with db.cursor() as cursor:
-                cursor.execute(
-                    "DELETE FROM "+table+" WHERE "+field+" = %s",
-                    value
-                )
+                cursor.execute("DELETE FROM "+table+" WHERE "+field+" = %s", value)
 
                 db.commit()
-
     except Error as e:
         db_error(e)

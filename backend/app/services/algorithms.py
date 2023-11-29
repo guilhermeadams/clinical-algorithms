@@ -2,42 +2,37 @@ from app.models.algorithm import algorithm_model
 from app.services.nodes import search_nodes
 from app.schemas.algorithm import AlgorithmSchema
 from app.db import conn
-from .data_handler import result_to_dict, to_iso_date
+from .data_handler import to_iso_date
 from sqlalchemy import insert, update, exc
 from app.services import graphs
+from app.pymsql import select, db_error
+from pymysql import Error
 
 algorithm_fields = ['id', 'title', 'description', 'version', 'updated_at']
 
 
 def index():
     try:
-        all_algorithms = conn.execute(
-            algorithm_model.select()
-        ).fetchall()
-
-        return result_to_dict(all_algorithms, algorithm_fields)
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+        return select("SELECT * FROM algorithms")
+    except Error as e:
+        db_error(e)
 
 
-def search(keyword: str):
+def search(keyword: str, thorough=False):
     try:
-        algorithms_found = conn.execute(
-            algorithm_model.select().where(algorithm_model.c.title.like("%"+keyword+"%"))
-        ).fetchall()
-
-        return result_to_dict(algorithms_found, algorithm_fields)
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+        if thorough:
+            return select("SELECT * FROM algorithms WHERE title REGEXP %s", "[[:<:]]"+keyword+"[[:>:]]")
+        else:
+            return select("SELECT * FROM algorithms WHERE title LIKE %s", "%"+keyword+"%")
+    except Error as e:
+        db_error(e)
 
 
 def thorough_search(keyword: str):
     try:
         nodes_found = search_nodes(keyword)
 
-        algorithms_found = search(keyword)
+        algorithms_found = search(keyword, True)
 
         results = {}
 
@@ -49,7 +44,7 @@ def thorough_search(keyword: str):
             }
 
         for node_found in nodes_found:
-            if node_found['algorithm_id'] not in node_found:
+            if node_found['algorithm_id'] not in results:
                 results[node_found['algorithm_id']] = {
                     "title": "",
                     "description": "",
@@ -60,30 +55,21 @@ def thorough_search(keyword: str):
             results[node_found['algorithm_id']]['nodes'].append(node_found)
 
             if not results[node_found['algorithm_id']]['title']:
-                algorithm_found = conn.execute(
-                    algorithm_model.select().where(algorithm_model.c.id == node_found['algorithm_id'])
-                ).fetchone()
+                algorithm_found = select("SELECT * FROM algorithms WHERE id = %s", node_found['algorithm_id'])[0]
 
-                results[node_found['algorithm_id']]['title'] = algorithm_found[1]
-                results[node_found['algorithm_id']]['description'] = algorithm_found[2]
+                results[node_found['algorithm_id']]['title'] = algorithm_found['title']
+                results[node_found['algorithm_id']]['description'] = algorithm_found['description']
 
         return results
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+    except Error as e:
+        db_error(e)
 
 
 def show(algorithm_id: int):
     try:
-        algorithm = conn.execute(
-            algorithm_model.select().where(algorithm_model.c.id == algorithm_id)
-        ).fetchall()
-
-        if len(algorithm):
-            return result_to_dict(algorithm, algorithm_fields)[0]
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+        return select("SELECT * FROM algorithms WHERE id = %s", algorithm_id)
+    except Error as e:
+        db_error(e)
 
 
 def store(algorithm: AlgorithmSchema):
@@ -102,11 +88,9 @@ def store(algorithm: AlgorithmSchema):
         graphs.store(algorithm_id=stored_algorithm.lastrowid)
 
         return stored_algorithm
-    # except exc.SQLAlchemyError as e:
     except exc.SQLAlchemyError:
         conn.rollback()
         raise
-        # return e.__dict__['orig']
 
 
 def update_algorithm(algorithm: AlgorithmSchema):
@@ -125,8 +109,6 @@ def update_algorithm(algorithm: AlgorithmSchema):
         conn.commit()
 
         return updated_algorithm
-    # except exc.SQLAlchemyError as e:
-    #     return e.__dict__['orig']
     except exc.SQLAlchemyError:
         conn.rollback()
         raise
@@ -144,8 +126,6 @@ def delete(algorithm_id: int):
         conn.commit()
 
         return deleted_algorithm
-    # except exc.SQLAlchemyError as e:
-    #     return e.__dict__['orig']
     except exc.SQLAlchemyError:
         conn.rollback()
         raise
