@@ -32,7 +32,9 @@
           >
             <div
               class="text-body1"
-              v-html="`<b>Algoritmo:</b> ${getResultText(data.results[key].title)}`"
+              v-html="`<b>Algoritmo:</b> ${
+                highlightKeyword(data.results[key].title, data.keyword)
+              }`"
             />
 
             <q-list separator>
@@ -43,7 +45,7 @@
                 v-ripple
               >
                 <div
-                  v-html="`<b>Nodo:</b> ${getResultText(node.label)}`"
+                  v-html="`<b>Nodo:</b> ${highlightKeyword(node.label, data.keyword)}`"
                   class="q-mt-sm"
                 />
               </q-item>
@@ -71,8 +73,10 @@ import {
   inject,
 } from 'vue';
 
-import SearchInput from 'components/inputs/search-input.vue';
 import Settings from 'src/services/settings';
+import { highlightKeyword } from 'src/services/texts';
+
+import SearchInput from 'components/inputs/search-input.vue';
 import LoadingSpinner from 'components/spinners/loading-spinner.vue';
 import Algorithms, { IAlgorithmThoroughSearchResult } from 'src/services/algorithms';
 
@@ -116,8 +120,6 @@ const clearSearch = () => {
   data.results = null;
   data.keyword = '';
 };
-
-const getResultText = (text: string) => text.replace(data.keyword, `<span class="highlight-text">${data.keyword}</span>`);
 
 onBeforeMount(() => {
   settings.page.setTitle('Publicación de algoritmos (visualización para uso de usuarios finales)');
