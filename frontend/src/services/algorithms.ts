@@ -34,12 +34,15 @@ export interface INode {
   label: string,
 }
 
+export interface IAlgorithmThoroughSearchResultItem {
+  id: number,
+  title: string,
+  description: string,
+  nodes: INode[],
+}
+
 export interface IAlgorithmThoroughSearchResult {
-  [key: number]: {
-    title: string,
-    description: string,
-    nodes: INode[],
-  }
+  [key: number]: IAlgorithmThoroughSearchResultItem
 }
 
 const resource = 'algorithms';
