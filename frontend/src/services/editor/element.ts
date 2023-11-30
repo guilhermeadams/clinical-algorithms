@@ -435,7 +435,6 @@ class Element {
         if (inputs.length) {
           // eslint-disable-next-line no-restricted-syntax
           for (const input of inputs) {
-            console.log(input);
             input.setAttribute('readonly', 'true');
             input.classList.add('cursor-inherit');
           }

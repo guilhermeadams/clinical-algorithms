@@ -15,7 +15,7 @@
         </div>
 
         <div
-          v-if="isActionElement || isEvaluationElement"
+          v-if="editable"
           class="q-pt-sm q-pb-md q-px-md"
         >
           <div><b>Recomendaciones / Buenas prácticas</b></div>
@@ -31,13 +31,25 @@
         </div>
       </div>
 
-      <div id="editor-metadata-panel-content" class="q-pa-md">
+      <div
+        id="editor-metadata-panel-content"
+        :class="{ 'editor-read-only': !editable }"
+        class="q-pa-md"
+      >
         <div v-if="loadingBlocks">
           <loading-spinner />
         </div>
 
+        <div v-if="!editable">
+          <fixed-metadata-card
+            v-for="index of totalBlocks"
+            :key="`metadata-fixed-form-${index}`"
+            :index="index"
+          />
+        </div>
+
         <div
-          v-else-if="totalBlocks && (isActionElement || isEvaluationElement)"
+          v-else-if="totalBlocks"
         >
           <!-- FIXED METADATA -->
           <metadata-fixed-form
@@ -65,6 +77,7 @@ import Editor from 'src/services/editor';
 
 import MetadataFixedForm from 'components/forms/editor/fixed-metadata-form.vue';
 import LoadingSpinner from 'components/spinners/loading-spinner.vue';
+import FixedMetadataCard from 'components/cards/metadata/fixed-metadata-card.vue';
 
 const editor = inject('editor') as Editor;
 
@@ -73,6 +86,10 @@ const totalBlocks = computed(() => editor.metadata.data.totalBlocks);
 const isActionElement = computed(() => editor.element.isAction());
 
 const isEvaluationElement = computed(() => editor.element.isEvaluation());
+
+const editable = computed(
+  () => !editor.data.readOnly && (isActionElement.value || isEvaluationElement.value),
+);
 
 const showMetadataPanel = computed(
   () => editor.metadata.data.showPanel && (isActionElement.value || isEvaluationElement.value),
@@ -145,4 +162,8 @@ onBeforeUnmount(() => {
   height: calc(100% - 136px)
   overflow-y: auto
   overflow-x: hidden
+
+#editor-metadata-panel-content.editor-read-only
+  top: 48px
+  height: calc(100% - 47px)
 </style>

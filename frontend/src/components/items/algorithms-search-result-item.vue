@@ -22,7 +22,7 @@
 
       <div
         v-else
-        class="text-body1"
+        class="text-body1 q-mb-sm"
         v-html="`<b>Algoritmo:</b> ${ highlightSearchKeyword(result.title, keyword) }`"
       />
 
