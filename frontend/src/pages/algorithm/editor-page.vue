@@ -10,7 +10,7 @@
 
     <div id="editor-content" class="bg-white overflow-auto">
       <!-- ELEMENTS -->
-      <editor-elements-toolbar />
+      <editor-elements-toolbar v-if="!readOnly" />
 
       <!-- STAGE -->
       <editor-stage />
@@ -38,7 +38,6 @@
 <script setup lang="ts">
 import {
   computed,
-  // onBeforeUnmount,
   onBeforeMount,
   provide,
   inject,
@@ -68,6 +67,8 @@ const width = computed(
   () => (settings.page.mainMenu ? 'calc(100% - 300px)' : '100%'),
 );
 
+const readOnly = computed(() => editor.data.readOnly);
+
 const exitEditor = () => {
   if (route.query.search) {
     return router.push({
@@ -92,10 +93,14 @@ onBeforeMount(() => {
 
   settings.page.mainMenu = false;
 
-  const { id } = route.query;
+  const { id, node } = route.query;
 
   if (id && typeof id === 'string') {
     editor.graph.open(id);
+  }
+
+  if (node) {
+    editor.setReadOnly(true);
   }
 });
 

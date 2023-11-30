@@ -24,6 +24,7 @@ class Editor {
   metadata: Metadata;
 
   data: IJointData = reactive({
+    readOnly: false,
     showSaveDialog: false,
     paper: undefined,
     graph,
@@ -63,7 +64,10 @@ class Editor {
             color: '#EAEAEA',
           },
 
+          // ALERT!!!
+          // to use editable link, just comment the line below
           defaultLink: () => Editor.createLink(),
+
           linkPinning: false,
           snapLinks: { radius: 10 },
         });
@@ -131,6 +135,10 @@ class Editor {
 
   public toggleSaveDialog() {
     this.data.showSaveDialog = !this.data.showSaveDialog;
+  }
+
+  public setReadOnly(value: boolean) {
+    this.data.readOnly = value;
   }
 }
 

@@ -36,6 +36,7 @@
     />
 
     <q-btn
+      v-if="!readOnly"
       :loading="savingGraph"
       label="Guardar"
       class="float-right"
@@ -63,6 +64,7 @@ const editor = inject('editor') as Editor;
 const saved = computed(() => editor.graph.data.saved);
 const savingGraph = computed(() => editor.graph.data.saving);
 const lastUpdate = computed(() => editor.graph.lastUpdate);
+const readOnly = computed(() => editor.data.readOnly);
 
 const exitEditor = () => {
   if (route.query.search) {
@@ -78,7 +80,9 @@ const exitEditor = () => {
 };
 
 const goAlgorithmsPage = () => {
-  if (editor.graph.isSaved) {
+  if (readOnly.value) {
+    exitEditor();
+  } else if (editor.graph.isSaved) {
     exitEditor();
   } else {
     editor.toggleSaveDialog();

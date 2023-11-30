@@ -135,16 +135,19 @@ class Element {
       useModelGeometry: true,
     });
 
-    const removeButton = this.customRemoveButton(
-      params?.removeButtons.x,
-      params?.removeButtons.y,
-    );
+    const allTools = [boundaryTool];
+
+    if (!this.editor.data.readOnly) {
+      const removeButton = this.customRemoveButton(
+        params?.removeButtons.x,
+        params?.removeButtons.y,
+      );
+
+      allTools.push(removeButton);
+    }
 
     const toolsView = new joint.dia.ToolsView({
-      tools: [
-        boundaryTool,
-        removeButton,
-      ],
+      tools: [...allTools],
     });
 
     if (this.editor.data.paper instanceof dia.Paper) {
@@ -423,6 +426,18 @@ class Element {
 
               this.editor.graph.notSaved();
             });
+          }
+        }
+      },
+      disableAll() {
+        const inputs = document.getElementsByClassName(TEXTAREA_CLASSNAME);
+
+        if (inputs.length) {
+          // eslint-disable-next-line no-restricted-syntax
+          for (const input of inputs) {
+            console.log(input);
+            input.setAttribute('readonly', 'true');
+            input.classList.add('cursor-inherit');
           }
         }
       },
