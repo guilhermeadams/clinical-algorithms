@@ -1,7 +1,15 @@
 import { USERS_INDEX } from 'src/router/routes/users';
 import { FLOWCHARTS_INDEX, FLOWCHARTS_SEARCH } from 'src/router/routes/algorithms';
 
-const sections = [
+export interface IMainMenuSection {
+  name: string,
+  items: {
+    name: string,
+    label: string,
+  }[],
+}
+
+const sections: IMainMenuSection[] = [
   {
     name: 'Registros básicos',
     items: [

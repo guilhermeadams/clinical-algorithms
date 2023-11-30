@@ -54,15 +54,13 @@ import {
   inject,
 } from 'vue';
 
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 import Settings from 'src/services/settings';
-import { highlightSearchKeyword } from 'src/services/texts';
 
 import SearchInput from 'components/inputs/search-input.vue';
 import LoadingSpinner from 'components/spinners/loading-spinner.vue';
-import Algorithms, { IAlgorithmThoroughSearchResult, INode } from 'src/services/algorithms';
-import { FLOWCHARTS_EDITOR } from 'src/router/routes/algorithms';
+import Algorithms, { IAlgorithmThoroughSearchResult } from 'src/services/algorithms';
 import AlgorithmsSearchResult from 'components/items/algorithms-search-result-item.vue';
 
 const route = useRoute();
