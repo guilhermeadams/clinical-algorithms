@@ -93,14 +93,14 @@ onBeforeMount(() => {
 
   settings.page.mainMenu = false;
 
-  const { id, node } = route.query;
+  const { id, search } = route.query;
 
   if (id && typeof id === 'string') {
     editor.graph.open(id);
-  }
 
-  if (node) {
-    editor.setReadOnly(true);
+    if (search) {
+      editor.setReadOnly(true);
+    }
   }
 });
 

@@ -1,12 +1,10 @@
 <template>
+  <div></div>
   <q-card class="shadow-light q-my-lg">
     <q-card-section
       class="search-result-item"
     >
-      <q-list
-        v-if="!result.nodes.length"
-        separator
-      >
+      <q-list separator>
         <q-item
           clickable
           v-ripple
@@ -20,12 +18,6 @@
         </q-item>
       </q-list>
 
-      <div
-        v-else
-        class="text-body1 q-mb-sm"
-        v-html="`<b>Algoritmo:</b> ${ highlightSearchKeyword(result.title, keyword) }`"
-      />
-
       <q-list separator>
         <q-item
           v-for="node of result.nodes"
@@ -36,7 +28,7 @@
         >
           <div
             v-html="`<b>Nodo:</b> ${highlightSearchKeyword(node.label, keyword)}`"
-            class="q-mt-sm"
+            class="q-pl-lg q-mt-sm"
           />
         </q-item>
       </q-list>

@@ -70,6 +70,8 @@ class Editor {
 
           linkPinning: false,
           snapLinks: { radius: 10 },
+
+          interactive: () => !this.data.readOnly,
         });
 
         this.data.paper.on('blank:pointerup', (/* elementView */) => {
