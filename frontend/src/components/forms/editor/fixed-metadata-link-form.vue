@@ -40,6 +40,7 @@
 
       <simple-modal
         :show="showRemoveLinkDialog"
+        :confirming="deletingLink"
         @cancel="showRemoveLinkDialog = false"
         @confirm="removeLink"
       >
@@ -85,6 +86,8 @@ const props = defineProps({
   },
 });
 
+const deletingLink = ref(false);
+
 const data = reactive({
   blockIndex: props.blockIndex,
   linkIndex: props.linkIndex,
@@ -97,7 +100,25 @@ watch(data, (value) => {
 });
 
 const removeLink = () => {
-  editor.metadata.fixed.removeLink(props.blockIndex, props.linkIndex);
+  try {
+    deletingLink.value = true;
+
+    editor.metadata.fixed.removeLink(props.blockIndex, props.linkIndex);
+  } finally {
+    setTimeout(() => {
+      deletingLink.value = false;
+
+      showRemoveLinkDialog.value = false;
+
+      editor.metadata.data.loadingBlocks = true;
+
+      setTimeout(() => {
+        editor.metadata.updateTotalBlocks();
+
+        editor.metadata.data.loadingBlocks = false;
+      }, 1000);
+    }, 1000);
+  }
 };
 
 const setInitialValues = () => {

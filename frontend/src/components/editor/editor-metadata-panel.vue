@@ -10,6 +10,7 @@
       class="bg-white shadow-light-up"
       :class="{ 'editor-read-only': !editable }"
     >
+      <div>{{ loadingBlocks }}{{ totalBlocks }}</div>
       <div id="editor-metadata-panel-header">
         <div class="text-h6 q-px-md q-py-sm">
           {{ data.name }}{{ elementLabel }}
@@ -41,7 +42,7 @@
           <loading-spinner />
         </div>
 
-        <div v-if="!editable">
+        <div v-else-if="!editable">
           <div v-if="!totalBlocks">
             No hay recomendaciones ni buenas prácticas en este nodo.
           </div>

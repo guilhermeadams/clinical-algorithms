@@ -260,8 +260,6 @@ class Metadata {
         return undefined;
       },
       removeLink: (blockIndex: number, linkIndex: number) => {
-        this.data.loadingBlocks = true;
-
         const selectedElement = this.editor.element.getSelected();
 
         if (selectedElement) {
@@ -308,14 +306,6 @@ class Metadata {
                 );
               }
             }
-
-            setTimeout(() => {
-              const updatedMetadata = this.getFromElement(selectedElement);
-
-              this.data.totalBlocks = updatedMetadata?.fixed.length || 0;
-
-              this.data.loadingBlocks = false;
-            }, 1000);
           }
         }
       },
