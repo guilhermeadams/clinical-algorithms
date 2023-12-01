@@ -34,7 +34,12 @@ def update_graph(algorithm_graph: AlgorithmGraphSchema):
 
 def show(algorithm_id: int):
     try:
-        return select("SELECT * FROM algorithms WHERE id = %s", algorithm_id)
+        graphs = select("SELECT * FROM graphs WHERE algorithm_id = %s", algorithm_id)
+
+        if len(graphs):
+            return graphs[0]
+
+        return {}
     except Error as e:
         db_error(e)
 
