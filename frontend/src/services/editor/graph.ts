@@ -108,9 +108,11 @@ class Graph {
     }
   }
 
-  public async open(graphId: number | string) {
+  public async open(graphId: number | string, readOnly: boolean) {
     try {
       this.data.loading = true;
+
+      this.editor.setReadOnly(readOnly);
 
       await this.setGraph(graphId);
 

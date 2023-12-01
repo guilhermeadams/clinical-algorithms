@@ -96,11 +96,7 @@ onBeforeMount(() => {
   const { id, search } = route.query;
 
   if (id && typeof id === 'string') {
-    editor.graph.open(id);
-
-    if (search) {
-      editor.setReadOnly(true);
-    }
+    editor.graph.open(id, !!search);
   }
 });
 

@@ -3,7 +3,7 @@ import { dia } from 'jointjs';
 
 import { IJointData } from 'src/services/editor/types';
 import { reactive } from 'vue';
-import customElements from 'src/services/editor/elements/custom-elements';
+import customElements, { CustomElement } from 'src/services/editor/elements/custom-elements';
 import Element from 'src/services/editor/element';
 import Graph from 'src/services/editor/graph';
 import Metadata from 'src/services/editor/metadata';
@@ -103,7 +103,10 @@ class Editor {
         });
 
         this.data.paper.on('element:pointerup', (elementView: dia.ElementView) => {
-          this.element.select(elementView.options.model.id);
+          // do not select lane element if it's in read only mode
+          if (!(this.data.readOnly && elementView.options.model.prop('type') === CustomElement.LANE)) {
+            this.element.select(elementView.options.model.id);
+          }
         });
 
         this.data.paper.on('link:snap:connect', () => {
