@@ -10,7 +10,6 @@
       class="bg-white shadow-light-up"
       :class="{ 'editor-read-only': !editable }"
     >
-      <div>{{ loadingBlocks }}{{ totalBlocks }}</div>
       <div id="editor-metadata-panel-header">
         <div class="text-h6 q-px-md q-py-sm">
           {{ data.name }}{{ elementLabel }}
@@ -24,7 +23,7 @@
 
           <q-btn
             class="q-mt-sm full-width"
-            label="Nueva recomendación"
+            label="Nueva recomendación / buena práctica"
             color="primary"
             no-caps
             push
