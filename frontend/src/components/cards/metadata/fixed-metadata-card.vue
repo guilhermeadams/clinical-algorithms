@@ -96,7 +96,7 @@
                 {{ link.url }}
               </a>
 
-              <div class="q-pb-sm"><b>Tipo:</b> {{ link.type }}</div>
+              <div class="q-py-sm"><b>Tipo:</b> {{ link.type }}</div>
             </q-card-section>
           </q-card>
         </div>

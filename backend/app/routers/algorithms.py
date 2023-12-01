@@ -57,4 +57,4 @@ def show(algorithm_id: int):
 
 @router.delete("/{algorithm_id}")
 def delete(algorithm_id: int):
-    return algorithms.delete(algorithm_id)
+    return algorithms.delete_algorithm(algorithm_id)

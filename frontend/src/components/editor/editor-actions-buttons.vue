@@ -4,6 +4,7 @@
     class="q-pa-md shadow-light-up"
   >
     <div
+      v-if="!readOnly"
       id="updated-at-info" class="text-center text-body1"
     >
       <div

@@ -1,11 +1,11 @@
 from app.models.algorithm import algorithm_model
-from app.services.nodes import search_nodes
+from app.services import nodes
 from app.schemas.algorithm import AlgorithmSchema
 from app.db import conn
 from .data_handler import to_iso_date
-from sqlalchemy import insert, update, exc
+from sqlalchemy import update, exc
 from app.services import graphs
-from app.pymsql import select, db_error
+from app.pymsql import insert, select, delete, db_error
 from pymysql import Error
 
 algorithm_fields = ['id', 'title', 'description', 'version', 'updated_at']
@@ -30,7 +30,7 @@ def search(keyword: str, thorough=False):
 
 def thorough_search(keyword: str):
     try:
-        nodes_found = search_nodes(keyword)
+        nodes_found = nodes.search(keyword)
 
         algorithms_found = search(keyword, True)
 
@@ -57,7 +57,10 @@ def thorough_search(keyword: str):
             results[node_found['algorithm_id']]['nodes'].append(node_found)
 
             if not results[node_found['algorithm_id']]['title']:
-                algorithm_found = select("SELECT * FROM algorithms WHERE id = %s", node_found['algorithm_id'])[0]
+                algorithm_found = select(
+                    "SELECT * FROM algorithms WHERE id = %s",
+                    node_found['algorithm_id'],
+                )[0]
 
                 results[node_found['algorithm_id']]['id'] = algorithm_found['id']
                 results[node_found['algorithm_id']]['title'] = algorithm_found['title']
@@ -77,25 +80,20 @@ def show(algorithm_id: int):
 
 def store(algorithm: AlgorithmSchema):
     try:
-        stored_algorithm = conn.execute(
-            insert(algorithm_model).values(
-                title=algorithm.title,
-                description=algorithm.description,
-                version=algorithm.version,
-                updated_at=to_iso_date(algorithm.updated_at)
-            )
+        algorithm_id = insert(
+            "algorithms",
+            ["title", "description", "version", "updated_at"],
+            [algorithm.title, algorithm.description, algorithm.version, to_iso_date(algorithm.updated_at)],
         )
 
-        conn.commit()
+        graphs.store(algorithm_id)
 
-        graphs.store(algorithm_id=stored_algorithm.lastrowid)
-
-        return stored_algorithm
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+        return {"algorithm_id": algorithm_id}
+    except Error as e:
+        db_error(e)
 
 
+# TODO: USE PYMYSQL METHODS
 def update_algorithm(algorithm: AlgorithmSchema):
     try:
         updated_algorithm = conn.execute(
@@ -117,18 +115,15 @@ def update_algorithm(algorithm: AlgorithmSchema):
         raise
 
 
-def delete(algorithm_id: int):
+def delete_algorithm(algorithm_id: int):
     try:
-        # delete the graph before...
-        graphs.delete(algorithm_id)
+        # delete nodes
+        nodes.delete_algorithm_nodes(algorithm_id)
 
-        deleted_algorithm = conn.execute(
-            algorithm_model.delete().where(algorithm_model.c.id == algorithm_id)
-        )
+        # delete graph
+        graphs.delete_algorithm_graphs(algorithm_id)
 
-        conn.commit()
-
-        return deleted_algorithm
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+        # then delete graph itself
+        delete('algorithms', 'id', algorithm_id)
+    except Error as e:
+        db_error(e)

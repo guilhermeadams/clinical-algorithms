@@ -22,6 +22,31 @@ def conn():
         db_error(e)
 
 
+def insert(table: str, fields: List[str], values: List[str | int]):
+    try:
+        db = conn()
+
+        with db:
+            with db.cursor() as cursor:
+                sql_fields = ""
+                sql_values = ""
+
+                for index in range(len(fields)):
+                    sql_fields += fields[index]+", " if index + 1 != len(fields) else fields[index]
+                    sql_values += "%s, " if index + 1 != len(fields) else "%s"
+
+                cursor.execute(
+                    "INSERT INTO "+table+" ("+sql_fields+") VALUES ("+sql_values+")",
+                    values,
+                )
+
+                db.commit()
+
+                return cursor.lastrowid
+    except Error as e:
+        db_error(e)
+
+
 def select(stmt: str, params: List[str] | str | int = None):
     try:
         db = conn()
@@ -40,7 +65,7 @@ def select(stmt: str, params: List[str] | str | int = None):
         db_error(e)
 
 
-def delete(table: str, field: str, value: str):
+def delete(table: str, field: str, value: int | str):
     try:
         db = conn()
         with db:
