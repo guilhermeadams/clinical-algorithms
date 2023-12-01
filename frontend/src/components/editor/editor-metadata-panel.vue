@@ -61,7 +61,6 @@
             v-for="index of totalBlocks"
             :key="`metadata-fixed-form-${index}`"
             :index="index"
-            @deleted="updateTotalBlocks"
           />
         </div>
       </div>
@@ -120,10 +119,6 @@ const setInitialValue = () => {
 
 const addBlock = () => {
   editor.metadata.data.totalBlocks += 1;
-};
-
-const updateTotalBlocks = () => {
-  editor.metadata.updateTotalBlocks();
 };
 
 watch(() => editor.element.data.selectedId, (value) => {

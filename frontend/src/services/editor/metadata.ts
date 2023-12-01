@@ -141,6 +141,8 @@ class Metadata {
         setTimeout(() => {
           this.editor.graph.notSaved();
 
+          this.updateTotalBlocks();
+
           this.data.loadingBlocks = false;
         }, 1000);
       },
