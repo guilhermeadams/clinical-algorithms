@@ -8,6 +8,7 @@ def db_error(e: Error):
         print(f"Database error: {e.args[0]}, {e.args[1]}")
     else:
         print(f"Database error: {e.args[0]}")
+    raise
 
 
 def conn():
@@ -37,6 +38,34 @@ def insert(table: str, fields: List[str], values: List[str | int]):
 
                 cursor.execute(
                     "INSERT INTO "+table+" ("+sql_fields+") VALUES ("+sql_values+")",
+                    values,
+                )
+
+                db.commit()
+
+                return cursor.lastrowid
+    except Error as e:
+        db_error(e)
+
+
+def update(table: str, fields: List[str], values: List[str | int], key_field: str, key_value: str | int):
+    try:
+        db = conn()
+
+        with db:
+            with db.cursor() as cursor:
+                sql_fields = ""
+
+                for index in range(len(fields)):
+                    sql_fields += fields[index] + " = %s"
+
+                    if index + 1 < len(fields):
+                        sql_fields += ", "
+
+                values.append(key_value)
+
+                cursor.execute(
+                    "UPDATE "+table+" SET "+sql_fields+" WHERE "+key_field+" = %s",
                     values,
                 )
 

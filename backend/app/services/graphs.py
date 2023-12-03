@@ -1,35 +1,22 @@
 from datetime import datetime
-from app.db import conn
-from app.models.algorithm import graph_model
-from sqlalchemy import update, exc
 from app.schemas.algorithm import AlgorithmGraphSchema
 from app.services import nodes
-from app.pymsql import insert, select, delete, db_error
+from app.services.pymsql import insert, update, select, delete, db_error
 from pymysql import Error
 
 
-# TODO: USE PYMYSQL METHODS
 def update_graph(algorithm_graph: AlgorithmGraphSchema):
     try:
-        conn.execute(
-            update(graph_model)
-            .where(graph_model.c.id == algorithm_graph.id)
-            .values(
-                graph=algorithm_graph.graph,
-                updated_at=datetime.now()
-            )
-        )
+        fields = ["graph", "updated_at"]
+        values = [algorithm_graph.graph, datetime.now()]
 
-        conn.commit()
+        update("graphs", fields, values, "id", algorithm_graph.id)
 
         nodes.map_nodes(algorithm_graph.graph, algorithm_graph.algorithm_id)
 
         return show(algorithm_graph.algorithm_id)
-    # except exc.SQLAlchemyError as e:
-    #     return e.__dict__['orig']
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+    except Error as e:
+        db_error(e)
 
 
 def show(algorithm_id: int):

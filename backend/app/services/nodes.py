@@ -1,12 +1,12 @@
 import json
 from datetime import datetime
-from app.pymsql import insert, select, delete, db_error
+from app.services.pymsql import insert, select, delete, db_error
 from pymysql import Error
 
 node_fields = ['id', 'algorithm_id', 'node_id', 'node_type', 'label']
 
 
-def map_nodes(graph_string: str, algorithm_id: str):
+def map_nodes(graph_string: str, algorithm_id: int):
     try:
         delete("nodes", "algorithm_id", algorithm_id)
 

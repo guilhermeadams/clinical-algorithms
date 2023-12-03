@@ -1,11 +1,8 @@
-from app.models.algorithm import algorithm_model
 from app.services import nodes
 from app.schemas.algorithm import AlgorithmSchema
-from app.db import conn
 from .data_handler import to_iso_date
-from sqlalchemy import update, exc
 from app.services import graphs
-from app.pymsql import insert, select, delete, db_error
+from app.services.pymsql import insert, update, select, delete, db_error
 from pymysql import Error
 
 algorithm_fields = ['id', 'title', 'description', 'version', 'updated_at']
@@ -93,26 +90,16 @@ def store(algorithm: AlgorithmSchema):
         db_error(e)
 
 
-# TODO: USE PYMYSQL METHODS
 def update_algorithm(algorithm: AlgorithmSchema):
     try:
-        updated_algorithm = conn.execute(
-            update(algorithm_model)
-            .where(algorithm_model.c.id == algorithm.id)
-            .values(
-                title=algorithm.title,
-                description=algorithm.description,
-                version=algorithm.version,
-                updated_at=to_iso_date(algorithm.updated_at)
-            )
-        )
+        fields = ["title", "description", "version", "updated_at"]
+        values = [algorithm.title, algorithm.description, algorithm.version, to_iso_date(algorithm.updated_at)]
+        
+        updated_algorithm_id = update("algorithms", fields, values, "id", algorithm.id)
 
-        conn.commit()
-
-        return updated_algorithm
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+        return {"id": updated_algorithm_id}
+    except Error as e:
+        db_error(e)
 
 
 def delete_algorithm(algorithm_id: int):
