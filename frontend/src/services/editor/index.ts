@@ -66,7 +66,8 @@ class Editor {
 
           // ALERT!!!
           // to use editable link, just comment the line below
-          defaultLink: () => Editor.createLink(),
+          // defaultLink: () => Editor.createLink(),
+          // defaultLink: () => new joint.shapes.standard.Link(),
 
           linkPinning: false,
           snapLinks: { radius: 10 },
