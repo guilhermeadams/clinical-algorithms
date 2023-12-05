@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/3.7.7/joint.css" />
+</head>
+<body>
+    <!-- content -->
+    <div id="myholder"></div>
+
+    <!-- dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.1/backbone.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jointjs/3.7.7/joint.js"></script>
+
+    <!-- code -->
+    <script type="text/javascript">
+
+      const namespace = joint.shapes;
+
+      const graph = new joint.dia.Graph({}, { cellNamespace: namespace });
+
+      const paper = new joint.dia.Paper({
+        el: document.getElementById('myholder'),
+        model: graph,
+        width: 600,
+        height: 600,
+        gridSize: 1,
+        cellViewNamespace: namespace
+      });
+
+      const port = {
+        label: {
+          position: {
+            name: 'left'
+          },
+          markup: [{
+            tagName: 'text',
+            selector: 'label'
+          }]
+        },
+        attrs: {
+          portBody: {
+            magnet: true,
+            width: 16,
+            height: 16,
+            x: -8,
+            y: -8,
+            fill:  '#03071E'
+          },
+          label: {
+            text: 'port'
+          }
+        },
+        markup: [{
+          tagName: 'rect',
+          selector: 'portBody'
+        }]
+      };
+
+      const rect = new joint.shapes.standard.Rectangle();
+      rect.position(100, 30);
+        rect.resize(100, 40);
+        rect.attr({
+          body: {
+              fill: 'blue'
+          },
+          label: {
+              text: 'Hello',
+              fill: 'white'
+          },
+          ports: {
+            items: [port] // add a port in constructor
+          },
+        });
+        rect.addTo(graph);
+        rect.addPort(port);
+
+      const rect2 = rect.clone();
+      rect2.translate(300, 0);
+        rect2.attr('label/text', 'World!');
+        rect2.addTo(graph);
+
+      // const link = new joint.shapes.standard.Link();
+      // link.source(rect);
+      //   link.target(rect2);
+      //   link.addTo(graph);
+
+    </script>
+</body>
+</html>
