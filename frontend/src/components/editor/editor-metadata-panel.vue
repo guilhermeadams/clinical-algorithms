@@ -8,6 +8,7 @@
       v-if="showMetadataPanel"
       id="editor-metadata-panel"
       class="bg-white shadow-light-up"
+      :class="{ 'editor-read-only': !editable }"
     >
       <div id="editor-metadata-panel-header">
         <div class="text-h6 q-px-md q-py-sm">
@@ -15,14 +16,14 @@
         </div>
 
         <div
-          v-if="isActionElement || isEvaluationElement"
+          v-if="editable"
           class="q-pt-sm q-pb-md q-px-md"
         >
           <div><b>Recomendaciones / Buenas prácticas</b></div>
 
           <q-btn
             class="q-mt-sm full-width"
-            label="Nueva recomendación"
+            label="Nueva recomendación / buena práctica"
             color="primary"
             no-caps
             push
@@ -31,20 +32,35 @@
         </div>
       </div>
 
-      <div id="editor-metadata-panel-content" class="q-pa-md">
+      <div
+        id="editor-metadata-panel-content"
+        :class="{ 'editor-read-only': !editable }"
+        class="q-pa-md"
+      >
         <div v-if="loadingBlocks">
           <loading-spinner />
         </div>
 
+        <div v-else-if="!editable">
+          <div v-if="!totalBlocks">
+            No hay recomendaciones ni buenas prácticas en este nodo.
+          </div>
+
+          <fixed-metadata-card
+            v-for="index of totalBlocks"
+            :key="`metadata-fixed-form-${index}`"
+            :index="index"
+          />
+        </div>
+
         <div
-          v-else-if="totalBlocks && (isActionElement || isEvaluationElement)"
+          v-else-if="totalBlocks"
         >
           <!-- FIXED METADATA -->
           <metadata-fixed-form
             v-for="index of totalBlocks"
             :key="`metadata-fixed-form-${index}`"
             :index="index"
-            @deleted="updateTotalBlocks"
           />
         </div>
       </div>
@@ -65,6 +81,7 @@ import Editor from 'src/services/editor';
 
 import MetadataFixedForm from 'components/forms/editor/fixed-metadata-form.vue';
 import LoadingSpinner from 'components/spinners/loading-spinner.vue';
+import FixedMetadataCard from 'components/cards/metadata/fixed-metadata-card.vue';
 
 const editor = inject('editor') as Editor;
 
@@ -73,6 +90,10 @@ const totalBlocks = computed(() => editor.metadata.data.totalBlocks);
 const isActionElement = computed(() => editor.element.isAction());
 
 const isEvaluationElement = computed(() => editor.element.isEvaluation());
+
+const editable = computed(
+  () => !editor.data.readOnly && (isActionElement.value || isEvaluationElement.value),
+);
 
 const showMetadataPanel = computed(
   () => editor.metadata.data.showPanel && (isActionElement.value || isEvaluationElement.value),
@@ -98,10 +119,6 @@ const setInitialValue = () => {
 
 const addBlock = () => {
   editor.metadata.data.totalBlocks += 1;
-};
-
-const updateTotalBlocks = () => {
-  editor.metadata.updateTotalBlocks();
 };
 
 watch(() => editor.element.data.selectedId, (value) => {
@@ -145,4 +162,8 @@ onBeforeUnmount(() => {
   height: calc(100% - 136px)
   overflow-y: auto
   overflow-x: hidden
+
+#editor-metadata-panel-content.editor-read-only
+  top: 48px
+  height: calc(100% - 47px)
 </style>

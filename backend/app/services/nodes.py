@@ -1,36 +1,45 @@
 import json
-from app.db import conn
-from app.models.nodes import node_model
+from datetime import datetime
+from app.services.pymsql import insert, select, delete, db_error
+from pymysql import Error
+
+node_fields = ['id', 'algorithm_id', 'node_id', 'node_type', 'label']
 
 
 def map_nodes(graph_string: str, algorithm_id: int):
-    conn.execute(
-        node_model.delete().where(node_model.c.algorithm_id == algorithm_id)
-    )
+    try:
+        delete("nodes", "algorithm_id", algorithm_id)
 
-    graph = json.loads(graph_string)['cells']
+        fields = ["algorithm_id", "node_id", "node_type", "label", "updated_at"]
 
-    nodes = []
-    for node in graph:
-        data = {
-            "algorithm_id": algorithm_id,
-            "id": node['id'],
-            "node_type": node['type'],
-            "label": "",
-        }
+        graph = json.loads(graph_string)['cells']
 
-        if "props" in node:
-            if "label" in node['props']:
-                data['label'] = node['props']['label']
+        for node in graph:
+            data = [algorithm_id, node['id'], node['type'], "", datetime.now()]
 
-        nodes.append(data)
-    print('nodes')
-    print(json.dumps(nodes, indent=2))
-    # conn.execute(
-    #     insert(graph_model).values(
-    #         algorithm_id=algorithm_id,
-    #         graph=None,
-    #         updated_at=datetime.now()
-    #     )
-    # )
-    return True
+            if "props" in node:
+                if "label" in node['props']:
+                    data[3] = node['props']['label']
+
+            insert("nodes", fields, data)
+
+        return True
+    except Error as e:
+        db_error(e)
+
+
+def search(keyword: str):
+    try:
+        return select(
+            "SELECT * FROM nodes WHERE label REGEXP %s",
+            "[[:<:]]"+keyword+"[[:>:]]"
+        )
+    except Error as e:
+        db_error(e)
+
+
+def delete_algorithm_nodes(algorithm_id: int):
+    try:
+        return delete("nodes", "algorithm_id", algorithm_id)
+    except Error as e:
+        db_error(e)

@@ -1,9 +1,9 @@
 <template>
-  <q-page>
+  <q-page class="bg-grey-1">
     <div class="row q-mx-md q-py-sm">
       <div class="col-3">
         <search-input
-          label="Buscar algoritmos"
+          label="Palabra clave para la búsqueda de algoritmos"
           @search="searchFlowchart"
           @clear="clearSearch"
         />
@@ -19,10 +19,12 @@
       </div>
     </div>
 
-    <div class="row q-mx-md q-mb-sm">
-      <div class="col-12">
-        <algorithms-table />
-      </div>
+    <div class="q-px-md">
+      <q-card class="shadow-light">
+        <q-card-section>
+          <algorithms-table />
+        </q-card-section>
+      </q-card>
     </div>
 
     <edit-algorithm-modal />
@@ -56,7 +58,7 @@ const clearSearch = () => algorithms.clearSearch();
 const createFlowchart = () => algorithms.startCreating();
 
 onBeforeMount(() => {
-  settings.page.setTitle('Algoritmos');
+  settings.page.setTitle('Mantenimiento de algoritmos');
 });
 
 onBeforeRouteLeave((leaveGuard) => {

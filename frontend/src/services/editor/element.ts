@@ -1,7 +1,7 @@
 import * as joint from 'jointjs';
 import { dia } from 'jointjs';
 
-import Editor from 'src/services/editor/index';
+import Editor, { deselectAllTexts } from 'src/services/editor/index';
 import customElements, {
   CustomElement,
   elementName,
@@ -31,14 +31,21 @@ export interface IElementToolsSettings {
 class Element {
   editor: Editor;
 
-  data = reactive({
-    selectedId: '',
-    elementToCreate: '',
+  data: {
+    selectedId: dia.Cell.ID,
+    elementToCreate: string,
     creationPosition: {
-      x: 0,
-      y: 0,
+      x: number,
+      y: number,
     },
-  });
+  } = reactive({
+      selectedId: '',
+      elementToCreate: '',
+      creationPosition: {
+        x: 0,
+        y: 0,
+      },
+    });
 
   constructor(editor: Editor) {
     this.editor = editor;
@@ -128,16 +135,19 @@ class Element {
       useModelGeometry: true,
     });
 
-    const removeButton = this.customRemoveButton(
-      params?.removeButtons.x,
-      params?.removeButtons.y,
-    );
+    const allTools = [boundaryTool];
+
+    if (!this.editor.data.readOnly) {
+      const removeButton = this.customRemoveButton(
+        params?.removeButtons.x,
+        params?.removeButtons.y,
+      );
+
+      allTools.push(removeButton);
+    }
 
     const toolsView = new joint.dia.ToolsView({
-      tools: [
-        boundaryTool,
-        removeButton,
-      ],
+      tools: [...allTools],
     });
 
     if (this.editor.data.paper instanceof dia.Paper) {
@@ -286,6 +296,39 @@ class Element {
     return this.editor.data.graph.getElements().find((element) => element.id === id);
   }
 
+  public select(elementId: dia.Cell.ID) {
+    this.deselectAll();
+
+    const element = this.getById(elementId);
+
+    if (element && this.editor.data.paper) {
+      const elementView = element.findView(this.editor.data.paper);
+
+      if (elementView) {
+        elementView.showTools();
+
+        this.data.selectedId = elementId;
+
+        // console.log('SELECTED ELEMENT:');
+        // console.log(this.element.getSelected());
+
+        const selectedElement = this.getSelected();
+
+        if (selectedElement && selectedElement.prop('type') === CustomElement.LANE) {
+          const { y } = selectedElement.position();
+
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          selectedElement.position(0, y);
+
+          if (document.activeElement?.tagName !== 'INPUT') {
+            deselectAllTexts();
+          }
+        }
+      }
+    }
+  }
+
   public getSelected() {
     const elements = this.editor.data.graph.getElements();
 
@@ -383,6 +426,17 @@ class Element {
 
               this.editor.graph.notSaved();
             });
+          }
+        }
+      },
+      disableAll() {
+        const inputs = document.getElementsByClassName(TEXTAREA_CLASSNAME);
+
+        if (inputs.length) {
+          // eslint-disable-next-line no-restricted-syntax
+          for (const input of inputs) {
+            input.setAttribute('readonly', 'true');
+            input.classList.add('cursor-inherit');
           }
         }
       },

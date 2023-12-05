@@ -32,6 +32,7 @@
 
         <q-btn
           style="padding: 0 30px"
+          :loading="props.confirming"
           :label="props.confirmLabel"
           color="primary"
           push
@@ -59,6 +60,10 @@ const props = defineProps({
     default: '',
   },
   negative: {
+    type: Boolean,
+    default: false,
+  },
+  confirming: {
     type: Boolean,
     default: false,
   },

@@ -10,7 +10,7 @@ import Metadata from 'src/services/editor/metadata';
 
 const graph = new joint.dia.Graph({}, { cellNamespace: customElements });
 
-const deselectAllTexts = () => {
+export const deselectAllTexts = () => {
   window.getSelection()?.removeAllRanges();
 };
 
@@ -24,6 +24,7 @@ class Editor {
   metadata: Metadata;
 
   data: IJointData = reactive({
+    readOnly: false,
     showSaveDialog: false,
     paper: undefined,
     graph,
@@ -63,9 +64,14 @@ class Editor {
             color: '#EAEAEA',
           },
 
+          // ALERT!!!
+          // to use editable link, just comment the line below
           defaultLink: () => Editor.createLink(),
+
           linkPinning: false,
           snapLinks: { radius: 10 },
+
+          interactive: () => !this.data.readOnly,
         });
 
         this.data.paper.on('blank:pointerup', (/* elementView */) => {
@@ -75,6 +81,7 @@ class Editor {
         this.data.paper.on('blank:pointerdown cell:pointerdown', () => {
           if (document.activeElement && document.activeElement instanceof HTMLElement) {
             document.activeElement.blur();
+
             deselectAllTexts();
           }
         });
@@ -96,29 +103,9 @@ class Editor {
         });
 
         this.data.paper.on('element:pointerup', (elementView: dia.ElementView) => {
-          this.element.deselectAll();
-
-          elementView.showTools();
-
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          this.element.data.selectedId = elementView.model.id;
-
-          // console.log('SELECTED ELEMENT:');
-          // console.log(this.element.getSelected());
-
-          const selectedElement = this.element.getSelected();
-
-          if (selectedElement && selectedElement.prop('type') === CustomElement.LANE) {
-            const { y } = selectedElement.position();
-
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            selectedElement.position(0, y);
-
-            if (document.activeElement?.tagName !== 'INPUT') {
-              deselectAllTexts();
-            }
+          // do not select lane element if it's in read only mode
+          if (!(this.data.readOnly && elementView.options.model.prop('type') === CustomElement.LANE)) {
+            this.element.select(elementView.options.model.id);
           }
         });
 
@@ -153,6 +140,10 @@ class Editor {
 
   public toggleSaveDialog() {
     this.data.showSaveDialog = !this.data.showSaveDialog;
+  }
+
+  public setReadOnly(value: boolean) {
+    this.data.readOnly = value;
   }
 }
 

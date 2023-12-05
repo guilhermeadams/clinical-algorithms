@@ -1,108 +1,116 @@
-from app.models.algorithm import algorithm_model
+from app.services import nodes
 from app.schemas.algorithm import AlgorithmSchema
-from app.db import conn
-from .data_handler import algorithm_to_dict, to_iso_date
-from sqlalchemy import insert, update, exc
+from .data_handler import to_iso_date
 from app.services import graphs
+from app.services.pymsql import insert, update, select, delete, db_error
+from pymysql import Error
+
+algorithm_fields = ['id', 'title', 'description', 'version', 'updated_at']
 
 
 def index():
     try:
-        all_algorithms = conn.execute(
-            algorithm_model.select()
-        ).fetchall()
-
-        return algorithm_to_dict(all_algorithms)
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+        return select("SELECT * FROM algorithms")
+    except Error as e:
+        db_error(e)
 
 
-def search(keyword: str):
+def search(keyword: str, thorough=False):
     try:
-        algorithms_found = conn.execute(
-            algorithm_model.select().where(algorithm_model.c.title.like("%"+keyword+"%"))
-        ).fetchall()
+        if thorough:
+            return select("SELECT * FROM algorithms WHERE title REGEXP %s", "[[:<:]]"+keyword+"[[:>:]]")
+        else:
+            return select("SELECT * FROM algorithms WHERE title LIKE %s", "%"+keyword+"%")
+    except Error as e:
+        db_error(e)
 
-        return algorithm_to_dict(algorithms_found)
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+
+def thorough_search(keyword: str):
+    try:
+        nodes_found = nodes.search(keyword)
+
+        algorithms_found = search(keyword, True)
+
+        results = {}
+
+        for algorithm_found in algorithms_found:
+            results[algorithm_found['id']] = {
+                "id": algorithm_found['id'],
+                "title": algorithm_found['title'],
+                "description": algorithm_found['description'],
+                "nodes": []
+            }
+
+        for node_found in nodes_found:
+            if node_found['algorithm_id'] not in results:
+                results[node_found['algorithm_id']] = {
+                    "id": "",
+                    "title": "",
+                    "description": "",
+                    "nodes": []
+                }
+
+        for node_found in nodes_found:
+            results[node_found['algorithm_id']]['nodes'].append(node_found)
+
+            if not results[node_found['algorithm_id']]['title']:
+                algorithm_found = select(
+                    "SELECT * FROM algorithms WHERE id = %s",
+                    node_found['algorithm_id'],
+                )[0]
+
+                results[node_found['algorithm_id']]['id'] = algorithm_found['id']
+                results[node_found['algorithm_id']]['title'] = algorithm_found['title']
+                results[node_found['algorithm_id']]['description'] = algorithm_found['description']
+
+        return results
+    except Error as e:
+        db_error(e)
 
 
 def show(algorithm_id: int):
     try:
-        algorithm = conn.execute(
-            algorithm_model.select().where(algorithm_model.c.id == algorithm_id)
-        ).fetchall()
-
-        if len(algorithm):
-            return algorithm_to_dict(algorithm)[0]
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+        return select("SELECT * FROM algorithms WHERE id = %s", algorithm_id)[0]
+    except Error as e:
+        db_error(e)
 
 
 def store(algorithm: AlgorithmSchema):
     try:
-        stored_algorithm = conn.execute(
-            insert(algorithm_model).values(
-                title=algorithm.title,
-                description=algorithm.description,
-                version=algorithm.version,
-                updated_at=to_iso_date(algorithm.updated_at)
-            )
+        algorithm_id = insert(
+            "algorithms",
+            ["title", "description", "version", "updated_at"],
+            [algorithm.title, algorithm.description, algorithm.version, to_iso_date(algorithm.updated_at)],
         )
 
-        conn.commit()
+        graphs.store(algorithm_id)
 
-        graphs.store(algorithm_id=stored_algorithm.lastrowid)
-
-        return stored_algorithm
-    # except exc.SQLAlchemyError as e:
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
-        # return e.__dict__['orig']
+        return {"algorithm_id": algorithm_id}
+    except Error as e:
+        db_error(e)
 
 
 def update_algorithm(algorithm: AlgorithmSchema):
     try:
-        updated_algorithm = conn.execute(
-            update(algorithm_model)
-            .where(algorithm_model.c.id == algorithm.id)
-            .values(
-                title=algorithm.title,
-                description=algorithm.description,
-                version=algorithm.version,
-                updated_at=to_iso_date(algorithm.updated_at)
-            )
-        )
+        fields = ["title", "description", "version", "updated_at"]
+        values = [algorithm.title, algorithm.description, algorithm.version, to_iso_date(algorithm.updated_at)]
+        
+        updated_algorithm_id = update("algorithms", fields, values, "id", algorithm.id)
 
-        conn.commit()
-
-        return updated_algorithm
-    # except exc.SQLAlchemyError as e:
-    #     return e.__dict__['orig']
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+        return {"id": updated_algorithm_id}
+    except Error as e:
+        db_error(e)
 
 
-def delete(algorithm_id: int):
+def delete_algorithm(algorithm_id: int):
     try:
-        # delete the graph before...
-        graphs.delete(algorithm_id)
+        # delete nodes
+        nodes.delete_algorithm_nodes(algorithm_id)
 
-        deleted_algorithm = conn.execute(
-            algorithm_model.delete().where(algorithm_model.c.id == algorithm_id)
-        )
+        # delete graph
+        graphs.delete_algorithm_graphs(algorithm_id)
 
-        conn.commit()
-
-        return deleted_algorithm
-    # except exc.SQLAlchemyError as e:
-    #     return e.__dict__['orig']
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+        # then delete graph itself
+        delete('algorithms', 'id', algorithm_id)
+    except Error as e:
+        db_error(e)

@@ -6,7 +6,7 @@ export interface IFlowchartCategory {
   name: string,
 }
 
-export interface IFlowchart {
+export interface IAlgorithm {
   id: number,
   title: string,
   description: string,
@@ -26,15 +26,34 @@ const emptyFlowchart = {
   categories: [],
 };
 
+export interface INode {
+  id: number,
+  algorithm_id: number,
+  node_id: string,
+  node_type: string,
+  label: string,
+}
+
+export interface IAlgorithmThoroughSearchResultItem {
+  id: number,
+  title: string,
+  description: string,
+  nodes: INode[],
+}
+
+export interface IAlgorithmThoroughSearchResult {
+  [key: number]: IAlgorithmThoroughSearchResultItem
+}
+
 const resource = 'algorithms';
 
 class Algorithms {
   public data: {
     loading: boolean,
     showEditDialog: boolean,
-    algorithms: IFlowchart[],
-    algorithm: IFlowchart,
-    searchResults: IFlowchart[] | null,
+    algorithms: IAlgorithm[],
+    algorithm: IAlgorithm,
+    searchResults: IAlgorithm[] | null,
     totalSearchResult: number | null,
   } = reactive({
       loading: false,
@@ -55,7 +74,7 @@ class Algorithms {
     try {
       this.data.loading = true;
 
-      const { data: flowcharts }: { data: IFlowchart[] } = await api.get(resource);
+      const { data: flowcharts }: { data: IAlgorithm[] } = await api.get(resource);
 
       if (flowcharts) {
         this.data.algorithms = [...flowcharts];
@@ -71,13 +90,31 @@ class Algorithms {
     }
   }
 
+  public async thorough_search(keyword: string) {
+    try {
+      this.data.loading = true;
+
+      const { data: results }: {
+        data: IAlgorithmThoroughSearchResult[],
+      } = await api.get(`${resource}/thorough-search?keyword=${keyword}`);
+
+      return Promise.resolve(results);
+    } catch (error) {
+      return Promise.reject(error);
+    } finally {
+      setTimeout(() => {
+        this.data.loading = false;
+      }, 1000);
+    }
+  }
+
   public async search(keyword: string) {
     try {
       this.data.loading = true;
 
       this.data.searchResults = [];
 
-      const { data: flowchartsFound }: { data: IFlowchart[] } = await api.get(`${resource}/search?keyword=${keyword}`);
+      const { data: flowchartsFound }: { data: IAlgorithm[] } = await api.get(`${resource}/search?keyword=${keyword}`);
 
       if (flowchartsFound && flowchartsFound.length) {
         this.data.searchResults = [...flowchartsFound];
@@ -103,7 +140,7 @@ class Algorithms {
     this.toggleEditDialog();
   }
 
-  public viewFlowchartData(flowchart: IFlowchart) {
+  public viewFlowchartData(flowchart: IAlgorithm) {
     this.data.algorithm = { ...flowchart };
 
     // convert to brazilian date (DD/MM/YYYY)

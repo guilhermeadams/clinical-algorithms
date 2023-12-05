@@ -83,10 +83,11 @@ class Graph {
           this.editor.element.input.setValues(allElements);
 
           this.editor.element.input.createEventHandlers();
+
+          if (this.editor.data.readOnly) {
+            this.editor.element.input.disableAll();
+          }
         }
-      } else {
-        // TODO: create empty graph...
-        // this.editor.data.graph = new joint.dia.Graph({}, { cellNamespace: customElements });
       }
 
       return Promise.resolve(true);
@@ -107,9 +108,11 @@ class Graph {
     }
   }
 
-  public async open(graphId: number | string) {
+  public async open(graphId: number | string, readOnly: boolean) {
     try {
       this.data.loading = true;
+
+      this.editor.setReadOnly(readOnly);
 
       await this.setGraph(graphId);
 

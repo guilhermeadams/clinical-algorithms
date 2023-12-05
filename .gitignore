@@ -45,3 +45,5 @@ frontend/.env.local*
 backend/.venv
 backend/.vscode
 backend/.idea
+
+docs/*

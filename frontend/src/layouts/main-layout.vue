@@ -21,6 +21,7 @@
     </q-header>
 
     <q-drawer
+      v-if="showMenuButton"
       v-model="settings.page.mainMenu"
       show-if-above
       bordered
@@ -50,5 +51,7 @@ const toggleLeftDrawer = () => {
   settings.page.mainMenu = !settings.page.mainMenu;
 };
 
-const showMenuButton = computed(() => route.name !== FLOWCHARTS_EDITOR);
+const showMenuButton = computed(
+  () => route.name !== FLOWCHARTS_EDITOR,
+);
 </script>

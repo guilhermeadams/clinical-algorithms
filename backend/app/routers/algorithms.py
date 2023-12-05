@@ -33,7 +33,14 @@ def search(keyword: str | None = None):
     return None
 
 
-@router.put("/graph/{algorithm_id}")
+@router.get("/thorough-search")
+def thorough_search(keyword: str | None = None):
+    if keyword:
+        return algorithms.thorough_search(keyword)
+    return None
+
+
+@router.put("/graph/{graph_id}")
 def update_graph(algorithm_graph: AlgorithmGraphSchema):
     return graphs.update_graph(algorithm_graph)
 
@@ -50,4 +57,4 @@ def show(algorithm_id: int):
 
 @router.delete("/{algorithm_id}")
 def delete(algorithm_id: int):
-    return algorithms.delete(algorithm_id)
+    return algorithms.delete_algorithm(algorithm_id)

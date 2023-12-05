@@ -4,6 +4,7 @@
     class="q-pa-md shadow-light-up"
   >
     <div
+      v-if="!readOnly"
       id="updated-at-info" class="text-center text-body1"
     >
       <div
@@ -32,10 +33,11 @@
       color="primary"
       flat
       no-caps
-      @click="goFlowchartsPage"
+      @click="goAlgorithmsPage"
     />
 
     <q-btn
+      v-if="!readOnly"
       :loading="savingGraph"
       label="Guardar"
       class="float-right"
@@ -49,12 +51,13 @@
 
 <script setup lang="ts">
 import { computed, inject } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import Editor from 'src/services/editor';
-import { FLOWCHARTS_INDEX } from 'src/router/routes/algorithms';
+import { FLOWCHARTS_INDEX, FLOWCHARTS_SEARCH } from 'src/router/routes/algorithms';
 import { formatDatetime } from 'src/services/date';
 
+const route = useRoute();
 const router = useRouter();
 
 const editor = inject('editor') as Editor;
@@ -62,10 +65,26 @@ const editor = inject('editor') as Editor;
 const saved = computed(() => editor.graph.data.saved);
 const savingGraph = computed(() => editor.graph.data.saving);
 const lastUpdate = computed(() => editor.graph.lastUpdate);
+const readOnly = computed(() => editor.data.readOnly);
 
-const goFlowchartsPage = () => {
-  if (editor.graph.isSaved) {
-    router.push({ name: FLOWCHARTS_INDEX });
+const exitEditor = () => {
+  if (route.query.search) {
+    return router.push({
+      name: FLOWCHARTS_SEARCH,
+      query: {
+        keyword: route.query.search,
+      },
+    });
+  }
+
+  return router.push({ name: FLOWCHARTS_INDEX });
+};
+
+const goAlgorithmsPage = () => {
+  if (readOnly.value) {
+    exitEditor();
+  } else if (editor.graph.isSaved) {
+    exitEditor();
   } else {
     editor.toggleSaveDialog();
   }

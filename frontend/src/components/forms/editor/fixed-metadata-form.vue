@@ -161,8 +161,6 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['deleted']);
-
 const showDeleteBlockDialog = ref(false);
 
 const data = reactive({
@@ -193,8 +191,6 @@ const deleteBlock = () => {
   showDeleteBlockDialog.value = false;
 
   editor.metadata.fixed.removeBlock(props.index);
-
-  emit('deleted');
 };
 
 const setInitialValues = () => {

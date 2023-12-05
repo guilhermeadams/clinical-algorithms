@@ -1,80 +1,51 @@
 from datetime import datetime
-from app.db import conn
-from app.models.algorithm import graph_model
-from sqlalchemy import insert, update, exc
-from .data_handler import algorithm_graph_to_dict
 from app.schemas.algorithm import AlgorithmGraphSchema
-# from app.services import nodes
+from app.services import nodes
+from app.services.pymsql import insert, update, select, delete, db_error
+from pymysql import Error
 
 
 def update_graph(algorithm_graph: AlgorithmGraphSchema):
     try:
-        conn.execute(
-            update(graph_model)
-            .where(graph_model.c.id == algorithm_graph.id)
-            .values(
-                graph=algorithm_graph.graph,
-                updated_at=datetime.now()
-            )
-        )
+        fields = ["graph", "updated_at"]
+        values = [algorithm_graph.graph, datetime.now()]
 
-        conn.commit()
+        update("graphs", fields, values, "id", algorithm_graph.id)
 
-        # nodes.map_nodes(algorithm_graph.graph, algorithm_graph.id)
+        nodes.map_nodes(algorithm_graph.graph, algorithm_graph.algorithm_id)
 
         return show(algorithm_graph.algorithm_id)
-    # except exc.SQLAlchemyError as e:
-    #     return e.__dict__['orig']
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+    except Error as e:
+        db_error(e)
 
 
 def show(algorithm_id: int):
     try:
-        algorithm_graph = conn.execute(
-            graph_model.select().where(graph_model.c.algorithm_id == algorithm_id)
-        ).fetchall()
+        graphs = select("SELECT * FROM graphs WHERE algorithm_id = %s", algorithm_id)
 
-        if len(algorithm_graph):
-            return algorithm_graph_to_dict(algorithm_graph)[0]
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+        if len(graphs):
+            return graphs[0]
+
+        return {}
+    except Error as e:
+        db_error(e)
 
 
 def store(algorithm_id: int):
     try:
-        stored_algorithm_graph = conn.execute(
-            insert(graph_model).values(
-                algorithm_id=algorithm_id,
-                graph=None,
-                updated_at=datetime.now()
-            )
+        graph_id = insert(
+            "graphs",
+            ["algorithm_id", "graph", "updated_at"],
+            [algorithm_id, None, datetime.now()],
         )
 
-        conn.commit()
-
-        # query being committed by its caller
-        return stored_algorithm_graph
-    # except exc.SQLAlchemyError as e:
-    #     return e.__dict__['orig']
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+        return graph_id
+    except Error as e:
+        db_error(e)
 
 
-def delete(algorithm_id: int):
+def delete_algorithm_graphs(algorithm_id: int):
     try:
-        deleted_algorithm_graph = conn.execute(
-            graph_model.delete().where(graph_model.c.algorithm_id == algorithm_id)
-        )
-
-        conn.commit()
-
-        return deleted_algorithm_graph
-    # except exc.SQLAlchemyError as e:
-    #     return e.__dict__['orig']
-    except exc.SQLAlchemyError:
-        conn.rollback()
-        raise
+        return delete("graphs", "algorithm_id", algorithm_id)
+    except Error as e:
+        db_error(e)
