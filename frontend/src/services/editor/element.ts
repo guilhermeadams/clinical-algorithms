@@ -2,13 +2,17 @@ import * as joint from 'jointjs';
 import { dia } from 'jointjs';
 
 import Editor, { deselectAllTexts } from 'src/services/editor/index';
+
 import customElements, {
   CustomElement,
   elementName,
   PORT,
   TEXTAREA_CLASSNAME,
 } from 'src/services/editor/elements/custom-elements';
+
 import { reactive } from 'vue';
+
+import { autoResizeTextarea } from 'src/services/editor/textarea';
 
 export interface IElementToolsPadding {
   left: number | 20,
@@ -373,7 +377,7 @@ class Element {
       getFromEditorElement(elementId: dia.Cell.ID) {
         const domElement = document.querySelector(`[model-id="${elementId}"]`);
 
-        return domElement?.getElementsByTagName('input')[0];
+        return domElement?.getElementsByTagName('textarea')[0];
       },
       value: () => {
         const selectedElement = this.getSelected();
@@ -395,6 +399,10 @@ class Element {
               textarea.value = element.prop('props/label') || '';
             }
           }
+
+          setTimeout(() => {
+            deselectAllTexts();
+          }, 1);
         });
       },
       getEditorElement: (input: HTMLElement) => {
@@ -417,6 +425,10 @@ class Element {
         if (inputs.length) {
           // eslint-disable-next-line no-restricted-syntax
           for (const input of inputs) {
+            if (input instanceof HTMLTextAreaElement) {
+              autoResizeTextarea(input);
+            }
+
             input.addEventListener('input', (event) => {
               const element = this.input.getEditorElement(event.target as HTMLElement);
 

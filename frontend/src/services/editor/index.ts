@@ -59,7 +59,7 @@ class Editor {
           preventDefaultViewAction: false,
 
           drawGrid: false,
-          gridSize: 1,
+          gridSize: 2,
           background: {
             color: '#EAEAEA',
           },
