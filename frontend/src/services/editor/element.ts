@@ -207,6 +207,8 @@ class Element {
         }).resize(50, 50).addTo(this.editor.data.graph);
 
         this.createTools(element);
+
+        deselectAllTexts();
       },
       Action: async () => {
         const element = new customElements.ActionElement({
@@ -220,6 +222,8 @@ class Element {
         this.createTools(element);
 
         this.input.createEventHandlers();
+
+        deselectAllTexts();
       },
       Evaluation: async () => {
         const element = new customElements.EvaluationElement({
@@ -233,6 +237,8 @@ class Element {
         this.createTools(element);
 
         this.input.createEventHandlers();
+
+        deselectAllTexts();
       },
       End: async () => {
         const element = new customElements.EndElement({
@@ -243,6 +249,8 @@ class Element {
         }).addTo(this.editor.data.graph);
 
         this.createTools(element);
+
+        deselectAllTexts();
       },
       Lane: async () => {
         const element = new customElements.LaneElement({
@@ -260,6 +268,8 @@ class Element {
         });
 
         this.input.createEventHandlers();
+
+        deselectAllTexts();
       },
     };
   }
