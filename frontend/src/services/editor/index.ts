@@ -59,14 +59,15 @@ class Editor {
           preventDefaultViewAction: false,
 
           drawGrid: false,
-          gridSize: 1,
+          gridSize: 2,
           background: {
             color: '#EAEAEA',
           },
 
           // ALERT!!!
           // to use editable link, just comment the line below
-          defaultLink: () => Editor.createLink(),
+          // defaultLink: () => Editor.createLink(),
+          // defaultLink: () => new joint.shapes.standard.Link(),
 
           linkPinning: false,
           snapLinks: { radius: 10 },

@@ -1,11 +1,18 @@
-/*
-function initTextarea(textarea: HTMLTextAreaElement) {
+export function autoResizeTextarea(textarea: HTMLTextAreaElement) {
   const resize = () => {
     textarea.style.height = 'auto';
     textarea.style.height = `${textarea.scrollHeight}px`;
+
+    if (textarea.scrollHeight === 42) {
+      textarea.style.marginTop = '-21px';
+    } else if (textarea.scrollHeight === 63) {
+      textarea.style.marginTop = '-32px';
+    } else {
+      textarea.style.marginTop = '-12px';
+    }
   };
 
-  /!* 0-timeout to get the already changed text *!/
+  /* 0-timeout to get the already changed text */
   const delayedResize = () => {
     window.setTimeout(resize, 0);
   };
@@ -31,4 +38,3 @@ function initTextarea(textarea: HTMLTextAreaElement) {
   textarea.select();
   resize();
 }
-*/

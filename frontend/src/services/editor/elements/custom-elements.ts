@@ -117,23 +117,23 @@ const customElements = {
           class="editor-action-element"
         >
           <div class="element-textarea-container">
-            <input
+            <!--<input
               class="${TEXTAREA_CLASSNAME}"
               placeholder="Acción"
               contenteditable="true"
               maxlength="70"
               spellcheck="false"
-            />
-            <!--<textarea
+            />-->
+            <textarea
               class="${TEXTAREA_CLASSNAME}"
               autocomplete="off"
               placeholder="Ação"
               contenteditable="true"
-              maxlength="70"
+              maxlength="60"
               spellcheck="false"
               rows="1"
               @selector="elementLabel"
-            ></textarea>-->
+            ></textarea>
           </div>
         </div>
       </foreignObject>
