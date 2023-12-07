@@ -12,7 +12,7 @@ class Algorithms(Base):
     __tablename__ = "algorithms"
     id = Column(BIGINT, primary_key=True, index=True)
     title = Column(VARCHAR(255), index=True)
-    description = Column(TEXT, index=True)
+    description = Column(TEXT)
     version = Column(VARCHAR(10))
     updated_at = Column(DATE)
 
@@ -76,16 +76,16 @@ class AlgorithmsNodesRecommendations(Base):
     )
     index = Column(BIGINT, nullable=False)
     recommendation_type = Column(Enum(RecommendationType), nullable=False)
-    description = Column(TEXT, index=True)
+    description = Column(TEXT)
     intervention_type = Column(Enum(InterventionType), nullable=False)
     intervention = Column(VARCHAR(255), index=True)
     comparator = Column(VARCHAR(255), index=True)
     direction = Column(Enum(Direction), nullable=False)
     strength = Column(Enum(Strength), nullable=False)
     certainty_of_the_evidence = Column(Enum(Certainty), nullable=False)
-    implementation_considerations = Column(TEXT, index=True)
-    additional_comments = Column(TEXT, index=True)
-    recommendation_source = Column(TEXT, index=True)
+    implementation_considerations = Column(TEXT)
+    additional_comments = Column(TEXT)
+    recommendation_source = Column(TEXT)
     updated_at = Column(DATE)
 
 
