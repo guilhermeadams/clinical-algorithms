@@ -86,7 +86,6 @@ import Editor from 'src/services/editor';
 import MetadataFixedForm from 'components/forms/editor/fixed-metadata-form.vue';
 import LoadingSpinner from 'components/spinners/loading-spinner.vue';
 import FixedMetadataCard from 'components/cards/metadata/fixed-metadata-card.vue';
-import { sliceText } from 'src/services/texts';
 
 const editor = inject('editor') as Editor;
 

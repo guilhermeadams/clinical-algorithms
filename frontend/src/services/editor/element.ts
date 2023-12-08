@@ -225,6 +225,14 @@ class Element {
 
         deselectAllTexts();
       },
+      Recommendation: async () => {
+        new customElements.RecommendationElement({
+          position: {
+            x: 300,
+            y: 300,
+          },
+        }).resize(500, 100).addTo(this.editor.data.graph);
+      },
       Evaluation: async () => {
         const element = new customElements.EvaluationElement({
           position: {

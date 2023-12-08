@@ -4,6 +4,7 @@ export enum CustomElement {
   START = 'StartElement',
   ACTION = 'ActionElement',
   EVALUATION = 'EvaluationElement',
+  RECOMMENDATION = 'RecommendationElement',
   END = 'EndElement',
   LINK = 'LinkElement',
   // CARD = 'ElementCardExample',
@@ -16,6 +17,7 @@ export const elementName: {
   [CustomElement.START]: 'Início',
   [CustomElement.ACTION]: 'Acción',
   [CustomElement.EVALUATION]: 'Evaluación',
+  [CustomElement.RECOMMENDATION]: 'Recomendación',
   [CustomElement.END]: 'Fin',
   [CustomElement.LINK]: 'Enlace',
   // [CustomElement.CARD]: 'Card interativo',
@@ -98,6 +100,28 @@ const customElements = {
       tagName: 'path',
       selector: 'icon',
     }],
+  }),
+
+  [CustomElement.RECOMMENDATION]: joint.dia.Element.define(CustomElement.RECOMMENDATION, {
+    attrs: {
+      foreignObject: {
+        width: 'calc(w)',
+        height: 'calc(h)',
+      },
+    },
+  }, {
+    markup: joint.util.svg/* xml */`
+      <foreignObject
+        @selector="foreignObject"
+      >
+        <div
+          xmlns="http://www.w3.org/1999/xhtml"
+          class="recommendation-element"
+        >
+          <div>Teste</div>
+        </div>
+      </foreignObject>
+    `,
   }),
 
   [CustomElement.ACTION]: joint.dia.Element.define(CustomElement.ACTION, {
