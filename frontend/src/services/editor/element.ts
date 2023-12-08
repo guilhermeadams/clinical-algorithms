@@ -14,23 +14,23 @@ import { reactive } from 'vue';
 
 import { autoResizeTextarea } from 'src/services/editor/textarea';
 
-export interface IElementToolsPadding {
-  left: number | 20,
-  top: number | 12,
-  right: number | 10,
-  bottom: number | 16,
-}
+// export interface IElementToolsPadding {
+//   left: number | 20,
+//   top: number | 12,
+//   right: number | 10,
+//   bottom: number | 16,
+// }
 
-export interface IElementToolsSettings {
-  element: dia.Element,
-  options?: {
-    position?: {
-      x: number,
-      y: number,
-    },
-    padding?: IElementToolsPadding,
-  }
-}
+// export interface IElementToolsSettings {
+//   element: dia.Element,
+//   options?: {
+//     position?: {
+//       x: number,
+//       y: number,
+//     },
+//     padding?: IElementToolsPadding,
+//   }
+// }
 
 class Element {
   editor: Editor;
@@ -221,9 +221,17 @@ class Element {
 
         this.createTools(element);
 
-        this.input.createEventHandlers();
+        this.textarea.createEventHandlers();
 
         deselectAllTexts();
+      },
+      Recommendation: async () => {
+        new customElements.RecommendationElement({
+          position: {
+            x: 300,
+            y: 300,
+          },
+        }).resize(500, 100).addTo(this.editor.data.graph);
       },
       Evaluation: async () => {
         const element = new customElements.EvaluationElement({
@@ -236,7 +244,7 @@ class Element {
 
         this.createTools(element);
 
-        this.input.createEventHandlers();
+        this.textarea.createEventHandlers();
 
         deselectAllTexts();
       },
@@ -267,7 +275,7 @@ class Element {
           },
         });
 
-        this.input.createEventHandlers();
+        this.textarea.createEventHandlers();
 
         deselectAllTexts();
       },
@@ -323,8 +331,8 @@ class Element {
 
         this.data.selectedId = elementId;
 
-        // console.log('SELECTED ELEMENT:');
-        // console.log(this.element.getSelected());
+        console.log('Selected element props:');
+        console.log(element.prop('props'));
 
         const selectedElement = this.getSelected();
 
@@ -384,6 +392,31 @@ class Element {
 
   get input() {
     return {
+      setValues: (elements: dia.Element[]) => {
+        elements.forEach((element) => {
+          if (this.isLane(element)) {
+            const textarea = this.input.getFromEditorElement(element.id);
+
+            if (textarea) {
+              textarea.value = element.prop('props/label') || '';
+            }
+          }
+
+          setTimeout(() => {
+            deselectAllTexts();
+          }, 1);
+        });
+      },
+      getFromEditorElement(elementId: dia.Cell.ID) {
+        const domElement = document.querySelector(`[model-id="${elementId}"]`);
+
+        return domElement?.getElementsByTagName('input')[0];
+      },
+    };
+  }
+
+  get textarea() {
+    return {
       getFromEditorElement(elementId: dia.Cell.ID) {
         const domElement = document.querySelector(`[model-id="${elementId}"]`);
 
@@ -401,9 +434,9 @@ class Element {
           if (
             this.isAction(element)
             || this.isEvaluation(element)
-            || this.isLane(element)
+            // || this.isLane(element)
           ) {
-            const textarea = this.input.getFromEditorElement(element.id);
+            const textarea = this.textarea.getFromEditorElement(element.id);
 
             if (textarea) {
               textarea.value = element.prop('props/label') || '';
@@ -440,7 +473,7 @@ class Element {
             }
 
             input.addEventListener('input', (event) => {
-              const element = this.input.getEditorElement(event.target as HTMLElement);
+              const element = this.textarea.getEditorElement(event.target as HTMLElement);
 
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore

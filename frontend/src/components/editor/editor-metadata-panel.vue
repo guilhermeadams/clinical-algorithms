@@ -10,8 +10,14 @@
       class="bg-white shadow-light-up"
       :class="{ 'editor-read-only': !editable }"
     >
-      <div id="editor-metadata-panel-header">
-        <div class="text-h6 q-px-md q-py-sm">
+      <div
+        id="editor-metadata-panel-header"
+        :class="{ 'editor-read-only': !editable }"
+      >
+        <div
+          class="text-body1 text-bold text-primary q-px-md q-pt-md q-pb-sm"
+          style="font-size:18px"
+        >
           {{ data.name }}{{ elementLabel }}
         </div>
 
@@ -19,8 +25,6 @@
           v-if="editable"
           class="q-pt-sm q-pb-md q-px-md"
         >
-          <div><b>Recomendaciones / Buenas prácticas</b></div>
-
           <q-btn
             class="q-mt-sm full-width"
             label="Nueva recomendación / buena práctica"
@@ -152,18 +156,22 @@ onBeforeUnmount(() => {
   top: 0
   left: 0
   width: 100%
+  height: 141px
   border-bottom: 1px solid #DDD
+
+#editor-metadata-panel-header.editor-read-only
+  height: 78px
 
 #editor-metadata-panel-content
   position: absolute
-  top: 138px
+  top: 141px
   left: 0
   width: 100%
-  height: calc(100% - 136px)
+  height: calc(100% - 141px)
   overflow-y: auto
   overflow-x: hidden
 
 #editor-metadata-panel-content.editor-read-only
-  top: 48px
-  height: calc(100% - 47px)
+  top: 78px
+  height: calc(100% - 77px)
 </style>

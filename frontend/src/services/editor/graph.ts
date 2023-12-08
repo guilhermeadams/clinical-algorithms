@@ -81,11 +81,12 @@ class Graph {
           this.editor.element.createElementsTools(allElements);
 
           this.editor.element.input.setValues(allElements);
+          this.editor.element.textarea.setValues(allElements);
 
-          this.editor.element.input.createEventHandlers();
+          this.editor.element.textarea.createEventHandlers();
 
           if (this.editor.data.readOnly) {
-            this.editor.element.input.disableAll();
+            this.editor.element.textarea.disableAll();
           }
         }
       }
