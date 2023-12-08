@@ -11,7 +11,10 @@
       :class="{ 'editor-read-only': !editable }"
     >
       <div id="editor-metadata-panel-header">
-        <div class="text-h6 q-px-md q-py-sm">
+        <div
+          class="text-body1 text-bold text-primary q-px-md q-pt-md q-pb-sm"
+          style="font-size:18px"
+        >
           {{ data.name }}{{ elementLabel }}
         </div>
 
@@ -19,8 +22,6 @@
           v-if="editable"
           class="q-pt-sm q-pb-md q-px-md"
         >
-          <div><b>Recomendaciones / Buenas prácticas</b></div>
-
           <q-btn
             class="q-mt-sm full-width"
             label="Nueva recomendación / buena práctica"
@@ -82,6 +83,7 @@ import Editor from 'src/services/editor';
 import MetadataFixedForm from 'components/forms/editor/fixed-metadata-form.vue';
 import LoadingSpinner from 'components/spinners/loading-spinner.vue';
 import FixedMetadataCard from 'components/cards/metadata/fixed-metadata-card.vue';
+import { sliceText } from 'src/services/texts';
 
 const editor = inject('editor') as Editor;
 
@@ -156,10 +158,10 @@ onBeforeUnmount(() => {
 
 #editor-metadata-panel-content
   position: absolute
-  top: 138px
+  top: 141px
   left: 0
   width: 100%
-  height: calc(100% - 136px)
+  height: calc(100% - 141px)
   overflow-y: auto
   overflow-x: hidden
 

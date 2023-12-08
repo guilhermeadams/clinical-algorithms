@@ -17,3 +17,9 @@ export const highlightSearchKeyword = (text: string, keyword: string) => {
 
   return text.replace(keyword, `<span class="highlight-text">${keyword}</span>`);
 };
+
+export const sliceText = (value: string, length = 100) => {
+  if (value === undefined || value.length < length) return value;
+
+  return `${value.slice(0, length)}...`;
+};
