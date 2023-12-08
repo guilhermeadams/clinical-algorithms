@@ -323,8 +323,8 @@ class Element {
 
         this.data.selectedId = elementId;
 
-        // console.log('SELECTED ELEMENT:');
-        // console.log(this.element.getSelected());
+        console.log('Selected element props:');
+        console.log(element.prop('props'));
 
         const selectedElement = this.getSelected();
 
