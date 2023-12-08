@@ -181,26 +181,17 @@ const customElements = {
           class="editor-evaluation-element"
         >
           <div>
-            <input
-              class="${TEXTAREA_CLASSNAME}"
-              placeholder="Evaluación"
-              contenteditable="true"
-              maxlength="70"
-              spellcheck="false"
-            />
-          </div>
-          <!--<div>
             <textarea
               class="${TEXTAREA_CLASSNAME}"
               autocomplete="off"
-              placeholder="Avaliação"
+              placeholder="Ação"
               contenteditable="true"
-              maxlength="70"
+              maxlength="60"
               spellcheck="false"
               rows="1"
               @selector="elementLabel"
             ></textarea>
-          </div>-->
+          </div>
         </div>
       </foreignObject>
     `,
@@ -259,19 +250,22 @@ const customElements = {
       >
         <div
           xmlns="http://www.w3.org/1999/xhtml"
+          class="editor-lane-element"
         >
-          <div>
+          <div
+            style="cursor:move"
+          >
             <div
-              style="height:20px;border-bottom:2px solid #777777;margin-top:30px;cursor:ns-resize"
-              class="editor-lane-element"
+              style="height:20px;border-bottom:2px solid #777777;margin-top:30px"
             >
             </div>
             <input
               class="${TEXTAREA_CLASSNAME}"
               placeholder="Título"
               contenteditable="true"
-              maxlength="70"
+              maxlength="60"
               spellcheck="false"
+              style="width:530px"
             />
           </div>
         </div>
