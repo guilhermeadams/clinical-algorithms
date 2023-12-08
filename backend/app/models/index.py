@@ -10,7 +10,7 @@ from .models_enums import (RecommendationType,
 
 class Algorithms(Base):
     __tablename__ = "algorithms"
-    id = Column(BIGINT, primary_key=True, index=True)
+    id = Column(BIGINT, primary_key=True)
     title = Column(VARCHAR(255), index=True)
     description = Column(TEXT)
     version = Column(VARCHAR(10))
@@ -19,14 +19,14 @@ class Algorithms(Base):
 
 class AlgorithmsCategories(Base):
     __tablename__ = "categories"
-    id = Column(BIGINT, primary_key=True, index=True)
+    id = Column(BIGINT, primary_key=True)
     name = Column(VARCHAR(255))
     updated_at = Column(DATE)
 
 
 class AlgorithmsCategoriesRelated(Base):
     __tablename__ = "algorithms_categories"
-    id = Column(BIGINT, primary_key=True, index=True)
+    id = Column(BIGINT, primary_key=True)
     algorithm_id = Column(
         BIGINT,
         ForeignKey("algorithms.id"),
@@ -42,7 +42,7 @@ class AlgorithmsCategoriesRelated(Base):
 
 class AlgorithmsGraphs(Base):
     __tablename__ = "graphs"
-    id = Column(BIGINT, primary_key=True, index=True)
+    id = Column(BIGINT, primary_key=True)
     algorithm_id = Column(
         BIGINT,
         ForeignKey("algorithms.id"),
@@ -54,7 +54,7 @@ class AlgorithmsGraphs(Base):
 
 class AlgorithmsNodes(Base):
     __tablename__ = "nodes"
-    id = Column(BIGINT, primary_key=True, index=True)
+    id = Column(BIGINT, primary_key=True)
     algorithm_id = Column(
         BIGINT,
         ForeignKey("algorithms.id"),
@@ -68,7 +68,7 @@ class AlgorithmsNodes(Base):
 
 class AlgorithmsNodesRecommendations(Base):
     __tablename__ = "recommendations"
-    id = Column(BIGINT, primary_key=True, index=True)
+    id = Column(BIGINT, primary_key=True)
     node_id = Column(
         BIGINT,
         ForeignKey("nodes.id"),
@@ -91,7 +91,7 @@ class AlgorithmsNodesRecommendations(Base):
 
 class AlgorithmsNodesRecommendationsLinks(Base):
     __tablename__ = "links"
-    id = Column(BIGINT, primary_key=True, index=True)
+    id = Column(BIGINT, primary_key=True)
     recommendation_id = Column(
         BIGINT,
         ForeignKey("recommendations.id"),
