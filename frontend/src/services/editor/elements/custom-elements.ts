@@ -103,12 +103,11 @@ const customElements = {
     }],
   }),
 
-  [CustomElement.RECOMMENDATION]: (
-    recommendations: IFixedMetadata[],
-  ) => {
+  [CustomElement.RECOMMENDATION]: (recommendations: IFixedMetadata[]) => {
     let items = '';
 
-    for (const recommendation of recommendations) {
+    // only the 3 first recommendations
+    for (const recommendation of recommendations.slice(0, 3)) {
       items += `<li data-index="${recommendation.index}">`;
       items += `${recommendation.intervention} - ${recommendation.direction}`;
       if (recommendation.strength) items += ` - ${recommendation.strength}`;
