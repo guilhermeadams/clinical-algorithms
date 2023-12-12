@@ -13,6 +13,7 @@ import customElements, {
 import { reactive } from 'vue';
 
 import { autoResizeTextarea } from 'src/services/editor/textarea';
+import { IFixedMetadata } from 'src/services/editor/metadata';
 
 // export interface IElementToolsPadding {
 //   left: number | 20,
@@ -53,6 +54,10 @@ class Element {
 
   constructor(editor: Editor) {
     this.editor = editor;
+  }
+
+  public getAll() {
+    return this.editor.data.graph.getElements();
   }
 
   public isAction(element?: dia.Element) {
@@ -225,13 +230,17 @@ class Element {
 
         deselectAllTexts();
       },
-      Recommendation: async () => {
-        new customElements.RecommendationElement({
+      Recommendation: async (x: number, y: number, recommendations: IFixedMetadata[]) => {
+        const RecommendationElement = customElements.RecommendationElement(
+          recommendations,
+        );
+
+        new RecommendationElement({
           position: {
-            x: 300,
-            y: 300,
+            x,
+            y,
           },
-        }).resize(500, 100).addTo(this.editor.data.graph);
+        }).resize(500, 110).addTo(this.editor.data.graph);
       },
       Evaluation: async () => {
         const element = new customElements.EvaluationElement({
@@ -496,6 +505,24 @@ class Element {
         }
       },
     };
+  }
+
+  public createRecommendations() {
+    const allElements = this.getAll();
+
+    if (allElements.length) {
+      for (const element of allElements) {
+        if ([CustomElement.ACTION, CustomElement.EVALUATION].includes(element.prop('type'))) {
+          const { x, y } = element.position();
+
+          const recommendations = this.editor.metadata.getFromElement(element);
+
+          if (recommendations && recommendations.fixed) {
+            void this.create.Recommendation(x, y + 84, recommendations.fixed);
+          }
+        }
+      }
+    }
   }
 }
 
