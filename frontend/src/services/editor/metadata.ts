@@ -33,12 +33,17 @@ class Metadata {
     totalBlocks: number,
     totalLinks: { [key: number]: number },
     showPanel: boolean,
+    recommendationToShow: {
+      originalElementId: dia.Cell.ID,
+      data: IFixedMetadata,
+    } | null,
   } = reactive({
       mountingComponent: true,
       loadingBlocks: false,
       totalBlocks: 0,
       totalLinks: {},
       showPanel: false,
+      recommendationToShow: null,
     });
 
   constructor(editor: Editor) {
@@ -49,6 +54,7 @@ class Metadata {
     this.data.mountingComponent = true;
     this.data.totalLinks = {};
     this.data.totalBlocks = 0;
+    this.data.recommendationToShow = null;
   }
 
   public closeMetadataPanel() {
@@ -388,6 +394,27 @@ class Metadata {
       this.data.totalLinks[blockIndex] = 1;
     } else {
       this.data.totalLinks[blockIndex] += 1;
+    }
+  }
+
+  public showRecommendation(elementId: dia.Cell.ID, recommendationIndex: number) {
+    this.data.showPanel = true;
+
+    const element = this.editor.element.getById(elementId);
+
+    if (element) {
+      const metadata = this.getFromElement(element);
+
+      if (
+        metadata
+        && metadata.fixed
+        && metadata.fixed[recommendationIndex - 1]
+      ) {
+        this.data.recommendationToShow = {
+          data: { ...metadata.fixed[recommendationIndex - 1] },
+          originalElementId: elementId,
+        };
+      }
     }
   }
 }

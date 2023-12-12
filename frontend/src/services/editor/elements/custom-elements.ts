@@ -109,7 +109,10 @@ const customElements = {
     let items = '';
 
     for (const recommendation of recommendations) {
-      items += `<li>${recommendation.intervention} - ${recommendation.direction} - ${recommendation.strength}</li>`;
+      items += `<li data-index="${recommendation.index}">`;
+      items += `${recommendation.intervention} - ${recommendation.direction}`;
+      if (recommendation.strength) items += ` - ${recommendation.strength}`;
+      items += '</li>';
     }
 
     return joint.dia.Element.define(CustomElement.RECOMMENDATION, {

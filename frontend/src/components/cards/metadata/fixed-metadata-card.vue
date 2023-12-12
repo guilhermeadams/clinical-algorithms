@@ -166,13 +166,21 @@ const isFormal = computed(
   () => fixedMetadata.value && fixedMetadata.value.recommendation_type === 'Recomendación formal',
 );
 
+const recommendation = computed(() => editor.metadata.data.recommendationToShow);
+
 onBeforeMount(() => {
-  const metadata = editor.metadata.getFromElement();
+  // show single recommendation
+  if (recommendation.value) {
+    fixedMetadata.value = { ...recommendation.value?.data };
+  } else {
+    // show all recommendations
+    const metadata = editor.metadata.getFromElement();
 
-  if (metadata) {
-    const { fixed } = metadata;
+    if (metadata) {
+      const { fixed } = metadata;
 
-    fixedMetadata.value = { ...fixed[props.index - 1] };
+      fixedMetadata.value = { ...fixed[props.index - 1] };
+    }
   }
 });
 

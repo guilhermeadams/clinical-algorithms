@@ -46,15 +46,23 @@
         </div>
 
         <div v-else-if="!editable">
-          <div v-if="!totalBlocks">
-            No hay recomendaciones ni buenas prácticas en este nodo.
-          </div>
-
+          <!-- SINGLE RECOMMENDATION PREVIEW -->
           <fixed-metadata-card
-            v-for="index of totalBlocks"
-            :key="`metadata-fixed-form-${index}`"
-            :index="index"
+            v-if="recommendation"
           />
+
+          <!-- ALL RECOMMENDATIONS PREVIEW -->
+          <div v-else>
+            <div v-if="!totalBlocks">
+              No hay recomendaciones ni buenas prácticas en este nodo.
+            </div>
+
+            <fixed-metadata-card
+              v-for="index of totalBlocks"
+              :key="`metadata-fixed-form-${index}`"
+              :index="index"
+            />
+          </div>
         </div>
 
         <div
@@ -95,18 +103,33 @@ const isActionElement = computed(() => editor.element.isAction());
 
 const isEvaluationElement = computed(() => editor.element.isEvaluation());
 
+const showRecommendation = computed(() => editor.metadata.data.recommendationToShow);
+
+const recommendation = computed(() => editor.metadata.data.recommendationToShow);
+
 const editable = computed(
   () => !editor.data.readOnly && (isActionElement.value || isEvaluationElement.value),
 );
 
 const showMetadataPanel = computed(
-  () => editor.metadata.data.showPanel && (isActionElement.value || isEvaluationElement.value),
+  () => editor.metadata.data.showPanel
+    && (isActionElement.value || isEvaluationElement.value || showRecommendation.value),
 );
 
 const loadingBlocks = computed(() => editor.metadata.data.loadingBlocks);
 
 const elementLabel = computed(() => {
-  const label = editor.element.getLabel();
+  let label = '';
+
+  if (recommendation.value?.originalElementId) {
+    const recommendationElement = editor.element.getById(recommendation.value?.originalElementId);
+
+    if (recommendationElement) {
+      label = editor.element.getLabel(recommendationElement);
+    }
+  } else {
+    label = editor.element.getLabel();
+  }
 
   return label ? `: ${label}` : '';
 });

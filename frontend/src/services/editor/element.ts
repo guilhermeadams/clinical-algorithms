@@ -13,7 +13,6 @@ import customElements, {
 import { reactive } from 'vue';
 
 import { autoResizeTextarea } from 'src/services/editor/textarea';
-import { IFixedMetadata } from 'src/services/editor/metadata';
 
 // export interface IElementToolsPadding {
 //   left: number | 20,
@@ -230,17 +229,45 @@ class Element {
 
         deselectAllTexts();
       },
-      Recommendation: async (x: number, y: number, recommendations: IFixedMetadata[]) => {
-        const RecommendationElement = customElements.RecommendationElement(
-          recommendations,
-        );
+      Recommendation: async (x: number, y: number, element: dia.Element) => {
+        const metadata = this.editor.metadata.getFromElement(element);
 
-        new RecommendationElement({
-          position: {
-            x,
-            y,
-          },
-        }).resize(500, 110).addTo(this.editor.data.graph);
+        if (metadata && metadata.fixed) {
+          const RecommendationElement = customElements.RecommendationElement(
+            metadata.fixed,
+          );
+
+          const createdRecommendationElement = new RecommendationElement({
+            position: {
+              x,
+              y,
+            },
+          }).resize(500, 110).addTo(this.editor.data.graph);
+
+          // create click event handlers for each recommendation
+          this.create.RecommendationEventHandlers(createdRecommendationElement.id, element.id);
+        }
+      },
+      RecommendationEventHandlers: (
+        recommendationElementId: dia.Cell.ID,
+        originalElementId: dia.Cell.ID,
+      ) => {
+        const domElement = document.querySelector(`[model-id="${recommendationElementId}"]`);
+
+        if (domElement) {
+          const listItems = domElement?.getElementsByTagName('li');
+
+          if (listItems.length) {
+            for (const listItem of listItems) {
+              listItem.addEventListener('click', () => {
+                this.editor.metadata.showRecommendation(
+                  originalElementId,
+                  Number(listItem.getAttribute('data-index')),
+                );
+              });
+            }
+          }
+        }
       },
       Evaluation: async () => {
         const element = new customElements.EvaluationElement({
@@ -366,7 +393,9 @@ class Element {
     return elements.find(({ id }) => this.data.selectedId === id);
   }
 
-  public getLabel() {
+  public getLabel(element?: dia.Element) {
+    if (element) return element.prop('props/label') || '';
+
     return this.getSelected()?.prop('props/label') || '';
   }
 
@@ -515,11 +544,7 @@ class Element {
         if ([CustomElement.ACTION, CustomElement.EVALUATION].includes(element.prop('type'))) {
           const { x, y } = element.position();
 
-          const recommendations = this.editor.metadata.getFromElement(element);
-
-          if (recommendations && recommendations.fixed) {
-            void this.create.Recommendation(x, y + 84, recommendations.fixed);
-          }
+          void this.create.Recommendation(x, y + 84, element);
         }
       }
     }
