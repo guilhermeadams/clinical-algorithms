@@ -8,6 +8,7 @@ class NodesTypes(enum.Enum):
     EndElement = "EndElement"
     LinkElement = "LinkElement"
     LaneElement = "LaneElement"
+    link = "link"
 
 
 class RecommendationType(enum.Enum):

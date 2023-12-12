@@ -55,6 +55,10 @@ class Element {
     this.editor = editor;
   }
 
+  public getAll() {
+    return this.editor.data.graph.getElements();
+  }
+
   public isAction(element?: dia.Element) {
     if (element) return element.prop('type') === CustomElement.ACTION;
 
@@ -225,13 +229,45 @@ class Element {
 
         deselectAllTexts();
       },
-      Recommendation: async () => {
-        new customElements.RecommendationElement({
-          position: {
-            x: 300,
-            y: 300,
-          },
-        }).resize(500, 100).addTo(this.editor.data.graph);
+      Recommendation: async (x: number, y: number, element: dia.Element) => {
+        const metadata = this.editor.metadata.getFromElement(element);
+
+        if (metadata && metadata.fixed) {
+          const RecommendationElement = customElements.RecommendationElement(
+            metadata.fixed,
+          );
+
+          const createdRecommendationElement = new RecommendationElement({
+            position: {
+              x,
+              y,
+            },
+          }).resize(500, 110).addTo(this.editor.data.graph);
+
+          // create click event handlers for each recommendation
+          this.create.RecommendationEventHandlers(createdRecommendationElement.id, element.id);
+        }
+      },
+      RecommendationEventHandlers: (
+        recommendationElementId: dia.Cell.ID,
+        originalElementId: dia.Cell.ID,
+      ) => {
+        const domElement = document.querySelector(`[model-id="${recommendationElementId}"]`);
+
+        if (domElement) {
+          const listItems = domElement?.getElementsByTagName('li');
+
+          if (listItems.length) {
+            for (const listItem of listItems) {
+              listItem.addEventListener('click', () => {
+                this.editor.metadata.showRecommendation(
+                  originalElementId,
+                  Number(listItem.getAttribute('data-index')),
+                );
+              });
+            }
+          }
+        }
       },
       Evaluation: async () => {
         const element = new customElements.EvaluationElement({
@@ -357,7 +393,9 @@ class Element {
     return elements.find(({ id }) => this.data.selectedId === id);
   }
 
-  public getLabel() {
+  public getLabel(element?: dia.Element) {
+    if (element) return element.prop('props/label') || '';
+
     return this.getSelected()?.prop('props/label') || '';
   }
 
@@ -496,6 +534,20 @@ class Element {
         }
       },
     };
+  }
+
+  public createRecommendations() {
+    const allElements = this.getAll();
+
+    if (allElements.length) {
+      for (const element of allElements) {
+        if ([CustomElement.ACTION, CustomElement.EVALUATION].includes(element.prop('type'))) {
+          const { x, y } = element.position();
+
+          void this.create.Recommendation(x, y + 104, element);
+        }
+      }
+    }
   }
 }
 

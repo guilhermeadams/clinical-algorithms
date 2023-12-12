@@ -85,8 +85,11 @@ class Graph {
 
           this.editor.element.textarea.createEventHandlers();
 
+          // READ ONLY MODE
           if (this.editor.data.readOnly) {
             this.editor.element.textarea.disableAll();
+
+            this.editor.element.createRecommendations();
           }
         }
       }

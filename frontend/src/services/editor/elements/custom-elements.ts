@@ -1,4 +1,5 @@
 import * as joint from 'jointjs';
+import { IFixedMetadata } from 'src/services/editor/metadata';
 
 export enum CustomElement {
   START = 'StartElement',
@@ -102,15 +103,26 @@ const customElements = {
     }],
   }),
 
-  [CustomElement.RECOMMENDATION]: joint.dia.Element.define(CustomElement.RECOMMENDATION, {
-    attrs: {
-      foreignObject: {
-        width: 'calc(w)',
-        height: 'calc(h)',
+  [CustomElement.RECOMMENDATION]: (recommendations: IFixedMetadata[]) => {
+    let items = '';
+
+    // only the 3 first recommendations
+    for (const recommendation of recommendations.slice(0, 3)) {
+      items += `<li data-index="${recommendation.index}">`;
+      items += `${recommendation.intervention} - ${recommendation.direction}`;
+      if (recommendation.strength) items += ` - ${recommendation.strength}`;
+      items += '</li>';
+    }
+
+    return joint.dia.Element.define(CustomElement.RECOMMENDATION, {
+      attrs: {
+        foreignObject: {
+          width: 'calc(w)',
+          height: 'calc(h)',
+        },
       },
-    },
-  }, {
-    markup: joint.util.svg/* xml */`
+    }, {
+      markup: joint.util.svg/* xml */`
       <foreignObject
         @selector="foreignObject"
       >
@@ -118,11 +130,14 @@ const customElements = {
           xmlns="http://www.w3.org/1999/xhtml"
           class="recommendation-element"
         >
-          <div>Teste</div>
+          <ul class="text-caption">
+            ${items}
+          </ul>
         </div>
       </foreignObject>
     `,
-  }),
+    });
+  },
 
   [CustomElement.ACTION]: joint.dia.Element.define(CustomElement.ACTION, {
     attrs: {
