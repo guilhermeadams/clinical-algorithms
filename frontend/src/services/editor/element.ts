@@ -544,7 +544,7 @@ class Element {
         if ([CustomElement.ACTION, CustomElement.EVALUATION].includes(element.prop('type'))) {
           const { x, y } = element.position();
 
-          void this.create.Recommendation(x, y + 84, element);
+          void this.create.Recommendation(x, y + 104, element);
         }
       }
     }
