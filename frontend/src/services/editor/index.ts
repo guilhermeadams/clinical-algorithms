@@ -7,6 +7,8 @@ import customElements, { CustomElement } from 'src/services/editor/elements/cust
 import Element from 'src/services/editor/element';
 import Graph from 'src/services/editor/graph';
 import Metadata from 'src/services/editor/metadata';
+import { RouteLocationNormalizedLoaded, Router } from 'vue-router';
+import { FLOWCHARTS_EDITOR } from 'src/router/routes/algorithms';
 
 const graph = new joint.dia.Graph({}, { cellNamespace: customElements });
 
@@ -23,6 +25,10 @@ class Editor {
 
   metadata: Metadata;
 
+  route: RouteLocationNormalizedLoaded;
+
+  router: Router;
+
   data: IJointData = reactive({
     readOnly: false,
     showSaveDialog: false,
@@ -30,10 +36,13 @@ class Editor {
     graph,
   });
 
-  constructor() {
+  constructor(params: { route: RouteLocationNormalizedLoaded, router: Router }) {
     this.element = new Element(this);
     this.graph = new Graph(this);
     this.metadata = new Metadata(this);
+
+    this.route = params.route;
+    this.router = params.router;
   }
 
   public reset() {
@@ -143,8 +152,22 @@ class Editor {
     this.data.showSaveDialog = !this.data.showSaveDialog;
   }
 
-  public setReadOnly(value: boolean) {
-    this.data.readOnly = value;
+  public setReadOnly(mode: string) {
+    this.data.readOnly = mode === 'public';
+  }
+
+  public async switchToMode() {
+    await this.router.replace({
+      name: FLOWCHARTS_EDITOR,
+      query: {
+        id: this.route.query.id,
+        mode: this.route.query.mode === 'edit' ? 'public' : 'edit',
+        node: this.route.query.node || undefined,
+        search: this.route.query.search || undefined,
+      },
+    });
+
+    setTimeout(() => window.location.reload(), 50);
   }
 }
 

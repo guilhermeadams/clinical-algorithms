@@ -62,6 +62,7 @@ const goEditor = (algorithmId: number, node: INode | null) => {
       name: FLOWCHARTS_EDITOR,
       query: {
         id: node.algorithm_id,
+        mode: 'public',
         node: node.node_id,
         search: props.keyword,
       },
@@ -71,6 +72,7 @@ const goEditor = (algorithmId: number, node: INode | null) => {
       name: FLOWCHARTS_EDITOR,
       query: {
         id: algorithmId,
+        mode: 'public',
         search: props.keyword,
       },
     });

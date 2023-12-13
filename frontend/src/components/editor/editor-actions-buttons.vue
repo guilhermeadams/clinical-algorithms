@@ -39,12 +39,34 @@
     <q-btn
       v-if="!readOnly"
       :loading="savingGraph"
+      label="Publicación"
+      class="float-right q-ml-lg"
+      style="width:120px"
+      color="primary"
+      push
+      @click="viewPublicGraph"
+    />
+
+    <q-btn
+      v-if="!readOnly"
+      :loading="savingGraph"
       label="Guardar"
       class="float-right"
       style="width:120px"
       color="primary"
       push
       @click="saveGraph"
+    />
+
+    <q-btn
+      v-if="readOnly"
+      :loading="savingGraph"
+      label="Editar algoritmo"
+      class="float-right"
+      style="width:180px"
+      color="primary"
+      push
+      @click="editGraph"
     />
   </div>
 </template>
@@ -92,6 +114,18 @@ const goAlgorithmsPage = () => {
 
 const saveGraph = () => {
   editor.graph.save();
+};
+
+const editGraph = async () => {
+  await editor.switchToMode();
+};
+
+const viewPublicGraph = async () => {
+  if (editor.graph.isSaved) {
+    await editor.switchToMode();
+  } else {
+    editor.toggleSaveDialog();
+  }
 };
 </script>
 

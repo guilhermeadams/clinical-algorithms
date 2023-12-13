@@ -53,15 +53,16 @@ import EditorElementsToolbar from 'components/editor/editor-elements-toolbar.vue
 import EditorMetadataPanel from 'components/editor/editor-metadata-panel.vue';
 import EditorActionsButtons from 'components/editor/editor-actions-buttons.vue';
 import SimpleModal from 'components/modals/simple-modal.vue';
+
 import { FLOWCHARTS_INDEX, FLOWCHARTS_SEARCH } from 'src/router/routes/algorithms';
-
-const editor = new Editor();
-provide('editor', editor);
-
-const settings = inject('settings') as Settings;
 
 const route = useRoute();
 const router = useRouter();
+
+const editor = new Editor({ route, router });
+provide('editor', editor);
+
+const settings = inject('settings') as Settings;
 
 const width = computed(
   () => (settings.page.mainMenu ? 'calc(100% - 300px)' : '100%'),
@@ -88,15 +89,19 @@ const saveGraph = () => {
   exitEditor();
 };
 
-onBeforeMount(() => {
-  settings.page.setTitle('Editor de algoritmos');
-
+onBeforeMount(async () => {
   settings.page.mainMenu = false;
 
-  const { id, search } = route.query;
+  const { id, mode } = route.query;
 
-  if (id && typeof id === 'string') {
-    editor.graph.open(id, !!search);
+  if (
+    id
+    && typeof id === 'string'
+    && typeof mode === 'string'
+  ) {
+    await editor.graph.open(id, mode);
+
+    settings.page.setTitle(editor.data.readOnly ? 'Publicación de algoritmo' : 'Editar algoritmo');
   }
 });
 

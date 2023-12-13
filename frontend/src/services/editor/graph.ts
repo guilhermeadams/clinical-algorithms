@@ -1,6 +1,7 @@
 import Editor from 'src/services/editor/index';
 import { api } from 'boot/axios';
 import { reactive } from 'vue';
+import { FLOWCHARTS_EDITOR } from 'src/router/routes/algorithms';
 
 const RESOURCE_ALGORITHM = 'algorithms';
 const RESOURCE = 'algorithms/graph';
@@ -112,11 +113,11 @@ class Graph {
     }
   }
 
-  public async open(graphId: number | string, readOnly: boolean) {
+  public async open(graphId: number | string, mode: string) {
     try {
       this.data.loading = true;
 
-      this.editor.setReadOnly(readOnly);
+      this.editor.setReadOnly(mode);
 
       await this.setGraph(graphId);
 
