@@ -73,11 +73,6 @@ class Editor {
             color: '#EAEAEA',
           },
 
-          // ALERT!!!
-          // to use editable link, just comment the line below
-          // defaultLink: () => Editor.createLink(),
-          // defaultLink: () => new joint.shapes.standard.Link(),
-
           linkPinning: false,
           snapLinks: { radius: 10 },
 
@@ -106,6 +101,12 @@ class Editor {
           this.graph.notSaved();
 
           deselectAllTexts();
+        });
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        this.data.graph.on('change:vertices', (/* cell: dia.Cell */) => {
+          this.graph.notSaved();
         });
 
         this.data.paper.on('element:pointerdown', (/* elementView: dia.ElementView */) => {

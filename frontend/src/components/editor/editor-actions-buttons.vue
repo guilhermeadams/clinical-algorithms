@@ -38,7 +38,6 @@
 
     <q-btn
       v-if="!readOnly"
-      :loading="savingGraph"
       label="Publicación"
       class="float-right q-ml-lg"
       style="width:120px"
