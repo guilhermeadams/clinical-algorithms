@@ -1,7 +1,6 @@
 import Editor from 'src/services/editor/index';
 import { api } from 'boot/axios';
 import { reactive } from 'vue';
-import { FLOWCHARTS_EDITOR } from 'src/router/routes/algorithms';
 
 const RESOURCE_ALGORITHM = 'algorithms';
 const RESOURCE = 'algorithms/graph';

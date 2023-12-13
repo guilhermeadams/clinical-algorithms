@@ -121,11 +121,9 @@ const editGraph = async () => {
 };
 
 const viewPublicGraph = async () => {
-  if (editor.graph.isSaved) {
-    await editor.switchToMode();
-  } else {
-    editor.toggleSaveDialog();
-  }
+  if (!editor.graph.isSaved) await editor.graph.save();
+
+  await editor.switchToMode();
 };
 </script>
 
