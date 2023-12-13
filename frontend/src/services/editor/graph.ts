@@ -82,7 +82,6 @@ class Graph {
 
           this.editor.element.input.setValues(allElements);
           this.editor.element.textarea.setValues(allElements);
-
           this.editor.element.textarea.createEventHandlers();
 
           // READ ONLY MODE

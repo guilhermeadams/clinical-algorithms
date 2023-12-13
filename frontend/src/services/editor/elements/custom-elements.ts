@@ -131,9 +131,9 @@ const customElements = {
           xmlns="http://www.w3.org/1999/xhtml"
           class="recommendation-element"
         >
-          <ul class="text-caption">
+          <ol type="1" class="text-caption">
             ${items}
-          </ul>
+          </ol>
         </div>
       </foreignObject>
     `,
