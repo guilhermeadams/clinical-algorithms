@@ -107,9 +107,10 @@ const customElements = {
     let items = '';
 
     // only the 3 first recommendations
-    for (const recommendation of recommendations.slice(0, 3)) {
+    for (const recommendation of recommendations) {
       items += `<li data-index="${recommendation.index}">`;
-      items += `${recommendation.intervention} - ${recommendation.direction}`;
+      items += recommendation.intervention;
+      if (recommendation.direction) items += ` - ${recommendation.direction}`;
       if (recommendation.strength) items += ` - ${recommendation.strength}`;
       items += '</li>';
     }
@@ -130,9 +131,9 @@ const customElements = {
           xmlns="http://www.w3.org/1999/xhtml"
           class="recommendation-element"
         >
-          <ul class="text-caption">
+          <ol type="1" class="text-caption">
             ${items}
-          </ul>
+          </ol>
         </div>
       </foreignObject>
     `,

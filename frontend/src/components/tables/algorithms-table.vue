@@ -104,6 +104,7 @@ const editFlowchart = (flowchartId: number) => {
     name: FLOWCHARTS_EDITOR,
     query: {
       id: flowchartId,
+      mode: 'edit',
     },
   });
 };

@@ -18,7 +18,7 @@
             class="text-h6"
             style="text-transform: uppercase"
           >
-            {{ fixedMetadata.recommendation_type }}
+            {{ fixedMetadata.index }}. {{ fixedMetadata.recommendation_type }}
           </div>
         </div>
 

@@ -82,7 +82,6 @@ class Graph {
 
           this.editor.element.input.setValues(allElements);
           this.editor.element.textarea.setValues(allElements);
-
           this.editor.element.textarea.createEventHandlers();
 
           // READ ONLY MODE
@@ -112,11 +111,11 @@ class Graph {
     }
   }
 
-  public async open(graphId: number | string, readOnly: boolean) {
+  public async open(graphId: number | string, mode: string) {
     try {
       this.data.loading = true;
 
-      this.editor.setReadOnly(readOnly);
+      this.editor.setReadOnly(mode);
 
       await this.setGraph(graphId);
 
