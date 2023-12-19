@@ -12,12 +12,10 @@ declare module '@vue/runtime-core' {
 function getAuthorizationHeader() {
   const token = LocalStorage.getItem('token') as string;
 
-  return { Token: token || '' };
-
-  // return !token ? {} : {
-  //   Authorization: `X-Token ${token}`,
-  //   'Content-Type': 'application/json',
-  // };
+  return {
+    Token: token || '',
+    'Content-Type': 'application/json',
+  };
 }
 
 const api = axios.create({

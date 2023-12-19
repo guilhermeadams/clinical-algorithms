@@ -1,7 +1,11 @@
 import { reactive } from 'vue';
+import { RouteLocationNormalizedLoaded } from 'vue-router';
+import { ALGORITHMS_PUBLIC_EDITOR, ALGORITHMS_PUBLIC_SEARCH } from 'src/router/routes/algorithms';
 
 class Settings {
   private appName = 'PAHO';
+
+  private route: RouteLocationNormalizedLoaded;
 
   public page: {
     setTitle: (title?: string) => void,
@@ -16,6 +20,19 @@ class Settings {
       title: 'PAHO',
       mainMenu: true,
     });
+
+  constructor(options: { route: RouteLocationNormalizedLoaded }) {
+    this.route = options.route;
+  }
+
+  get isPublicView() {
+    return [
+      ALGORITHMS_PUBLIC_SEARCH,
+      ALGORITHMS_PUBLIC_EDITOR,
+    ].includes(
+      String(this.route.name),
+    );
+  }
 }
 
 export default Settings;

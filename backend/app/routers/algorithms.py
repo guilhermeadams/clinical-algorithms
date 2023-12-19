@@ -30,6 +30,13 @@ def thorough_search(keyword: str | None = None):
     return None
 
 
+@public_router.get("/search")
+def search(keyword: str | None = None):
+    if keyword:
+        return algorithms.search(keyword)
+    return True
+
+
 @public_router.get("/{algorithm_id}")
 def show(algorithm_id: int):
     return algorithms.show(algorithm_id)
@@ -48,13 +55,6 @@ def store(algorithm: AlgorithmSchema):
 @router.put("/{algorithm_id}")
 def update(algorithm: AlgorithmSchema):
     return algorithms.update_algorithm(algorithm)
-
-
-@router.get("/search")
-def search(keyword: str | None = None):
-    if keyword:
-        return algorithms.search(keyword)
-    return None
 
 
 @router.put("/graph/{graph_id}")

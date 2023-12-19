@@ -81,16 +81,18 @@
 
 <script setup lang="ts">
 import { computed, inject, onBeforeMount } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
+import Settings from 'src/services/settings';
 import Algorithms, { IAlgorithm } from 'src/services/algorithms';
-import { ALGORITHMS_EDITOR, ALGORITHMS_PUBLIC_EDITOR, ALGORITHMS_PUBLIC_SEARCH } from 'src/router/routes/algorithms';
+import { ALGORITHMS_EDITOR, ALGORITHMS_PUBLIC_EDITOR } from 'src/router/routes/algorithms';
+
+const settings = inject('settings') as Settings;
 
 const algorithms = inject('algorithms') as Algorithms;
 
-const route = useRoute();
 const router = useRouter();
 
-const publicView = computed(() => route.name === ALGORITHMS_PUBLIC_SEARCH);
+const publicView = computed(() => settings.isPublicView);
 
 const columns = [
   {

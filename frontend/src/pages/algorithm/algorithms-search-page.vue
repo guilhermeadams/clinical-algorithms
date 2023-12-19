@@ -61,7 +61,7 @@ import {
   inject,
 } from 'vue';
 
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import Settings from 'src/services/settings';
 
@@ -69,10 +69,11 @@ import SearchInput from 'components/inputs/search-input.vue';
 import LoadingSpinner from 'components/spinners/loading-spinner.vue';
 import Algorithms, { IAlgorithmThoroughSearchResult } from 'src/services/algorithms';
 import AlgorithmsSearchResult from 'components/items/algorithms-search-result-item.vue';
-import { ALGORITHMS_PUBLIC_SEARCH } from 'src/router/routes/algorithms';
 import AlgorithmsTable from 'components/tables/algorithms-table.vue';
+import { ALGORITHMS_PUBLIC_SEARCH } from 'src/router/routes/algorithms';
 
 const route = useRoute();
+const router = useRouter();
 
 const settings = inject('settings') as Settings;
 
@@ -97,7 +98,7 @@ const hasResults = computed(() => {
   return Object.keys(data.results).length > 0;
 });
 
-const publicView = computed(() => route.name === ALGORITHMS_PUBLIC_SEARCH);
+const publicView = computed(() => settings.isPublicView);
 
 const searchFlowchart = async (keyword: string) => {
   try {
@@ -117,6 +118,12 @@ const searchFlowchart = async (keyword: string) => {
 const clearSearch = () => {
   data.results = null;
   data.keyword = '';
+
+  if (settings.isPublicView) {
+    router.replace({
+      name: ALGORITHMS_PUBLIC_SEARCH,
+    });
+  }
 };
 
 onBeforeMount(() => {
@@ -124,7 +131,7 @@ onBeforeMount(() => {
     data.initialKeyword = String(route.query.keyword);
   }
 
-  if (route.name === ALGORITHMS_PUBLIC_SEARCH) {
+  if (settings.isPublicView) {
     settings.page.setTitle('Búsqueda de algoritmos');
   } else {
     settings.page.setTitle('Publicación de algoritmos (visualización para uso de usuarios finales)');

@@ -7,11 +7,13 @@ import { onMounted, provide } from 'vue';
 
 import Settings from 'src/services/settings';
 import { useRoute, useRouter } from 'vue-router';
-import { ALGORITHMS_PUBLIC_EDITOR, ALGORITHMS_PUBLIC_SEARCH } from 'src/router/routes/algorithms';
 import { LocalStorage } from 'quasar';
 import { ACCOUNT_LOGIN } from 'src/router/routes/account';
 
-const settings = new Settings();
+const route = useRoute();
+const router = useRouter();
+
+const settings = new Settings({ route });
 
 settings.page.setTitle('Início');
 
@@ -20,17 +22,8 @@ provide('settings', settings);
 onMounted(() => {
   const token = LocalStorage.getItem('token');
 
-  const route = useRoute();
-  const router = useRouter();
-
   setTimeout(() => {
-    if (
-      !token
-      && ![
-        ALGORITHMS_PUBLIC_SEARCH,
-        ALGORITHMS_PUBLIC_EDITOR,
-      ].includes(String(route.name))
-    ) {
+    if (!token && !settings.isPublicView) {
       void router.push({
         name: ACCOUNT_LOGIN,
       });
