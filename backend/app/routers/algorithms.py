@@ -10,10 +10,34 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
+public_router = APIRouter(
+    prefix="/algorithms",
+    tags=["algorithms"],
+    dependencies=[],
+    responses={404: {"description": "Not found"}},
+)
 
-@router.get("")
+
+@public_router.get("")
 def index():
     return algorithms.index()
+
+
+@public_router.get("/thorough-search")
+def thorough_search(keyword: str | None = None):
+    if keyword:
+        return algorithms.thorough_search(keyword)
+    return None
+
+
+@public_router.get("/{algorithm_id}")
+def show(algorithm_id: int):
+    return algorithms.show(algorithm_id)
+
+
+@public_router.get("/graph/{algorithm_id}")
+def show_graph(algorithm_id: int):
+    return graphs.show(algorithm_id)
 
 
 @router.post("")
@@ -33,26 +57,9 @@ def search(keyword: str | None = None):
     return None
 
 
-@router.get("/thorough-search")
-def thorough_search(keyword: str | None = None):
-    if keyword:
-        return algorithms.thorough_search(keyword)
-    return None
-
-
 @router.put("/graph/{graph_id}")
 def update_graph(algorithm_graph: AlgorithmGraphSchema):
     return graphs.update_graph(algorithm_graph)
-
-
-@router.get("/graph/{algorithm_id}")
-def search(algorithm_id: int):
-    return graphs.show(algorithm_id)
-
-
-@router.get("/{algorithm_id}")
-def show(algorithm_id: int):
-    return algorithms.show(algorithm_id)
 
 
 @router.delete("/{algorithm_id}")
