@@ -15,7 +15,7 @@
 
           <div
             v-if="fixedMetadata.recommendation_type"
-            class="text-h6"
+            class="text-body1 text-bold"
             style="text-transform: uppercase"
           >
             {{ fixedMetadata.index }}. {{ fixedMetadata.recommendation_type }}

@@ -1,37 +1,29 @@
 import { RouteRecordRaw } from 'vue-router';
-import Account, { ACCOUNT } from './routes/account';
+import Account from './routes/account';
 import Home from './routes/home';
-import Users, { USERS_INDEX } from './routes/users';
-import Flowcharts, { FLOWCHARTS_INDEX } from './routes/algorithms';
-// import FlowchartCategories from './routes/flowchart_categories';
+import Users from './routes/users';
+import Flowcharts from './routes/algorithms';
 
 const routes: RouteRecordRaw[] = [
+  // {
+  //   path: '',
+  //   component: () => import('layouts/main-layout.vue'),
+  //   children: [],
+  // },
   {
     path: '',
     component: () => import('layouts/main-layout.vue'),
     children: [
       ...Home,
+      ...Users,
+      ...Flowcharts,
     ],
   },
   {
-    path: `/${ACCOUNT}`,
+    path: '/admin',
     component: () => import('layouts/login-layout.vue'),
     children: [
       ...Account,
-    ],
-  },
-  {
-    path: `/${USERS_INDEX}`,
-    component: () => import('layouts/main-layout.vue'),
-    children: [
-      ...Users,
-    ],
-  },
-  {
-    path: `/${FLOWCHARTS_INDEX}`,
-    component: () => import('layouts/main-layout.vue'),
-    children: [
-      ...Flowcharts,
     ],
   },
 ];

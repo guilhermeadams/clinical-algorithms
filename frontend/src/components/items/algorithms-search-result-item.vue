@@ -1,5 +1,4 @@
 <template>
-  <div></div>
   <q-card class="shadow-light q-my-lg">
     <q-card-section
       class="search-result-item"
@@ -40,9 +39,10 @@
 import { highlightSearchKeyword } from 'src/services/texts';
 import { IAlgorithmThoroughSearchResultItem, INode } from 'src/services/algorithms';
 import { PropType } from 'vue';
-import { FLOWCHARTS_EDITOR } from 'src/router/routes/algorithms';
-import { useRouter } from 'vue-router';
+import { ALGORITHMS_EDITOR, ALGORITHMS_PUBLIC_EDITOR, ALGORITHMS_PUBLIC_SEARCH } from 'src/router/routes/algorithms';
+import { useRoute, useRouter } from 'vue-router';
 
+const route = useRoute();
 const router = useRouter();
 
 const props = defineProps({
@@ -57,9 +57,12 @@ const props = defineProps({
 });
 
 const goEditor = (algorithmId: number, node: INode | null) => {
+  const name = route.name === ALGORITHMS_PUBLIC_SEARCH
+    ? ALGORITHMS_PUBLIC_EDITOR : ALGORITHMS_EDITOR;
+
   if (node) {
     router.push({
-      name: FLOWCHARTS_EDITOR,
+      name,
       query: {
         id: node.algorithm_id,
         mode: 'public',
@@ -69,7 +72,7 @@ const goEditor = (algorithmId: number, node: INode | null) => {
     });
   } else if (algorithmId) {
     router.push({
-      name: FLOWCHARTS_EDITOR,
+      name,
       query: {
         id: algorithmId,
         mode: 'public',

@@ -44,7 +44,7 @@ import AlgorithmsTable from 'components/tables/algorithms-table.vue';
 import Algorithms from 'src/services/algorithms';
 import EditAlgorithmModal from 'components/modals/algorithms/edit-algorithm-modal.vue';
 import { onBeforeRouteLeave } from 'vue-router';
-import { FLOWCHARTS_EDITOR } from 'src/router/routes/algorithms';
+import { ALGORITHMS_EDITOR } from 'src/router/routes/algorithms';
 
 const algorithms = new Algorithms();
 provide('algorithms', algorithms);
@@ -62,7 +62,7 @@ onBeforeMount(() => {
 });
 
 onBeforeRouteLeave((leaveGuard) => {
-  if (leaveGuard.name === FLOWCHARTS_EDITOR) {
+  if (leaveGuard.name === ALGORITHMS_EDITOR) {
     settings.page.mainMenu = false;
   }
 });
