@@ -41,7 +41,7 @@ import { computed, inject } from 'vue';
 import Settings from 'src/services/settings';
 import MainMenu from 'components/menus/main-menu.vue';
 import { useRoute } from 'vue-router';
-import { FLOWCHARTS_EDITOR } from 'src/router/routes/algorithms';
+import { ALGORITHMS_EDITOR, ALGORITHMS_PUBLIC_EDITOR, ALGORITHMS_PUBLIC_SEARCH } from 'src/router/routes/algorithms';
 
 const route = useRoute();
 
@@ -52,6 +52,10 @@ const toggleLeftDrawer = () => {
 };
 
 const showMenuButton = computed(
-  () => route.name !== FLOWCHARTS_EDITOR,
+  () => ![
+    ALGORITHMS_EDITOR,
+    ALGORITHMS_PUBLIC_SEARCH,
+    ALGORITHMS_PUBLIC_EDITOR,
+  ].includes(String(route.name)),
 );
 </script>

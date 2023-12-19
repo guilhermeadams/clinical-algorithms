@@ -58,7 +58,7 @@
     />
 
     <q-btn
-      v-if="readOnly"
+      v-if="readOnly && showEditButton"
       :loading="savingGraph"
       label="Editar algoritmo"
       class="float-right"
@@ -75,7 +75,14 @@ import { computed, inject } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import Editor from 'src/services/editor';
-import { FLOWCHARTS_INDEX, FLOWCHARTS_SEARCH } from 'src/router/routes/algorithms';
+
+import {
+  ALGORITHMS_INDEX,
+  ALGORITHMS_PUBLIC_EDITOR,
+  ALGORITHMS_PUBLIC_SEARCH,
+  ALGORITHMS_SEARCH,
+} from 'src/router/routes/algorithms';
+
 import { formatDatetime } from 'src/services/date';
 
 const route = useRoute();
@@ -87,18 +94,22 @@ const saved = computed(() => editor.graph.data.saved);
 const savingGraph = computed(() => editor.graph.data.saving);
 const lastUpdate = computed(() => editor.graph.lastUpdate);
 const readOnly = computed(() => editor.data.readOnly);
+const showEditButton = computed(() => route.name !== ALGORITHMS_PUBLIC_EDITOR);
 
 const exitEditor = () => {
   if (route.query.search) {
+    const name = route.name === ALGORITHMS_PUBLIC_EDITOR
+      ? ALGORITHMS_PUBLIC_SEARCH : ALGORITHMS_SEARCH;
+
     return router.push({
-      name: FLOWCHARTS_SEARCH,
+      name,
       query: {
         keyword: route.query.search,
       },
     });
   }
 
-  return router.push({ name: FLOWCHARTS_INDEX });
+  return router.push({ name: ALGORITHMS_INDEX });
 };
 
 const goAlgorithmsPage = () => {

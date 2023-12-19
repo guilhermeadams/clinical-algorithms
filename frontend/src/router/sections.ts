@@ -1,5 +1,5 @@
 import { USERS_INDEX } from 'src/router/routes/users';
-import { FLOWCHARTS_INDEX, FLOWCHARTS_SEARCH } from 'src/router/routes/algorithms';
+import { ALGORITHMS_INDEX, ALGORITHMS_SEARCH } from 'src/router/routes/algorithms';
 
 export interface IMainMenuSection {
   name: string,
@@ -23,11 +23,11 @@ const sections: IMainMenuSection[] = [
     name: 'Algoritmos',
     items: [
       {
-        name: FLOWCHARTS_INDEX,
+        name: ALGORITHMS_INDEX,
         label: 'Mantenimiento',
       },
       {
-        name: FLOWCHARTS_SEARCH,
+        name: ALGORITHMS_SEARCH,
         label: 'Búsqueda y publicación',
       },
     ],

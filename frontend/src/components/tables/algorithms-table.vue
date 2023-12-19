@@ -62,8 +62,8 @@
 <script setup lang="ts">
 import { inject, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
-import Algorithms, { IFlowchart } from 'src/services/algorithms';
-import { FLOWCHARTS_EDITOR } from 'src/router/routes/algorithms';
+import Algorithms, { IAlgorithm } from 'src/services/algorithms';
+import { ALGORITHMS_EDITOR } from 'src/router/routes/algorithms';
 
 const algorithms = inject('algorithms') as Algorithms;
 
@@ -101,7 +101,7 @@ const columns = [
 
 const editFlowchart = (flowchartId: number) => {
   router.push({
-    name: FLOWCHARTS_EDITOR,
+    name: ALGORITHMS_EDITOR,
     query: {
       id: flowchartId,
       mode: 'edit',
@@ -109,7 +109,7 @@ const editFlowchart = (flowchartId: number) => {
   });
 };
 
-const viewFlowchartData = (flowchart: IFlowchart) => algorithms.viewFlowchartData(flowchart);
+const viewFlowchartData = (flowchart: IAlgorithm) => algorithms.viewFlowchartData(flowchart);
 
 onBeforeMount(() => {
   algorithms.getAll();
