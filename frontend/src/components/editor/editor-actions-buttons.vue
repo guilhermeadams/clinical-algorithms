@@ -97,6 +97,15 @@ const readOnly = computed(() => editor.data.readOnly);
 const showEditButton = computed(() => route.name !== ALGORITHMS_PUBLIC_EDITOR);
 
 const exitEditor = () => {
+  if (route.name === ALGORITHMS_PUBLIC_EDITOR) {
+    return router.push({
+      name: ALGORITHMS_PUBLIC_SEARCH,
+      query: {
+        keyword: route.query.search,
+      },
+    });
+  }
+
   if (route.query.search) {
     const name = route.name === ALGORITHMS_PUBLIC_EDITOR
       ? ALGORITHMS_PUBLIC_SEARCH : ALGORITHMS_SEARCH;

@@ -35,24 +35,44 @@
           {{ props.row.author || 'No definido' }}
         </q-td>
 
-        <q-td key="action" :props="props">
-          <q-btn
-            class="q-px-md q-mr-md"
-            label="Ver datos básicos"
-            color="primary"
-            no-caps
-            push
-            @click.stop="viewFlowchartData(props.row)"
-          />
+        <q-td
+          key="action"
+          :props="props"
+        >
+          <div
+            v-if="publicView"
+          >
+            <q-btn
+              class="q-px-md"
+              label="Ver algoritmo"
+              color="primary"
+              no-caps
+              push
+              @click.stop="editFlowchart(props.row.id, 'public')"
+            />
+          </div>
 
-          <q-btn
-            class="q-px-md"
-            label="Editar algoritmo"
-            color="primary"
-            no-caps
-            push
-            @click.stop="editFlowchart(props.row.id)"
-          />
+          <div
+            v-else
+          >
+            <q-btn
+              class="q-px-md q-mr-md"
+              label="Ver datos básicos"
+              color="primary"
+              no-caps
+              push
+              @click.stop="viewFlowchartData(props.row)"
+            />
+
+            <q-btn
+              class="q-px-md"
+              label="Editar algoritmo"
+              color="primary"
+              no-caps
+              push
+              @click.stop="editFlowchart(props.row.id)"
+            />
+          </div>
         </q-td>
       </q-tr>
     </template>
@@ -60,14 +80,17 @@
 </template>
 
 <script setup lang="ts">
-import { inject, onBeforeMount } from 'vue';
-import { useRouter } from 'vue-router';
+import { computed, inject, onBeforeMount } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import Algorithms, { IAlgorithm } from 'src/services/algorithms';
-import { ALGORITHMS_EDITOR } from 'src/router/routes/algorithms';
+import { ALGORITHMS_EDITOR, ALGORITHMS_PUBLIC_EDITOR, ALGORITHMS_PUBLIC_SEARCH } from 'src/router/routes/algorithms';
 
 const algorithms = inject('algorithms') as Algorithms;
 
+const route = useRoute();
 const router = useRouter();
+
+const publicView = computed(() => route.name === ALGORITHMS_PUBLIC_SEARCH);
 
 const columns = [
   {
@@ -99,12 +122,22 @@ const columns = [
   },
 ];
 
-const editFlowchart = (flowchartId: number) => {
-  router.push({
+const editFlowchart = (flowchartId: number, mode: 'edit' | 'public' = 'edit') => {
+  if (mode === 'public') {
+    return router.push({
+      name: ALGORITHMS_PUBLIC_EDITOR,
+      query: {
+        id: flowchartId,
+        mode,
+      },
+    });
+  }
+
+  return router.push({
     name: ALGORITHMS_EDITOR,
     query: {
       id: flowchartId,
-      mode: 'edit',
+      mode,
     },
   });
 };
