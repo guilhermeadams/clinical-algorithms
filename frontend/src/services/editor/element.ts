@@ -2,11 +2,11 @@ import * as joint from 'jointjs';
 import { dia } from 'jointjs';
 
 import Editor, { deselectAllTexts } from 'src/services/editor/index';
+import Ports from 'src/services/editor/ports';
 
 import customElements, {
   CustomElement,
   elementName,
-  PORT,
   TEXTAREA_CLASSNAME,
 } from 'src/services/editor/elements/custom-elements';
 
@@ -207,7 +207,7 @@ class Element {
             x: this.data.creationPosition.x,
             y: this.data.creationPosition.y,
           },
-          ports: Element.generatePorts(19, 27),
+          ports: Ports.generateToStart(),
         }).resize(50, 50).addTo(this.editor.data.graph);
 
         this.createTools(element);
@@ -220,7 +220,7 @@ class Element {
             x: this.data.creationPosition.x,
             y: this.data.creationPosition.y,
           },
-          ports: Element.generatePorts(95, 42),
+          ports: Ports.generateToAction(),
         }).resize(200, 84).addTo(this.editor.data.graph);
 
         this.createTools(element);
@@ -275,7 +275,7 @@ class Element {
             x: this.data.creationPosition.x,
             y: this.data.creationPosition.y,
           },
-          ports: Element.generatePorts(95, 50),
+          ports: Ports.generateToEvaluation(),
         }).resize(200, 100).addTo(this.editor.data.graph);
 
         this.createTools(element);
@@ -407,17 +407,6 @@ class Element {
     await this.setProp('title', title);
 
     await this.setAttr('label/text', title);
-  }
-
-  private static generatePorts(x: number, y: number) {
-    const newlyPort = { ...PORT };
-
-    newlyPort.attrs.body.x = x;
-    newlyPort.attrs.body.y = y;
-
-    return {
-      items: [newlyPort],
-    };
   }
 
   public getName() {

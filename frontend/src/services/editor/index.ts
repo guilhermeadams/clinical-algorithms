@@ -5,6 +5,7 @@ import { IJointData } from 'src/services/editor/types';
 import { reactive } from 'vue';
 import customElements, { CustomElement } from 'src/services/editor/elements/custom-elements';
 import Element from 'src/services/editor/element';
+import Ports from 'src/services/editor/ports';
 import Graph from 'src/services/editor/graph';
 import Metadata from 'src/services/editor/metadata';
 import { RouteLocationNormalizedLoaded, Router } from 'vue-router';
@@ -23,6 +24,8 @@ class Editor {
 
   element: Element;
 
+  ports: Ports;
+
   metadata: Metadata;
 
   route: RouteLocationNormalizedLoaded;
@@ -38,6 +41,7 @@ class Editor {
 
   constructor(params: { route: RouteLocationNormalizedLoaded, router: Router }) {
     this.element = new Element(this);
+    this.ports = new Ports(this);
     this.graph = new Graph(this);
     this.metadata = new Metadata(this);
 
@@ -77,6 +81,14 @@ class Editor {
           snapLinks: { radius: 10 },
 
           interactive: () => !this.data.readOnly,
+
+          defaultLink: new joint.dia.Link({
+            attrs: {
+              '.marker-target': {
+                d: 'M 10 0 L 0 5 L 10 10 z',
+              },
+            },
+          }),
         });
 
         this.data.paper.on('blank:pointerup', (/* elementView */) => {
