@@ -12,19 +12,15 @@
             <div class="q-px-md q-py-md">
               <q-select
                 v-model="data.recommendation_type"
-                :options="[
-                  'Formal recommendation',
-                  'Good Practice Statement',
-                  'Informal recommendation',
-                ]"
+                :options="['Recomendación formal', 'Buenas practicas', 'Recomendación informal']"
                 class="q-mb-lg"
-                label="Recommendation type"
+                label="Tipo de recomendación"
                 dense
               />
 
               <q-input
                 v-model="data.description"
-                label="Description"
+                label="Descripción"
                 type="textarea"
                 spellcheck="false"
                 dense
@@ -32,16 +28,16 @@
 
               <q-select
                 v-model="data.intervention_type"
-                :options="['Treatment', 'Diagnosis', 'Population classification']"
+                :options="['Tratamiento', 'Diagnóstico', 'Clasificación de la población']"
                 class="q-my-lg"
-                label="Intervention type"
+                label="Tipo de intervención"
                 dense
               />
 
               <q-input
                 v-model="data.intervention"
                 class="q-mt-md"
-                label="Intervention"
+                label="Intervención"
                 spellcheck="false"
                 dense
               />
@@ -49,40 +45,40 @@
               <q-input
                 v-model="data.comparator"
                 class="q-mt-md"
-                label="Comparator"
+                label="Comparador"
                 spellcheck="false"
                 dense
               />
 
               <q-select
                 v-model="data.direction"
-                :options="['In favor of intervention', 'Against intervention', 'Both']"
+                :options="['A favor de la intervención', 'En contra de la intervención', 'Ambos']"
                 class="q-my-lg"
-                label="Direction"
+                label="Dirección"
                 dense
               />
 
               <q-select
                 v-if="isFormal"
                 v-model="data.strength"
-                :options="['Strong', 'Conditional', 'Weak']"
+                :options="['Fuerte', 'Débil']"
                 class="q-my-lg"
-                label="Recommendation strength"
+                label="Fuerza de la evidencia"
                 dense
               />
 
               <q-select
                 v-if="isFormal"
                 v-model="data.certainty_of_the_evidence"
-                :options="['High', 'Moderate', 'Low', 'Very Low']"
+                :options="['Alta', 'Moderada', 'Baja', 'No especificada']"
                 class="q-my-lg"
-                label="Certainty of evidence"
+                label="Certeza de la evidencia"
                 dense
               />
 
               <q-input
                 v-model="data.implementation_considerations"
-                label="Implementation considerations"
+                label="Consideraciones de implementación"
                 class="q-my-lg"
                 type="textarea"
                 spellcheck="false"
@@ -91,7 +87,7 @@
 
               <q-input
                 v-model="data.additional_comments"
-                label="Additional comments"
+                label="Comentarios adicionales"
                 class="q-my-lg"
                 type="textarea"
                 spellcheck="false"
@@ -100,7 +96,7 @@
 
               <q-input
                 v-model="data.recommendation_source"
-                label="Recommendation source"
+                label="Fuente de recomendación"
                 class="q-my-lg"
                 type="textarea"
                 spellcheck="false"
@@ -116,7 +112,7 @@
 
             <div class="bg-grey-2">
               <q-btn
-                :label="`Remove ${blockName}`"
+                :label="`Eliminar ${blockName}`"
                 class="full-width"
                 color="negative"
                 icon="close"
@@ -185,7 +181,7 @@ const data = reactive({
 
 const blockName = computed(() => `${props.index}. ${data.recommendation_type}`);
 
-const isFormal = computed(() => data.recommendation_type === 'Formal recommendation');
+const isFormal = computed(() => data.recommendation_type === 'Recomendación formal');
 
 watch(data, (value) => {
   editor.metadata.fixed.set(props.index, { ...value });

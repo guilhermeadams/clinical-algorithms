@@ -368,7 +368,7 @@ class Element {
         this.data.selectedId = elementId;
 
         console.log('Selected element props:');
-        console.log(element.prop('props'));
+        console.log({ ...element });
 
         const selectedElement = this.getSelected();
 

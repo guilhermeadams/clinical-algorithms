@@ -3,7 +3,6 @@
     <q-input
       v-model="text"
       :label="props.label"
-      maxlength="12"
       bottom-slots
       debounce="750"
       @update:model-value="emitSearch"
