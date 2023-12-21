@@ -3,7 +3,7 @@
     <q-card-section class="q-pa-none">
       <div class="q-px-md">
         <div class="q-pt-md q-mb-sm">
-          Enlace #{{ props.linkIndex }}
+          Link #{{ props.linkIndex }}
         </div>
 
         <q-input
@@ -28,7 +28,7 @@
 
       <div class="bg-grey-2">
         <q-btn
-          label="Remove link"
+          label="Borrar enlace"
           class="full-width"
           color="negative"
           icon="close"

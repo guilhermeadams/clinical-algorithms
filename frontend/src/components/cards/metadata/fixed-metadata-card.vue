@@ -128,17 +128,17 @@
             class="q-mb-md"
           >
             <q-card-section>
-              <div class="q-pb-sm"><b>URL</b></div>
-              <a
-                :href="link.url"
-                target="_blank"
-                class="text-primary"
-                style="word-break: break-all"
-              >
-                {{ link.url }}
-              </a>
+              <div class="q-pb-sm"><b>URL:</b> <a
+                  :href="link.url"
+                  target="_blank"
+                  class="text-primary"
+                  style="word-break: break-all"
+                >
+                  {{ link.url }}
+                </a>
+              </div>
 
-              <div class="q-py-sm"><b>Tipo:</b> {{ link.type }}</div>
+              <div class="q-py-sm"><b>Link type:</b> {{ link.type }}</div>
             </q-card-section>
           </q-card>
         </div>
