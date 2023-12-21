@@ -54,6 +54,7 @@
         <div
           v-if="fixedMetadata.description"
           class="q-pb-lg"
+          style="word-break: break-all"
         >
           <div class="q-pb-sm"><b>Descripción</b></div>
 
@@ -90,6 +91,7 @@
         <div
           v-if="fixedMetadata.additional_comments"
           class="q-pb-lg"
+          style="word-break: break-all"
         >
           <div class="q-pb-sm"><b>Comentarios adicionales</b></div>
 
@@ -99,6 +101,7 @@
         <div
           v-if="fixedMetadata.recommendation_source"
           class="q-pb-lg"
+          style="word-break: break-all"
         >
           <div class="q-pb-sm"><b>Fuente de recomendación</b></div>
 

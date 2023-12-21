@@ -77,7 +77,7 @@ export const EVALUATION_PORT = {
   attrs: {
     body: {
       magnet: true,
-      width: 138,
+      width: 136,
       height: 11,
       x: 0,
       y: 0,
