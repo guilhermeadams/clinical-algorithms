@@ -1,15 +1,15 @@
 <template>
   <div class="q-pl-lg" style="margin-top:20px">
     <div class="inline-block q-mr-xl">
-      <b>Título:</b> {{ algorithm.title }}
+      <b>Title:</b> {{ algorithm.title }}
     </div>
 
     <div class="inline-block q-mr-xl">
-      <b>Versión:</b> {{ algorithm.version }}
+      <b>Version:</b> {{ algorithm.version }}
     </div>
 
     <div class="inline-block">
-      <b class="q-mr-sm">Categorías:</b>
+      <b class="q-mr-sm">Categories:</b>
 <!--      <q-chip-->
 <!--        v-for="category of algorithm.categories"-->
 <!--        :key="category"-->
@@ -18,7 +18,8 @@
 <!--        style="padding-left:12px;padding-right:12px;"-->
 <!--        dense-->
 <!--      />-->
-      No hay categorías definidas.
+<!--      No hay categorías definidas.-->
+      No categories selected.
     </div>
   </div>
 </template>

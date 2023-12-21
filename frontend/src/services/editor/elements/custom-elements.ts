@@ -15,14 +15,22 @@ export enum CustomElement {
 export const elementName: {
   [key: string]: string,
 } = {
-  [CustomElement.START]: 'Início',
-  [CustomElement.ACTION]: 'Acción',
-  [CustomElement.EVALUATION]: 'Evaluación',
-  [CustomElement.RECOMMENDATION]: 'Recomendación',
-  [CustomElement.END]: 'Fin',
-  [CustomElement.LINK]: 'Enlace',
+  [CustomElement.START]: 'Start',
+  [CustomElement.ACTION]: 'Action',
+  [CustomElement.EVALUATION]: 'Evaluation',
+  [CustomElement.RECOMMENDATION]: 'Recommendation',
+  [CustomElement.END]: 'End',
+  [CustomElement.LINK]: 'Link',
   // [CustomElement.CARD]: 'Card interativo',
-  [CustomElement.LANE]: 'Tiempo',
+  [CustomElement.LANE]: 'Time',
+  // [CustomElement.START]: 'Início',
+  // [CustomElement.ACTION]: 'Acción',
+  // [CustomElement.EVALUATION]: 'Evaluación',
+  // [CustomElement.RECOMMENDATION]: 'Recomendación',
+  // [CustomElement.END]: 'Fin',
+  // [CustomElement.LINK]: 'Enlace',
+  // // [CustomElement.CARD]: 'Card interativo',
+  // [CustomElement.LANE]: 'Tiempo',
 };
 
 export const ROUND_PORT = {

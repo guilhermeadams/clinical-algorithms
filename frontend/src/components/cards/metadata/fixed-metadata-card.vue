@@ -7,13 +7,6 @@
       <div class="q-pa-md">
         <div>
           <div
-            v-if="fixedMetadata.intervention_type"
-            class="float-right q-mt-sm"
-          >
-            <b>Tipo:</b> {{ fixedMetadata.intervention_type }}
-          </div>
-
-          <div
             v-if="fixedMetadata.recommendation_type"
             class="text-body1 text-bold"
             style="text-transform: uppercase"
@@ -23,27 +16,40 @@
         </div>
 
         <div
-          v-if="fixedMetadata.direction"
-          class="q-pt-md"
+          v-if="isFormal"
+          class="row q-pt-md"
         >
-          <b>Dirección:</b> {{ fixedMetadata.direction }}
+          <div
+            v-if="fixedMetadata.intervention_type"
+            class="col-6"
+          >
+            <b>Type:</b><br/>{{ fixedMetadata.intervention_type }}
+          </div>
+
+          <div
+            v-if="fixedMetadata.direction"
+            class="col-6"
+          >
+            <b>Direction:</b><br/>{{ fixedMetadata.direction }}
+          </div>
         </div>
 
         <div
           v-if="isFormal"
-          class="q-pt-md"
+          class="row q-pt-md"
         >
           <div
-            v-if="fixedMetadata.certainty_of_the_evidence"
-            class="float-right"
+            v-if="fixedMetadata.strength"
+            class="col-6"
           >
-            <b>Certeza de la evidencia:</b> {{ fixedMetadata.certainty_of_the_evidence }}
+            <b>Recommendation strength:</b><br/>{{ fixedMetadata.strength }}
           </div>
 
           <div
-            v-if="fixedMetadata.strength"
+            v-if="fixedMetadata.certainty_of_the_evidence"
+            class="col-6"
           >
-            <b>Fuerza de la evidencia:</b> {{ fixedMetadata.strength }}
+            <b>Certainty of evidence:</b><br/>{{ fixedMetadata.certainty_of_the_evidence }}
           </div>
         </div>
       </div>
@@ -56,7 +62,7 @@
           class="q-pb-lg"
           style="word-break: break-all"
         >
-          <div class="q-pb-sm"><b>Descripción</b></div>
+          <div class="q-pb-sm"><b>Description</b></div>
 
           <div>{{ fixedMetadata.description }}</div>
         </div>
@@ -65,7 +71,7 @@
           v-if="fixedMetadata.intervention"
           class="q-pb-lg"
         >
-          <div class="q-pb-sm"><b>Intervención</b></div>
+          <div class="q-pb-sm"><b>Intervention</b></div>
 
           <div>{{ fixedMetadata.intervention }}</div>
         </div>
@@ -74,7 +80,7 @@
           v-if="fixedMetadata.comparator"
           class="q-pb-lg"
         >
-          <div class="q-pb-sm"><b>Comparador</b></div>
+          <div class="q-pb-sm"><b>Comparator</b></div>
 
           <div>{{ fixedMetadata.comparator }}</div>
         </div>
@@ -83,7 +89,7 @@
           v-if="fixedMetadata.implementation_considerations"
           class="q-pb-lg"
         >
-          <div class="q-pb-sm"><b>Consideraciones de implementación</b></div>
+          <div class="q-pb-sm"><b>Implementation considerations</b></div>
 
           <div>{{ fixedMetadata.implementation_considerations }}</div>
         </div>
@@ -93,7 +99,7 @@
           class="q-pb-lg"
           style="word-break: break-all"
         >
-          <div class="q-pb-sm"><b>Comentarios adicionales</b></div>
+          <div class="q-pb-sm"><b>Additional comments</b></div>
 
           <div>{{ fixedMetadata.additional_comments }}</div>
         </div>
@@ -103,7 +109,7 @@
           class="q-pb-lg"
           style="word-break: break-all"
         >
-          <div class="q-pb-sm"><b>Fuente de recomendación</b></div>
+          <div class="q-pb-sm"><b>Recommendation source</b></div>
 
           <div>{{ fixedMetadata.recommendation_source }}</div>
         </div>
@@ -114,7 +120,7 @@
         >
           <q-separator class="q-mb-lg" />
 
-          <div class="q-pb-sm"><b>Enlaces</b></div>
+          <div class="q-pb-sm"><b>Links</b></div>
 
           <q-card
             v-for="link of fixedMetadata.links"
@@ -122,17 +128,17 @@
             class="q-mb-md"
           >
             <q-card-section>
-              <div class="q-pb-sm"><b>URL</b></div>
-              <a
-                :href="link.url"
-                target="_blank"
-                class="text-primary"
-                style="word-break: break-all"
-              >
-                {{ link.url }}
-              </a>
+              <div class="q-pb-sm"><b>URL:</b> <a
+                  :href="link.url"
+                  target="_blank"
+                  class="text-primary"
+                  style="word-break: break-all"
+                >
+                  {{ link.url }}
+                </a>
+              </div>
 
-              <div class="q-py-sm"><b>Tipo:</b> {{ link.type }}</div>
+              <div class="q-py-sm"><b>Link type:</b> {{ link.type }}</div>
             </q-card-section>
           </q-card>
         </div>
@@ -166,7 +172,7 @@ const props = defineProps({
 const fixedMetadata = ref<IFixedMetadata | null>(null);
 
 const isFormal = computed(
-  () => fixedMetadata.value && fixedMetadata.value.recommendation_type === 'Recomendación formal',
+  () => fixedMetadata.value && fixedMetadata.value.recommendation_type === 'Formal recommendation',
 );
 
 const recommendation = computed(() => editor.metadata.data.recommendationToShow);
