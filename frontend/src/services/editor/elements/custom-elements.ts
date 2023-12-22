@@ -15,35 +15,85 @@ export enum CustomElement {
 export const elementName: {
   [key: string]: string,
 } = {
-  [CustomElement.START]: 'Início',
-  [CustomElement.ACTION]: 'Acción',
-  [CustomElement.EVALUATION]: 'Evaluación',
-  [CustomElement.RECOMMENDATION]: 'Recomendación',
-  [CustomElement.END]: 'Fin',
-  [CustomElement.LINK]: 'Enlace',
+  [CustomElement.START]: 'Start',
+  [CustomElement.ACTION]: 'Action',
+  [CustomElement.EVALUATION]: 'Evaluation',
+  [CustomElement.RECOMMENDATION]: 'Recommendation',
+  [CustomElement.END]: 'End',
+  [CustomElement.LINK]: 'Link',
   // [CustomElement.CARD]: 'Card interativo',
-  [CustomElement.LANE]: 'Tiempo',
+  [CustomElement.LANE]: 'Time',
+  // [CustomElement.START]: 'Início',
+  // [CustomElement.ACTION]: 'Acción',
+  // [CustomElement.EVALUATION]: 'Evaluación',
+  // [CustomElement.RECOMMENDATION]: 'Recomendación',
+  // [CustomElement.END]: 'Fin',
+  // [CustomElement.LINK]: 'Enlace',
+  // // [CustomElement.CARD]: 'Card interativo',
+  // [CustomElement.LANE]: 'Tiempo',
 };
 
-export const PORT = {
-  attrs: {
-    body: {
-      magnet: true,
-      width: 10,
-      height: 10,
-      x: 0,
-      y: 0,
-      rx: 5,
-      ry: 5,
-      fill: 'grey',
-    },
-  },
+export const ROUND_PORT = {
   markup: [
     {
       tagName: 'rect',
       selector: 'body',
     },
   ],
+  attrs: {
+    body: {
+      magnet: true,
+      width: 11,
+      height: 11,
+      x: 0,
+      y: 0,
+      fill: '#21BA45',
+      rx: 6,
+      ry: 6,
+    },
+  },
+};
+
+export const ACTION_PORT = {
+  markup: [
+    {
+      tagName: 'rect',
+      selector: 'body',
+    },
+  ],
+  attrs: {
+    body: {
+      magnet: true,
+      width: 200,
+      height: 11,
+      x: 0,
+      y: 0,
+      fill: '#0089Ef',
+      rx: 5,
+      ry: 5,
+    },
+  },
+};
+
+export const EVALUATION_PORT = {
+  markup: [
+    {
+      tagName: 'rect',
+      selector: 'body',
+    },
+  ],
+  attrs: {
+    body: {
+      magnet: true,
+      width: 136,
+      height: 11,
+      x: 0,
+      y: 0,
+      fill: '#DABF5E',
+      rx: 5,
+      ry: 5,
+    },
+  },
 };
 
 export const TEXTAREA_CLASSNAME = 'element-textarea-input';

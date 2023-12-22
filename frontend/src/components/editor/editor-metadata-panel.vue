@@ -49,6 +49,7 @@
           <!-- SINGLE RECOMMENDATION PREVIEW -->
           <fixed-metadata-card
             v-if="recommendation"
+            :index="recommendation.data.index"
           />
 
           <!-- ALL RECOMMENDATIONS PREVIEW -->

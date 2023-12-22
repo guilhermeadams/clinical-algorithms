@@ -1,10 +1,11 @@
 import { reactive } from 'vue';
-import { useRouter } from 'vue-router';
-import { ACCOUNT_LOGIN } from 'src/router/routes/account';
-import { LocalStorage } from 'quasar';
+import { RouteLocationNormalizedLoaded } from 'vue-router';
+import { ALGORITHMS_PUBLIC_EDITOR, ALGORITHMS_PUBLIC_SEARCH } from 'src/router/routes/algorithms';
 
 class Settings {
   private appName = 'PAHO';
+
+  private route: RouteLocationNormalizedLoaded;
 
   public page: {
     setTitle: (title?: string) => void,
@@ -20,20 +21,17 @@ class Settings {
       mainMenu: true,
     });
 
-  constructor() {
-    Settings.checkUser();
+  constructor(options: { route: RouteLocationNormalizedLoaded }) {
+    this.route = options.route;
   }
 
-  private static checkUser() {
-    const token = LocalStorage.getItem('token');
-
-    if (!token) {
-      const router = useRouter();
-
-      void router.push({
-        name: ACCOUNT_LOGIN,
-      });
-    }
+  get isPublicView() {
+    return [
+      ALGORITHMS_PUBLIC_SEARCH,
+      ALGORITHMS_PUBLIC_EDITOR,
+    ].includes(
+      String(this.route.name),
+    );
   }
 }
 

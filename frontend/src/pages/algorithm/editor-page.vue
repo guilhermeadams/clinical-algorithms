@@ -54,7 +54,10 @@ import EditorMetadataPanel from 'components/editor/editor-metadata-panel.vue';
 import EditorActionsButtons from 'components/editor/editor-actions-buttons.vue';
 import SimpleModal from 'components/modals/simple-modal.vue';
 
-import { FLOWCHARTS_INDEX, FLOWCHARTS_SEARCH } from 'src/router/routes/algorithms';
+import {
+  ALGORITHMS_INDEX,
+  ALGORITHMS_SEARCH,
+} from 'src/router/routes/algorithms';
 
 const route = useRoute();
 const router = useRouter();
@@ -73,14 +76,14 @@ const readOnly = computed(() => editor.data.readOnly);
 const exitEditor = () => {
   if (route.query.search) {
     return router.push({
-      name: FLOWCHARTS_SEARCH,
+      name: ALGORITHMS_SEARCH,
       query: {
         keyword: route.query.search,
       },
     });
   }
 
-  return router.push({ name: FLOWCHARTS_INDEX });
+  return router.push({ name: ALGORITHMS_INDEX });
 };
 
 const saveGraph = () => {
