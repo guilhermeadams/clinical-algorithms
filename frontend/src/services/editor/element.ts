@@ -42,6 +42,7 @@ class Element {
       x: number,
       y: number,
     },
+    recommendationsRelationsMap: { [key: dia.Cell.ID]: dia.Cell.ID },
   } = reactive({
       selectedId: '',
       elementToCreate: '',
@@ -49,6 +50,7 @@ class Element {
         x: 0,
         y: 0,
       },
+      recommendationsRelationsMap: {},
     });
 
   constructor(editor: Editor) {
@@ -136,22 +138,80 @@ class Element {
     });
   }
 
-  private createTools(element: dia.Element, params?: { removeButtons: { x: number, y: number } }) {
-    const boundaryTool = new joint.elementTools.Boundary({
-      padding: 10,
-      rotate: true,
-      useModelGeometry: true,
+  public createRecommendationsExpandButton(
+    allTools: (joint.elementTools.Button | joint.elementTools.Boundary)[],
+  ) {
+    const infoButton = new joint.elementTools.Button({
+      focusOpacity: 0.5,
+      // top-right corner
+      x: 222,
+      y: 83,
+      offset: { x: -5, y: -5 },
+      action: (clickEvent) => {
+        const originalElementId = clickEvent.currentTarget.getAttribute('model-id');
+
+        const recommendationElementId = this.data.recommendationsRelationsMap[originalElementId];
+
+        const domElement = document.querySelector(`[model-id="${recommendationElementId}"]`);
+
+        if (domElement) {
+          if (domElement.getAttribute('display')) {
+            domElement.removeAttribute('display');
+          } else {
+            domElement.setAttribute('display', 'none');
+          }
+        }
+      },
+      markup: [
+        {
+          tagName: 'circle',
+          selector: 'button',
+          attributes: {
+            r: 12,
+            fill: '#CCCCCC',
+            cursor: 'pointer',
+          },
+        },
+        {
+          tagName: 'path',
+          selector: 'icon',
+          attributes: {
+            d: 'M -1.28 1.08 H -8 v -2.24 h 6.72 v -6.72 h 2.24 v 6.72 h 6.72 v 2.24 H 0.96 v 6.72 h -2.24 z',
+            fill: '#777',
+            pointerEvents: 'none',
+            cursor: 'pointer',
+          },
+        },
+      ],
     });
 
-    const allTools = [boundaryTool];
+    allTools.push(infoButton);
+  }
+
+  private createTools(element: dia.Element, params?: { removeButtons: { x: number, y: number } }) {
+    const allTools: (joint.elementTools.Button | joint.elementTools.Boundary)[] = [];
 
     if (!this.editor.data.readOnly) {
+      const boundaryTool = new joint.elementTools.Boundary({
+        padding: 10,
+        rotate: true,
+        useModelGeometry: true,
+      });
+
+      allTools.push(boundaryTool);
+
       const removeButton = this.customRemoveButton(
         params?.removeButtons.x,
         params?.removeButtons.y,
       );
 
       allTools.push(removeButton);
+    } else {
+      const metadata = this.editor.metadata.getFromElement(element);
+
+      if (metadata?.fixed && metadata.fixed.length) {
+        this.createRecommendationsExpandButton(allTools);
+      }
     }
 
     const toolsView = new joint.dia.ToolsView({
@@ -246,12 +306,19 @@ class Element {
 
           // create click event handlers for each recommendation
           this.create.RecommendationEventHandlers(createdRecommendationElement.id, element.id);
+
+          createdRecommendationElement.attr('./display', 'none');
         }
       },
       RecommendationEventHandlers: (
         recommendationElementId: dia.Cell.ID,
         originalElementId: dia.Cell.ID,
       ) => {
+        // create the ID relations between original element (that contains recommendations)
+        // and the element with recommendations list
+        // (used for toggle button)
+        this.data.recommendationsRelationsMap[originalElementId] = recommendationElementId;
+
         const domElement = document.querySelector(`[model-id="${recommendationElementId}"]`);
 
         if (domElement) {
@@ -324,7 +391,7 @@ class Element {
     // remove stroke from the selected element
     elements.forEach((element) => {
       // hide element tools
-      if (this.editor.data.paper) {
+      if (this.editor.data.paper && !this.editor.data.readOnly) {
         element.findView(this.editor.data.paper).hideTools();
       }
     });
@@ -534,6 +601,25 @@ class Element {
           const { x, y } = element.position();
 
           void this.create.Recommendation(x, y + 104, element);
+        }
+      }
+    }
+  }
+
+  public showAllTools() {
+    const allElements = this.getAll();
+
+    if (allElements.length) {
+      for (const element of allElements) {
+        if (
+          [CustomElement.ACTION, CustomElement.EVALUATION].includes(element.prop('type'))
+          && this.editor.data.paper
+        ) {
+          const elementView = element.findView(this.editor.data.paper);
+
+          if (elementView) {
+            elementView.showTools();
+          }
         }
       }
     }

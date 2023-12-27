@@ -250,7 +250,7 @@ const customElements = {
             <textarea
               class="${TEXTAREA_CLASSNAME}"
               autocomplete="off"
-              placeholder="Ação"
+              placeholder="Evaluación"
               contenteditable="true"
               maxlength="60"
               spellcheck="false"
