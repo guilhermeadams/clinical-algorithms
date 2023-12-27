@@ -13,6 +13,7 @@ import customElements, {
 import { reactive } from 'vue';
 
 import { autoResizeTextarea } from 'src/services/editor/textarea';
+import icons from 'src/services/editor/elements/svg_icons';
 
 // export interface IElementToolsPadding {
 //   left: number | 20,
@@ -154,11 +155,19 @@ class Element {
 
         const domElement = document.querySelector(`[model-id="${recommendationElementId}"]`);
 
-        if (domElement) {
+        const recommendationToggleButton = document.querySelectorAll(`[model-id="${originalElementId}"]`);
+
+        const path = recommendationToggleButton[1].getElementsByTagName('path');
+
+        if (domElement && path && path.length) {
           if (domElement.getAttribute('display')) {
             domElement.removeAttribute('display');
+
+            path[0].setAttribute('d', icons.minus);
           } else {
             domElement.setAttribute('display', 'none');
+
+            path[0].setAttribute('d', icons.plus);
           }
         }
       },
@@ -168,7 +177,7 @@ class Element {
           selector: 'button',
           attributes: {
             r: 12,
-            fill: '#CCCCCC',
+            fill: '#DDDDDD',
             cursor: 'pointer',
           },
         },
@@ -176,8 +185,8 @@ class Element {
           tagName: 'path',
           selector: 'icon',
           attributes: {
-            d: 'M -1.28 1.08 H -8 v -2.24 h 6.72 v -6.72 h 2.24 v 6.72 h 6.72 v 2.24 H 0.96 v 6.72 h -2.24 z',
-            fill: '#777',
+            d: icons.plus,
+            fill: '#999999',
             pointerEvents: 'none',
             cursor: 'pointer',
           },
