@@ -309,7 +309,7 @@ class Element {
               x,
               y,
             },
-          }).resize(500, 110).addTo(this.editor.data.graph);
+          }).resize(500, 143).addTo(this.editor.data.graph);
 
           // create click event handlers for each recommendation
           this.create.RecommendationEventHandlers(createdRecommendationElement.id, element.id);
