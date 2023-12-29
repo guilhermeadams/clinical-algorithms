@@ -158,11 +158,13 @@ const customElements = {
 
     // only the 3 first recommendations
     for (const recommendation of recommendations) {
-      items += `<li data-index="${recommendation.index}">`;
-      items += recommendation.intervention;
-      if (recommendation.direction) items += ` - ${recommendation.direction}`;
-      if (recommendation.strength) items += ` - ${recommendation.strength}`;
-      items += '</li>';
+      items += `<div class="row" data-index="${recommendation.index}">`;
+      items += `<div class="col-8 q-pa-sm">${recommendation.index}. ${recommendation.intervention}</div>`;
+      // if (recommendation.direction) items += ` - ${recommendation.direction}`;
+      // if (recommendation.strength) items += ` - ${recommendation.strength}`;
+      items += '<div class="col-2"></div>';
+      items += '<div class="col-2"></div>';
+      items += '</div>';
     }
 
     return joint.dia.Element.define(CustomElement.RECOMMENDATION, {
@@ -181,9 +183,9 @@ const customElements = {
           xmlns="http://www.w3.org/1999/xhtml"
           class="recommendation-element"
         >
-          <ol type="1" class="text-caption">
+          <div class="text-caption">
             ${items}
-          </ol>
+          </div>
         </div>
       </foreignObject>
     `,

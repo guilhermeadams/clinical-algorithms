@@ -65,7 +65,7 @@
               <q-select
                 v-if="isFormal"
                 v-model="data.strength"
-                :options="['Strong', 'Conditional', 'Weak']"
+                :options="['Strong', 'Weak', 'Conditional']"
                 class="q-my-lg"
                 label="Recommendation strength"
                 dense

@@ -331,7 +331,7 @@ class Element {
         const domElement = document.querySelector(`[model-id="${recommendationElementId}"]`);
 
         if (domElement) {
-          const listItems = domElement?.getElementsByTagName('li');
+          const listItems = domElement?.getElementsByClassName('row');
 
           if (listItems.length) {
             for (const listItem of listItems) {
