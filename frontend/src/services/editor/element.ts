@@ -302,9 +302,7 @@ class Element {
         const metadata = this.editor.metadata.getFromElement(element);
 
         if (metadata && metadata.fixed) {
-          const RecommendationElement = customElements.RecommendationElement(
-            metadata.fixed,
-          );
+          const RecommendationElement = customElements.RecommendationElement(metadata.fixed);
 
           const createdRecommendationElement = new RecommendationElement({
             position: {
