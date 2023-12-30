@@ -1,5 +1,6 @@
 import * as joint from 'jointjs';
 import { IFixedMetadata } from 'src/services/editor/metadata';
+import { DIRECTIONS, RECOMMENDATION_TYPE, STRENGTH } from 'src/services/editor/constants';
 
 export enum CustomElement {
   START = 'StartElement',
@@ -158,11 +159,30 @@ const customElements = {
 
     // only the 3 first recommendations
     for (const recommendation of recommendations) {
-      items += `<li data-index="${recommendation.index}">`;
-      items += recommendation.intervention;
-      if (recommendation.direction) items += ` - ${recommendation.direction}`;
-      if (recommendation.strength) items += ` - ${recommendation.strength}`;
-      items += '</li>';
+      items += `<div class="row" data-index="${recommendation.index}">`;
+
+      // is formal?
+      if (recommendation.recommendation_type === RECOMMENDATION_TYPE[0].value) {
+        items += `<div class="col-8 q-pa-sm">${recommendation.index}. ${recommendation.intervention}</div>`;
+
+        items += '<div class="col-2 flex justify-center items-start" style="padding-top:10px">';
+        items += `<div class="full-width text-center"><img src="./icons/${recommendation.direction}.svg" width="24" /></div>`;
+        items += `<div class="full-width text-center q-mb-sm" style="font-size:11px;line-height:14px">${
+          DIRECTIONS.find((direction) => direction.value === recommendation.direction)?.label
+        }</div>`;
+        items += '</div>';
+
+        items += '<div class="col-2 flex justify-center items-start" style="padding-top:10px">';
+        items += `<div class="full-width text-center"><img src="./icons/${recommendation.strength}.svg" width="20" /></div>`;
+        items += `<div class="full-width text-center q-mb-sm" style="font-size:11px;line-height:14px">${
+          STRENGTH.find((strength) => strength.value === recommendation.strength)?.label
+        }</div>`;
+        items += '</div>';
+      } else {
+        items += `<div class="col-12 q-pa-sm">${recommendation.index}. ${recommendation.intervention}</div>`;
+      }
+
+      items += '</div>';
     }
 
     return joint.dia.Element.define(CustomElement.RECOMMENDATION, {
@@ -181,9 +201,9 @@ const customElements = {
           xmlns="http://www.w3.org/1999/xhtml"
           class="recommendation-element"
         >
-          <ol type="1" class="text-caption">
+          <div class="text-caption">
             ${items}
-          </ol>
+          </div>
         </div>
       </foreignObject>
     `,
@@ -250,7 +270,7 @@ const customElements = {
             <textarea
               class="${TEXTAREA_CLASSNAME}"
               autocomplete="off"
-              placeholder="Ação"
+              placeholder="Evaluación"
               contenteditable="true"
               maxlength="60"
               spellcheck="false"

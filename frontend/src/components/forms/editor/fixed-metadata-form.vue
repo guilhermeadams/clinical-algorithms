@@ -12,13 +12,11 @@
             <div class="q-px-md q-py-md">
               <q-select
                 v-model="data.recommendation_type"
-                :options="[
-                  'Formal recommendation',
-                  'Good Practice Statement',
-                  'Informal recommendation',
-                ]"
+                :options="RECOMMENDATION_TYPE"
                 class="q-mb-lg"
                 label="Recommendation type"
+                map-options
+                emit-value
                 dense
               />
 
@@ -56,18 +54,22 @@
 
               <q-select
                 v-model="data.direction"
-                :options="['In favor of intervention', 'Against intervention', 'Both']"
+                :options="DIRECTIONS"
                 class="q-my-lg"
                 label="Direction"
+                map-options
+                emit-value
                 dense
               />
 
               <q-select
                 v-if="isFormal"
                 v-model="data.strength"
-                :options="['Strong', 'Conditional', 'Weak']"
+                :options="STRENGTH"
                 class="q-my-lg"
                 label="Recommendation strength"
+                map-options
+                emit-value
                 dense
               />
 
@@ -155,6 +157,7 @@ import {
 import MetadataLinksForm from 'components/forms/editor/fixed-metadata-links-form.vue';
 import Editor from 'src/services/editor';
 import DeleteModal from 'components/modals/simple-modal.vue';
+import { DIRECTIONS, RECOMMENDATION_TYPE, STRENGTH } from 'src/services/editor/constants';
 
 const editor = inject('editor') as Editor;
 
@@ -183,12 +186,18 @@ const data = reactive({
   links: [],
 });
 
-const blockName = computed(() => `${props.index}. ${data.recommendation_type}`);
+const blockName = computed(() => `${props.index}. ${
+  data.recommendation_type ? RECOMMENDATION_TYPE.find(
+    (type) => type.value === data.recommendation_type,
+  )?.label : 'Select recommendation type'
+}`);
 
-const isFormal = computed(() => data.recommendation_type === 'Formal recommendation');
+const isFormal = computed(() => data.recommendation_type === RECOMMENDATION_TYPE[0].value);
 
 watch(data, (value) => {
-  editor.metadata.fixed.set(props.index, { ...value });
+  editor.metadata.fixed.set(props.index, {
+    ...value,
+  });
 });
 
 const deleteBlock = () => {
