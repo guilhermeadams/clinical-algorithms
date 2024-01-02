@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue';
+import { inject, onMounted } from 'vue';
 import Users, { IUser } from 'src/services/users';
 import CheckOrNotIcon from 'components/icons/check-or-not-icon.vue';
 
@@ -102,4 +102,8 @@ const columns = [
 ];
 
 const editUser = (user: IUser) => users.editUser(user);
+
+onMounted(() => {
+  users.get();
+});
 </script>

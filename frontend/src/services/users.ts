@@ -1,30 +1,11 @@
 import { reactive } from 'vue';
-
-const usersMock = [
-  {
-    id: 1,
-    name: 'Gabriel Silveira',
-    email: 'gabriel@gabrielsilveira.com.br',
-    phone: '(11) 97676-8736',
-    maintainer: true,
-    master: false,
-    updatedAt: '23-10-2023 às 14:21h',
-  },
-  {
-    id: 2,
-    name: 'Roberto Rizzo',
-    email: 'robertopinarizzo@verx.com.br',
-    phone: '(11) 99917-5174',
-    maintainer: true,
-    master: true,
-    updatedAt: '22-10-2023 às 09:56h',
-  },
-];
+import { api } from 'boot/axios';
 
 const emptyUser = {
   id: 0,
   name: '',
   email: '',
+  password: '',
   phone: '',
   maintainer: false,
   master: false,
@@ -35,6 +16,7 @@ export interface IUser {
   id?: number,
   name: string,
   email: string,
+  password: string,
   phone: string,
   maintainer: boolean,
   master: boolean,
@@ -57,7 +39,7 @@ class Users {
     });
 
   constructor() {
-    this.data.users = [...usersMock];
+    this.data.users = [];
   }
 
   get usersList() {
@@ -98,6 +80,36 @@ class Users {
     this.data.user = { ...user };
 
     this.toggleEditDialog();
+  }
+
+  public async get() {
+    try {
+      const { data } = await api.get('users');
+
+      this.data.users = [...data];
+
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async create() {
+    try {
+      this.data.loading = true;
+
+      await api.post('users', {
+        ...this.data.user,
+      });
+
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
+    } finally {
+      this.toggleEditDialog();
+
+      this.data.loading = false;
+    }
   }
 
   public save() {
