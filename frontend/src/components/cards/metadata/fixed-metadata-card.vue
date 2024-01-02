@@ -7,11 +7,15 @@
       <div class="q-pa-md">
         <div>
           <div
-            v-if="fixedMetadata.recommendation_type"
             class="text-body1 text-bold"
             style="text-transform: uppercase"
           >
-            {{ fixedMetadata.index }}. {{ fixedMetadata.recommendation_type }}
+            {{ fixedMetadata.index }}. {{
+              fixedMetadata.recommendation_type ?
+                RECOMMENDATION_TYPE.find(
+                  (type) => type.value === fixedMetadata.recommendation_type,
+                ).label : 'Recommendation type was not selected'
+            }}
           </div>
         </div>
 
@@ -30,7 +34,9 @@
             v-if="fixedMetadata.direction"
             class="col-6"
           >
-            <b>Direction:</b><br/>{{ fixedMetadata.direction }}
+            <b>Direction:</b><br/>{{
+              DIRECTIONS.find((direction) => direction.value === fixedMetadata.direction).label
+            }}
           </div>
         </div>
 
@@ -42,7 +48,9 @@
             v-if="fixedMetadata.strength"
             class="col-6"
           >
-            <b>Recommendation strength:</b><br/>{{ fixedMetadata.strength }}
+            <b>Recommendation strength:</b><br/>{{
+              STRENGTH.find((strength) => strength.value === fixedMetadata.strength).label
+            }}
           </div>
 
           <div
@@ -159,6 +167,7 @@ import {
 import { IFixedMetadata } from 'src/services/editor/metadata';
 
 import Editor from 'src/services/editor';
+import { DIRECTIONS, RECOMMENDATION_TYPE, STRENGTH } from 'src/services/editor/constants';
 
 const editor = inject('editor') as Editor;
 
@@ -172,7 +181,8 @@ const props = defineProps({
 const fixedMetadata = ref<IFixedMetadata | null>(null);
 
 const isFormal = computed(
-  () => fixedMetadata.value && fixedMetadata.value.recommendation_type === 'Formal recommendation',
+  () => fixedMetadata.value
+    && fixedMetadata.value.recommendation_type === RECOMMENDATION_TYPE[0].value,
 );
 
 const recommendation = computed(() => editor.metadata.data.recommendationToShow);

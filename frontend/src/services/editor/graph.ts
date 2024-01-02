@@ -89,6 +89,8 @@ class Graph {
             this.editor.element.textarea.disableAll();
 
             this.editor.element.createRecommendations();
+
+            this.editor.element.showAllTools();
           }
         }
       }

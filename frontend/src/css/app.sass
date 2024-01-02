@@ -73,21 +73,24 @@ g[data-type="LaneElement"] .element-textarea-input
 
 .recommendation-element
   overflow-y: auto
-  padding: 8px
+  padding: 0
   width: 500px
-  height: 110px
+  height: 143px
   background: #EFEFEF
   border: 1px solid #CCCCCC
   border-radius: 5px
 
-.recommendation-element ol
-  padding: 0 0 0 20px
-  margin: 0
+.recommendation-element div.row
+  padding: 0
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1)
 
-.recommendation-element ol li
-  padding: 2px 0 2px 0
-  margin: 0
+.recommendation-element div.row:last-child
+  border-bottom: none
 
-.recommendation-element ol li:hover
+.recommendation-element div.row div.col-8
+  padding-left: 24px
+  text-indent: -14px
+
+.recommendation-element div.row:hover
   cursor: pointer
   color: var(--q-primary)
