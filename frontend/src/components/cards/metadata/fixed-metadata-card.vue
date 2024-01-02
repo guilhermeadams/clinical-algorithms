@@ -20,7 +20,6 @@
         </div>
 
         <div
-          v-if="isFormal"
           class="row q-pt-md"
         >
           <div
