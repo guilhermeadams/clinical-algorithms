@@ -5,6 +5,7 @@
     :loading="users.data.loading"
     title="Usuarios"
     row-key="name"
+    :rows-per-page-options="[0]"
     flat
     hide-bottom
   >

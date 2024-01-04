@@ -67,7 +67,7 @@
             v-model="users.data.user.password"
             :type="isPwd ? 'password' : 'text'"
             class="q-mb-md"
-            :rules="users.data.user.id ? false : [
+            :rules="users.data.user.id ? [] : [
               (val) => !!val || 'Ingrese la contraseña de usuario.'
             ]"
           >
@@ -88,7 +88,6 @@
 
       <div class="row q-my-lg">
         <div class="col-6">
-          {{ users.data.user.maintainer }}
           <q-checkbox
             v-if="canEdit"
             v-model="users.data.user.maintainer"
@@ -106,7 +105,6 @@
         </div>
 
         <div class="col-6">
-          {{ users.data.user.master }}
           <q-checkbox
             v-if="canEdit"
             v-model="users.data.user.master"
