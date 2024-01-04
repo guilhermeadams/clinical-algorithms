@@ -213,9 +213,20 @@ const isFormal = computed(() => data.recommendation_type === RECOMMENDATION_TYPE
 // });
 
 const setProp = (propName: string) => {
+  const metadata = editor.metadata.getFromElement();
+
+  // create metadata block if it doesn't exist
+  if (!metadata || !metadata.fixed[props.index - 1]) {
+    editor.metadata.fixed.set(props.index, {
+      ...data,
+    });
+  }
+
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   editor.element.setProp(`metadata/fixed/${props.index - 1}/${propName}`, data[propName]);
+
+  editor.graph.notSaved();
 };
 
 const deleteBlock = () => {
