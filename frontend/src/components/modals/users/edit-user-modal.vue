@@ -67,7 +67,9 @@
             v-model="users.data.user.password"
             :type="isPwd ? 'password' : 'text'"
             class="q-mb-md"
-            :rules="[(val) => !!val || 'Ingrese la contraseña de usuario.']"
+            :rules="users.data.user.id ? false : [
+              (val) => !!val || 'Ingrese la contraseña de usuario.'
+            ]"
           >
             <template v-slot:append>
               <q-icon
@@ -86,6 +88,7 @@
 
       <div class="row q-my-lg">
         <div class="col-6">
+          {{ users.data.user.maintainer }}
           <q-checkbox
             v-if="canEdit"
             v-model="users.data.user.maintainer"
@@ -103,6 +106,7 @@
         </div>
 
         <div class="col-6">
+          {{ users.data.user.master }}
           <q-checkbox
             v-if="canEdit"
             v-model="users.data.user.master"
@@ -186,7 +190,11 @@ const saveAndClose = async () => {
   try {
     data.saving = true;
 
-    await users.create();
+    if (users.data.user.id) {
+      await users.update();
+    } else {
+      await users.create();
+    }
 
     await users.get();
   } catch (error) {

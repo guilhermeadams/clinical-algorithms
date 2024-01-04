@@ -79,6 +79,13 @@ class Users {
   public editUser(user: IUser) {
     this.data.user = { ...user };
 
+    // hide original password hash
+    this.data.user.password = '';
+
+    // convert 0 / 1 to false / true
+    this.data.user.maintainer = !!this.data.user.maintainer;
+    this.data.user.master = !!this.data.user.master;
+
     this.toggleEditDialog();
   }
 
@@ -112,9 +119,13 @@ class Users {
     }
   }
 
-  public save() {
+  public async update() {
     try {
       this.data.loading = true;
+
+      await api.put('users', {
+        ...this.data.user,
+      });
 
       return Promise.resolve(true);
     } catch (error) {
@@ -122,20 +133,7 @@ class Users {
     } finally {
       this.toggleEditDialog();
 
-      setTimeout(() => {
-        if (this.data.user.id) {
-          // update user
-        } else {
-          // insert user
-          this.data.users.unshift({
-            ...this.data.user,
-            id: 999,
-            updatedAt: '24/10/2023 às 14:07h',
-          });
-        }
-
-        this.data.loading = false;
-      }, 1500);
+      this.data.loading = false;
     }
   }
 

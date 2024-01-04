@@ -9,7 +9,10 @@
     hide-bottom
   >
     <template v-slot:loading>
-      <q-inner-loading showing color="primary" />
+      <q-inner-loading
+        showing
+        color="primary"
+      />
     </template>
 
     <template v-slot:body="props">
@@ -31,11 +34,11 @@
         </q-td>
 
         <q-td key="maintainer" :props="props">
-          <check-or-not-icon :check="props.row.maintainer" />
+          <check-or-not-icon :check="!!props.row.maintainer" />
         </q-td>
 
         <q-td key="master" :props="props">
-          <check-or-not-icon :check="props.row.master" />
+          <check-or-not-icon :check="!!props.row.master" />
         </q-td>
 
         <q-td key="actions" :props="props">

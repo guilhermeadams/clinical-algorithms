@@ -19,3 +19,8 @@ def index():
 @router.post("")
 def store(user: UserSchema):
     return users.store(user)
+
+
+@router.put("")
+def update(user: UserSchema):
+    return users.update_user(user)

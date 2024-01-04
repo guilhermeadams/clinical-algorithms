@@ -1,4 +1,4 @@
-from app.services.pymsql import insert, select, db_error
+from app.services.pymsql import insert, update, select, db_error
 from app.schemas.user import UserSchema
 from .data_handler import to_iso_date
 from datetime import datetime
@@ -29,5 +29,24 @@ def store(user_data: UserSchema):
         )
 
         return {"user_id": user_id}
+    except Error as e:
+        db_error(e)
+
+
+def update_user(user: UserSchema):
+    try:
+        fields = ["name", "email", "phone", "maintainer", "master", "updated_at"]
+        values = [
+            user.name,
+            user.email,
+            user.phone,
+            user.maintainer,
+            user.master,
+            datetime.today().strftime('%Y-%m-%d'),
+        ]
+
+        updated_user_id = update("users", fields, values, "id", user.id)
+
+        return {"id": updated_user_id}
     except Error as e:
         db_error(e)
