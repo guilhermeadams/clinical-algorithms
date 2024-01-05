@@ -30,12 +30,14 @@ class Users {
     users: IUser[],
     user: IUser,
     searchResults: IUser[] | null,
+    totalSearchResult: number | null,
   } = reactive({
       loading: false,
       showEditDialog: false,
       users: [],
       user: { ...emptyUser },
       searchResults: null,
+      totalSearchResult: null,
     });
 
   constructor() {
@@ -43,30 +45,31 @@ class Users {
   }
 
   get usersList() {
-    return this.data.searchResults && this.data.searchResults.length
-      ? this.data.searchResults : this.data.users;
+    if (this.data.totalSearchResult !== null) return this.data.searchResults;
+
+    return this.data.users;
   }
 
-  public search(keyword: string) {
+  public async search(keyword: string) {
     try {
       this.data.loading = true;
 
       this.data.searchResults = [];
+      this.data.totalSearchResult = 0;
 
-      // eslint-disable-next-line no-restricted-syntax
-      for (const user of this.data.users) {
-        if (user.name.toLowerCase().includes(keyword.toLowerCase())) {
-          this.data.searchResults.push(user);
-        }
+      const { data } = await api.get(`users/search?keyword=${keyword}`);
+
+      if (data && data.length) {
+        this.data.searchResults = [...data];
+
+        this.data.totalSearchResult = data.length;
       }
 
-      return Promise.resolve(this.data.searchResults);
+      return Promise.resolve(true);
     } catch (error) {
       return Promise.reject(error);
     } finally {
-      setTimeout(() => {
-        this.data.loading = false;
-      }, 1000);
+      this.data.loading = false;
     }
   }
 
@@ -155,6 +158,7 @@ class Users {
 
   public clearSearch() {
     this.data.searchResults = null;
+    this.data.totalSearchResult = null;
   }
 
   public toggleEditDialog() {

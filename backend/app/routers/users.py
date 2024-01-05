@@ -12,20 +12,27 @@ router = APIRouter(
 
 
 @router.get("")
-def index():
+def index_user():
     return users.index()
 
 
 @router.post("")
-def store(user: UserSchema):
+def store_user(user: UserSchema):
     return users.store(user)
 
 
 @router.put("")
-def update(user: UserSchema):
+def update_user(user: UserSchema):
     return users.update_user(user)
 
 
+@router.get("/search")
+def search_user(keyword: str | None = None):
+    if keyword:
+        return users.search_user(keyword)
+    return True
+
+
 @router.delete("/{user_id}")
-def delete(user_id: int):
+def delete_user(user_id: int):
     return users.delete_user(user_id)

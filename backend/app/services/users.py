@@ -55,6 +55,15 @@ def update_user(user: UserSchema):
         db_error(e)
 
 
+def search_user(keyword: str):
+    try:
+        like = "%"+keyword+"%"
+
+        return select("SELECT * FROM users WHERE name LIKE %s OR email LIKE %s", [like, like])
+    except Error as e:
+        db_error(e)
+
+
 def delete_user(user_id: int):
     try:
         delete("users", 'id', user_id)

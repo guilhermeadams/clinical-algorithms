@@ -7,13 +7,17 @@
     row-key="name"
     :rows-per-page-options="[0]"
     flat
-    hide-bottom
+    :hide-bottom="!(users.usersList && !users.usersList.length)"
   >
     <template v-slot:loading>
       <q-inner-loading
         showing
         color="primary"
       />
+    </template>
+
+    <template v-slot:no-data>
+      <b>No se encontraron usuarios.</b>
     </template>
 
     <template v-slot:body="props">

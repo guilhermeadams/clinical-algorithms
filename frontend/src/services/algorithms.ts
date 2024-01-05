@@ -113,6 +113,7 @@ class Algorithms {
       this.data.loading = true;
 
       this.data.searchResults = [];
+      this.data.totalSearchResult = 0;
 
       const { data: flowchartsFound }: { data: IAlgorithm[] } = await api.get(`${resource}/search?keyword=${keyword}`);
 
@@ -122,7 +123,7 @@ class Algorithms {
         this.data.totalSearchResult = flowchartsFound.length;
       }
 
-      this.data.totalSearchResult = 0;
+      // this.data.totalSearchResult = 0;
 
       return Promise.resolve(true);
     } catch (error) {
