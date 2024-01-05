@@ -47,6 +47,9 @@ def update_user(user: UserSchema):
 
         updated_user_id = update("users", fields, values, "id", user.id)
 
+        if user.password:
+            updated_user_id = update("users", ["password"], [user.password], "id", user.id)
+
         return {"id": updated_user_id}
     except Error as e:
         db_error(e)
