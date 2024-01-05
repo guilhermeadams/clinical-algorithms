@@ -24,3 +24,8 @@ def store(user: UserSchema):
 @router.put("")
 def update(user: UserSchema):
     return users.update_user(user)
+
+
+@router.delete("/{user_id}")
+def delete(user_id: int):
+    return users.delete_user(user_id)

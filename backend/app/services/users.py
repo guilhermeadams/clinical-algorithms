@@ -1,4 +1,4 @@
-from app.services.pymsql import insert, update, select, db_error
+from app.services.pymsql import insert, update, select, delete, db_error
 from app.schemas.user import UserSchema
 from .data_handler import to_iso_date
 from datetime import datetime
@@ -51,5 +51,12 @@ def update_user(user: UserSchema):
             updated_user_id = update("users", ["password"], [user.password], "id", user.id)
 
         return {"id": updated_user_id}
+    except Error as e:
+        db_error(e)
+
+
+def delete_user(user_id: int):
+    try:
+        delete("users", 'id', user_id)
     except Error as e:
         db_error(e)

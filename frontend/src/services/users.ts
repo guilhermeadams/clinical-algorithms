@@ -137,9 +137,11 @@ class Users {
     }
   }
 
-  public delete() {
+  public async delete() {
     try {
       this.data.loading = true;
+
+      await api.delete(`users/${this.data.user.id}`);
 
       return Promise.resolve(true);
     } catch (error) {
@@ -147,20 +149,7 @@ class Users {
     } finally {
       this.toggleEditDialog();
 
-      setTimeout(() => {
-        const updatedUsers: IUser[] = [];
-
-        // eslint-disable-next-line no-restricted-syntax
-        for (const user of this.data.users) {
-          if (user.id !== this.data.user.id) {
-            updatedUsers.push({ ...user });
-          }
-        }
-
-        this.data.users = [...updatedUsers];
-
-        this.data.loading = false;
-      }, 1500);
+      this.data.loading = false;
     }
   }
 

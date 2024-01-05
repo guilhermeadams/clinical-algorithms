@@ -1,12 +1,12 @@
 <template>
   <edit-modal
     :show="showEditUserDialog"
-    title="Usuário"
+    title="Usuario"
     :deleting="data.deleting"
     :saving="data.saving"
     :editing="data.editing"
     :hide-delete="!users.data.user.id"
-    @delete="deleteAndClose"
+    @delete="showDeleteDialog(true)"
     @edit="setEditing"
     @save="submitUsersForm"
     @close="closeDialog"
@@ -122,6 +122,14 @@
         </div>
       </div>
     </q-form>
+
+    <delete-modal
+      :show="data.confirmDeleting"
+      title="¿Está seguro de que desea eliminar el usuario?"
+      :item-name="users.data.user.name"
+      @cancel="showDeleteDialog(false)"
+      @confirm="deleteAndClose"
+    />
   </edit-modal>
 </template>
 
@@ -139,6 +147,7 @@ import EditModal from 'components/modals/edit-modal.vue';
 import { QForm, QInput, useQuasar } from 'quasar';
 import CheckOrNotIcon from 'components/icons/check-or-not-icon.vue';
 import { validateEmail } from 'src/services/validation';
+import DeleteModal from 'components/modals/simple-modal.vue';
 
 const users = inject('users') as Users;
 const $q = useQuasar();
@@ -152,6 +161,7 @@ const data = reactive({
   deleting: false,
   editing: false,
   saving: false,
+  confirmDeleting: false,
 });
 
 const isPwd = ref(true);
@@ -164,14 +174,26 @@ watch(() => showEditUserDialog.value, (value) => {
 
 const canEdit = computed(() => data.editing || !users.data.user.id);
 
-const deleteAndClose = () => {
-  data.deleting = true;
+const showDeleteDialog = (value: boolean) => {
+  data.confirmDeleting = value;
+};
 
-  setTimeout(() => {
-    users.delete();
+const deleteAndClose = async () => {
+  try {
+    showDeleteDialog(false);
 
+    data.deleting = true;
+
+    await users.delete();
+
+    await users.get();
+  } catch (e) {
+    $q.notify({
+      message: 'Error while deleting user data',
+    });
+  } finally {
     data.deleting = false;
-  }, 1500);
+  }
 };
 
 const closeDialog = () => users.toggleEditDialog();
@@ -197,7 +219,7 @@ const saveAndClose = async () => {
     await users.get();
   } catch (error) {
     $q.notify({
-      message: 'Erro ao salvar dados básicos do fluxograma',
+      message: 'Error while saving user data',
     });
   } finally {
     data.saving = false;
