@@ -53,6 +53,7 @@ class Algorithms {
     showEditDialog: boolean,
     algorithms: IAlgorithm[],
     algorithm: IAlgorithm,
+    searchKeyword: string,
     searchResults: IAlgorithm[] | null,
     totalSearchResult: number | null,
   } = reactive({
@@ -60,6 +61,7 @@ class Algorithms {
       showEditDialog: false,
       algorithms: [],
       algorithm: { ...emptyFlowchart },
+      searchKeyword: '',
       searchResults: null,
       totalSearchResult: null,
     });
@@ -111,6 +113,7 @@ class Algorithms {
   public async search(keyword: string) {
     try {
       this.data.loading = true;
+      this.data.searchKeyword = keyword;
 
       this.data.searchResults = [];
       this.data.totalSearchResult = 0;
@@ -160,8 +163,6 @@ class Algorithms {
         ...this.data.algorithm,
       });
 
-      await this.getAll();
-
       this.toggleEditDialog();
 
       return Promise.resolve(true);
@@ -177,8 +178,6 @@ class Algorithms {
       await api.post(resource, {
         ...this.data.algorithm,
       });
-
-      await this.getAll();
 
       this.toggleEditDialog();
 
@@ -205,6 +204,7 @@ class Algorithms {
   public clearSearch() {
     this.data.searchResults = null;
     this.data.totalSearchResult = null;
+    this.data.searchKeyword = '';
   }
 
   public toggleEditDialog() {
