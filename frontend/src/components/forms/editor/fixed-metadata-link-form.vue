@@ -46,7 +46,7 @@
       >
         <q-card-section class="text-center q-py-lg">
           <b class="q-mb-md">
-            Quiere eliminar el enlace #{{ props.blockIndex }}?
+            Quiere eliminar el enlace #{{ props.linkIndex }}?
           </b>
 
           <div class="text-left">

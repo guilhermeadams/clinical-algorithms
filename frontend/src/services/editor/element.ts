@@ -604,10 +604,14 @@ class Element {
 
     if (allElements.length) {
       for (const element of allElements) {
-        if ([CustomElement.ACTION, CustomElement.EVALUATION].includes(element.prop('type'))) {
+        if (element.prop('type') === CustomElement.ACTION) {
           const { x, y } = element.position();
 
-          void this.create.Recommendation(x, y + 104, element);
+          void this.create.Recommendation(x, y + 94, element);
+        } else if (element.prop('type') === CustomElement.EVALUATION) {
+          const { x, y } = element.position();
+
+          void this.create.Recommendation(x + 1, y + 111, element);
         }
       }
     }
