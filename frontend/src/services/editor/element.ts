@@ -141,6 +141,7 @@ class Element {
 
   public createRecommendationsExpandButton(
     allTools: (joint.elementTools.Button | joint.elementTools.Boundary)[],
+    recommendationToggleButtonIndex: number,
   ) {
     const infoButton = new joint.elementTools.Button({
       focusOpacity: 0.5,
@@ -157,7 +158,9 @@ class Element {
 
         const recommendationToggleButton = document.querySelectorAll(`[model-id="${originalElementId}"]`);
 
-        const path = recommendationToggleButton[1].getElementsByTagName('path');
+        console.log(recommendationToggleButtonIndex, recommendationToggleButton);
+        // path element can be the second or third element...
+        const path = recommendationToggleButton[recommendationToggleButtonIndex].getElementsByTagName('path');
 
         if (domElement && path && path.length) {
           if (domElement.getAttribute('display')) {
@@ -197,17 +200,19 @@ class Element {
     allTools.push(infoButton);
   }
 
+  private static createBoundaryTool() {
+    return new joint.elementTools.Boundary({
+      padding: 10,
+      rotate: true,
+      useModelGeometry: true,
+    });
+  }
+
   private createTools(element: dia.Element, params?: { removeButtons: { x: number, y: number } }) {
     const allTools: (joint.elementTools.Button | joint.elementTools.Boundary)[] = [];
 
     if (!this.editor.data.readOnly) {
-      const boundaryTool = new joint.elementTools.Boundary({
-        padding: 10,
-        rotate: true,
-        useModelGeometry: true,
-      });
-
-      allTools.push(boundaryTool);
+      allTools.push(Element.createBoundaryTool());
 
       const removeButton = this.customRemoveButton(
         params?.removeButtons.x,
@@ -219,7 +224,7 @@ class Element {
       const metadata = this.editor.metadata.getFromElement(element);
 
       if (metadata?.fixed && metadata.fixed.length) {
-        this.createRecommendationsExpandButton(allTools);
+        this.createRecommendationsExpandButton(allTools, 1);
       }
     }
 
@@ -400,6 +405,8 @@ class Element {
       // hide element tools
       if (this.editor.data.paper && !this.editor.data.readOnly) {
         element.findView(this.editor.data.paper).hideTools();
+      } else if (this.editor.data.readOnly) {
+        this.createReadonlyTools(element, false);
       }
     });
 
@@ -428,6 +435,30 @@ class Element {
     return this.editor.data.graph.getElements().find((element) => element.id === id);
   }
 
+  private createReadonlyTools(element: dia.Element, showBoundary: boolean) {
+    if (this.editor.data.paper) {
+      const allTools: (joint.elementTools.Button | joint.elementTools.Boundary)[] = [];
+
+      const elementView = element.findView(this.editor.data.paper);
+
+      if (showBoundary) {
+        allTools.push(Element.createBoundaryTool());
+      }
+
+      const metadata = this.editor.metadata.getFromElement(element);
+
+      if (metadata?.fixed && metadata.fixed.length) {
+        this.createRecommendationsExpandButton(allTools, showBoundary ? 2 : 1);
+      }
+
+      const toolsView = new joint.dia.ToolsView({
+        tools: [...allTools],
+      });
+
+      elementView.addTools(toolsView);
+    }
+  }
+
   public select(elementId: dia.Cell.ID) {
     this.deselectAll();
 
@@ -437,6 +468,10 @@ class Element {
       const elementView = element.findView(this.editor.data.paper);
 
       if (elementView) {
+        if (this.editor.data.readOnly) {
+          this.createReadonlyTools(element, true);
+        }
+
         elementView.showTools();
 
         this.data.selectedId = elementId;
