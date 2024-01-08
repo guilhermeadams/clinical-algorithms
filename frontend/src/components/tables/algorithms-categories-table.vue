@@ -36,18 +36,11 @@
         >
           <q-btn
             class="q-px-md"
-            label="Ver categoría"
+            label="Editar categoría"
             color="primary"
             no-caps
             push
-          />
-
-          <q-btn
-            class="q-px-md q-ml-md"
-            label="Borrar"
-            color="negative"
-            no-caps
-            push
+            @click="editCategory(props.row)"
           />
         </q-td>
       </q-tr>
@@ -56,12 +49,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, provide } from 'vue';
+import { onMounted, inject } from 'vue';
 
 import AlgorithmsCategories from 'src/services/algorithms-categories';
 
-const categories = new AlgorithmsCategories();
-provide(categories, 'categories');
+const categories = inject('algorithmsCategories') as AlgorithmsCategories;
 
 const columns = [
   {
@@ -78,6 +70,12 @@ const columns = [
     field: 'action',
   },
 ];
+
+const editCategory = (category: { id: number, name: string }) => {
+  categories.data.category = { ...category };
+
+  categories.toggleEditDialog();
+};
 
 onMounted(() => {
   categories.get();

@@ -1,9 +1,11 @@
 from app.services import nodes
 from app.schemas.algorithm import AlgorithmSchema
+from app.schemas.algorithm_category import AlgorithmCategorySchema
 from .data_handler import to_iso_date
 from app.services import graphs
 from app.services.pymsql import insert, update, select, delete, db_error
 from pymysql import Error
+from datetime import datetime
 
 algorithm_fields = ['id', 'title', 'description', 'version', 'updated_at']
 
@@ -75,6 +77,13 @@ def show(algorithm_id: int):
         db_error(e)
 
 
+def categories_index():
+    try:
+        return select("SELECT * FROM categories")
+    except Error as e:
+        db_error(e)
+
+
 def store(algorithm: AlgorithmSchema):
     try:
         algorithm_id = insert(
@@ -86,6 +95,31 @@ def store(algorithm: AlgorithmSchema):
         graphs.store(algorithm_id)
 
         return {"algorithm_id": algorithm_id}
+    except Error as e:
+        db_error(e)
+
+
+def store_category(algorithm_category: AlgorithmCategorySchema):
+    try:
+        algorithm_category_id = insert(
+            "categories",
+            ["name", "updated_at"],
+            [algorithm_category.name, datetime.today().strftime('%Y-%m-%d')],
+        )
+
+        return {"algorithm_category_id": algorithm_category_id}
+    except Error as e:
+        db_error(e)
+
+
+def update_algorithm_category(algorithm_category: AlgorithmSchema):
+    try:
+        fields = ["name", "updated_at"]
+        values = [algorithm_category.name, datetime.today().strftime('%Y-%m-%d')]
+
+        updated_algorithm_category_id = update("categories", fields, values, "id", algorithm_category.id)
+
+        return {"id": updated_algorithm_category_id}
     except Error as e:
         db_error(e)
 

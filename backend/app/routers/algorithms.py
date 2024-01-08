@@ -63,6 +63,11 @@ def store_algorithm_category(algorithm_category: AlgorithmCategorySchema):
     return algorithms.store_category(algorithm_category)
 
 
+@router.put("/categories/{algorithm_id}")
+def update_algorithm_category(algorithm_category: AlgorithmCategorySchema):
+    return algorithms.update_algorithm_category(algorithm_category)
+
+
 @router.put("/{algorithm_id}")
 def update(algorithm: AlgorithmSchema):
     return algorithms.update_algorithm(algorithm)
