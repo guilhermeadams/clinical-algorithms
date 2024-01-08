@@ -2,10 +2,8 @@
   <edit-modal
     :show="showEditUserDialog"
     title="Editar categoría"
-    :deleting="data.deleting"
     :saving="data.saving"
     :editing="data.editing"
-    @delete="showDeleteDialog"
     @save="submitCategoryForm"
     @close="closeDialog"
     hide-delete
@@ -22,24 +20,17 @@
         lazy-rules
       />
     </q-form>
-
-<!--    <delete-modal-->
-<!--      :show="data.confirmDeleting"-->
-<!--      title="¿Está seguro de que desea eliminar el algoritmo?"-->
-<!--      :item-name="algorithms.data.algorithm.title"-->
-<!--      @cancel="showDeleteDialog(false)"-->
-<!--      @confirm="deleteAndClose"-->
-<!--    />-->
   </edit-modal>
 </template>
 
 <script setup lang="ts">
 import {
   computed,
+  onMounted,
   reactive,
   inject,
   watch,
-  ref, onMounted,
+  ref,
 } from 'vue';
 
 import { QForm, QInput, useQuasar } from 'quasar';
@@ -58,8 +49,6 @@ const inputCategoryName = ref<QInput>();
 
 const data = reactive({
   showDialog: false,
-  confirmDeleting: false,
-  deleting: false,
   editing: false,
   saving: false,
 });
@@ -67,26 +56,6 @@ const data = reactive({
 watch(() => showEditUserDialog.value, (value) => {
   data.showDialog = value;
 });
-
-const showDeleteDialog = (value: boolean) => {
-  data.confirmDeleting = value;
-};
-
-const deleteAndClose = async () => {
-  try {
-    showDeleteDialog(false);
-
-    data.deleting = true;
-
-    // await categories.delete();
-  } catch (error) {
-    $q.notify({
-      message: 'Erro ao excluir os dados básicos do fluxograma',
-    });
-  } finally {
-    data.deleting = false;
-  }
-};
 
 const closeDialog = () => categories.toggleEditDialog();
 

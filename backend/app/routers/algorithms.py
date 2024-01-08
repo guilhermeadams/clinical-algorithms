@@ -78,6 +78,11 @@ def update_graph(algorithm_graph: AlgorithmGraphSchema):
     return graphs.update_graph(algorithm_graph)
 
 
+@router.delete("/categories/{algorithm_id}")
+def delete_algorithm_category(algorithm_id: int):
+    return algorithms.delete_algorithm_category(algorithm_id)
+
+
 @router.delete("/{algorithm_id}")
-def delete(algorithm_id: int):
+def delete_algorithm(algorithm_id: int):
     return algorithms.delete_algorithm(algorithm_id)

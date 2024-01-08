@@ -30,6 +30,16 @@ class AlgorithmsCategories {
     }
   }
 
+  public async delete() {
+    try {
+      await api.delete(`algorithms/categories/${this.data.category.id}`);
+
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
   public toggleEditDialog() {
     this.data.showEditDialog = !this.data.showEditDialog;
   }

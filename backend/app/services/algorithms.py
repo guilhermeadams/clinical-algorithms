@@ -136,6 +136,13 @@ def update_algorithm(algorithm: AlgorithmSchema):
         db_error(e)
 
 
+def delete_algorithm_category(algorithm_id: int):
+    try:
+        delete('categories', 'id', algorithm_id)
+    except Error as e:
+        db_error(e)
+
+
 def delete_algorithm(algorithm_id: int):
     try:
         # delete nodes
