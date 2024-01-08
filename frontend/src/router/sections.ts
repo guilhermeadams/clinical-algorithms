@@ -1,5 +1,6 @@
 import { USERS_INDEX } from 'src/router/routes/users';
 import { ALGORITHMS_INDEX, ALGORITHMS_SEARCH } from 'src/router/routes/algorithms';
+import { ALGORITHMS_CATEGORIES_INDEX } from 'src/router/routes/algorithms_categories';
 
 export interface IMainMenuSection {
   name: string,
@@ -29,6 +30,10 @@ const sections: IMainMenuSection[] = [
       {
         name: ALGORITHMS_SEARCH,
         label: 'Búsqueda y publicación',
+      },
+      {
+        name: ALGORITHMS_CATEGORIES_INDEX,
+        label: 'Categorías',
       },
     ],
   },

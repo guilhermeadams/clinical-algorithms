@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 from app.services import algorithms, graphs
 from app.schemas.algorithm import AlgorithmSchema, AlgorithmGraphSchema
+from app.schemas.algorithm_category import AlgorithmCategorySchema
 from app.dependencies import get_token_header
 
 router = APIRouter(
@@ -37,6 +38,11 @@ def search(keyword: str | None = None):
     return True
 
 
+@public_router.get("/categories")
+def show_algorithms_categories():
+    return algorithms.categories_index()
+
+
 @public_router.get("/{algorithm_id}")
 def show(algorithm_id: int):
     return algorithms.show(algorithm_id)
@@ -50,6 +56,11 @@ def show_graph(algorithm_id: int):
 @router.post("")
 def store(algorithm: AlgorithmSchema):
     return algorithms.store(algorithm)
+
+
+@router.post("/categories")
+def store_algorithm_category(algorithm_category: AlgorithmCategorySchema):
+    return algorithms.store_category(algorithm_category)
 
 
 @router.put("/{algorithm_id}")

@@ -2,7 +2,8 @@ import { RouteRecordRaw } from 'vue-router';
 import Account from './routes/account';
 import Home from './routes/home';
 import Users from './routes/users';
-import Flowcharts from './routes/algorithms';
+import Algorithms from './routes/algorithms';
+import AlgorithmsCategories from './routes/algorithms_categories';
 
 const routes: RouteRecordRaw[] = [
   // {
@@ -16,7 +17,8 @@ const routes: RouteRecordRaw[] = [
     children: [
       ...Home,
       ...Users,
-      ...Flowcharts,
+      ...Algorithms,
+      ...AlgorithmsCategories,
     ],
   },
   {

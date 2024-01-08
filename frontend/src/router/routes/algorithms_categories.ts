@@ -1,10 +1,12 @@
 import { RouteRecordRaw } from 'vue-router';
 
+export const ALGORITHMS_CATEGORIES_INDEX = 'algorithms-categories-index';
+
 const routes: RouteRecordRaw[] = [
   {
-    path: '/algorithms-categories',
-    component: () => import('layouts/main-layout.vue'),
-    children: [{ path: '', component: () => import('pages/home/home-page.vue') }],
+    path: '/categories',
+    name: ALGORITHMS_CATEGORIES_INDEX,
+    component: () => import('pages/algorithm/algorithms-categories-page.vue'),
   },
 ];
 
