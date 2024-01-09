@@ -20,7 +20,7 @@ onMounted(async () => {
   if (route.query.node && editor.data.readOnly) {
     setTimeout(() => {
       editor.element.select(String(route.query.node));
-    }, 100);
+    }, 1000);
   }
 });
 </script>
