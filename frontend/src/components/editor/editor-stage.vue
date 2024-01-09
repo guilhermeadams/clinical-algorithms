@@ -16,12 +16,6 @@ const route = useRoute();
 
 onMounted(async () => {
   await editor.init('editor-stage');
-
-  if (route.query.node && editor.data.readOnly) {
-    setTimeout(() => {
-      editor.element.select(String(route.query.node));
-    }, 1000);
-  }
 });
 </script>
 
