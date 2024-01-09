@@ -1,5 +1,16 @@
 <template>
   <q-page class="bg-grey-1" padding>
+    <div class="row q-mb-md">
+      <div class="col-12 text-right">
+        <q-btn
+          label="Registrar categoría"
+          color="primary"
+          push
+          @click="startCreatingCategory"
+        />
+      </div>
+    </div>
+
     <algorithms-categories-table />
 
     <edit-algorithm-category-modal />
@@ -15,4 +26,8 @@ import { provide } from 'vue';
 const algorithmsCategories = new AlgorithmsCategories();
 
 provide('algorithmsCategories', algorithmsCategories);
+
+const startCreatingCategory = () => {
+  algorithmsCategories.toggleEditDialog(true);
+};
 </script>

@@ -1,7 +1,7 @@
 <template>
   <edit-modal
     :show="showEditUserDialog"
-    title="Editar categoría"
+    :title="`${categories.data.category.id ? 'Editar' : 'Nueva'} categoría`"
     :saving="data.saving"
     :editing="data.editing"
     @save="submitCategoryForm"
@@ -66,8 +66,12 @@ const saveAndClose = async () => {
     if (categories.data.category.id) {
       await categories.update();
     } else {
-      // await categories.save();
+      await categories.save();
     }
+
+    categories.toggleEditDialog();
+
+    await categories.get();
   } catch (error) {
     $q.notify({
       message: 'Error while trying to save category',

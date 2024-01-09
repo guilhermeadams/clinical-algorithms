@@ -1,6 +1,11 @@
 import { reactive } from 'vue';
 import { api } from 'boot/axios';
 
+const blankCategory = {
+  id: 0,
+  name: '',
+};
+
 class AlgorithmsCategories {
   public data: {
     loading: boolean,
@@ -10,9 +15,13 @@ class AlgorithmsCategories {
   } = reactive({
       loading: false,
       categories: [],
-      category: { id: 0, name: '' },
+      category: { ...blankCategory },
       showEditDialog: false,
     });
+
+  public clearCategoryData() {
+    this.data.category = { ...blankCategory };
+  }
 
   public async get() {
     try {
@@ -40,8 +49,24 @@ class AlgorithmsCategories {
     }
   }
 
-  public toggleEditDialog() {
+  public toggleEditDialog(clearCategoryData = false) {
+    if (clearCategoryData) {
+      this.clearCategoryData();
+    }
+
     this.data.showEditDialog = !this.data.showEditDialog;
+  }
+
+  public async save() {
+    try {
+      await api.post('algorithms/categories', {
+        ...this.data.category,
+      });
+
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   public async update() {
@@ -51,10 +76,6 @@ class AlgorithmsCategories {
       await api.put(finalResource, {
         ...this.data.category,
       });
-
-      this.toggleEditDialog();
-
-      await this.get();
 
       return Promise.resolve(true);
     } catch (error) {
