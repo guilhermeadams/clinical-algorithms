@@ -1,11 +1,12 @@
 from pydantic import BaseModel
+from typing import List
 
 
 class AlgorithmSchema(BaseModel):
     id: int
     title: str
     description: str
-    # author: str
+    categories: List[int] | None = None
     version: str
     updated_at: str
 

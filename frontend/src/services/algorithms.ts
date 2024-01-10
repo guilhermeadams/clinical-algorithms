@@ -3,6 +3,7 @@ import { api } from 'boot/axios';
 import date from 'src/services/date';
 
 export interface IFlowchartCategory {
+  id: number,
   name: string,
 }
 
@@ -53,6 +54,7 @@ class Algorithms {
     showEditDialog: boolean,
     algorithms: IAlgorithm[],
     algorithm: IAlgorithm,
+    algorithm_categories: { id: number, name: string }[],
     searchKeyword: string,
     searchResults: IAlgorithm[] | null,
     totalSearchResult: number | null,
@@ -61,6 +63,7 @@ class Algorithms {
       showEditDialog: false,
       algorithms: [],
       algorithm: { ...emptyFlowchart },
+      algorithm_categories: [],
       searchKeyword: '',
       searchResults: null,
       totalSearchResult: null,
@@ -90,6 +93,26 @@ class Algorithms {
         this.data.loading = false;
       }, 1000);
     }
+  }
+
+  public async getAlgorithmCategories() {
+    try {
+      const { data: categories }: {
+        data: { id: number, name: string }[],
+      } = await api.get(`${resource}/algorithm-categories/${this.data.algorithm.id}`);
+
+      if (categories) {
+        this.data.algorithm_categories = [...categories];
+      }
+
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public setAlgorithmCategories() {
+    this.data.algorithm.categories = [...this.data.algorithm_categories];
   }
 
   public async thorough_search(keyword: string) {
@@ -161,6 +184,8 @@ class Algorithms {
 
       await api.put(finalResource, {
         ...this.data.algorithm,
+        categories: this.data.algorithm.categories?.length
+          ? this.data.algorithm.categories.map((category) => category.id) : [],
       });
 
       this.toggleEditDialog();
@@ -177,6 +202,8 @@ class Algorithms {
 
       await api.post(resource, {
         ...this.data.algorithm,
+        categories: this.data.algorithm.categories?.length
+          ? this.data.algorithm.categories.map((category) => category.id) : [],
       });
 
       this.toggleEditDialog();
@@ -207,8 +234,12 @@ class Algorithms {
     this.data.searchKeyword = '';
   }
 
-  public toggleEditDialog() {
+  public async toggleEditDialog() {
     this.data.showEditDialog = !this.data.showEditDialog;
+
+    if (this.data.showEditDialog && this.data.algorithm.id) {
+      await this.getAlgorithmCategories();
+    }
   }
 }
 

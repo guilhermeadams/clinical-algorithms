@@ -6,6 +6,7 @@ from app.services import graphs
 from app.services.pymsql import insert, update, select, delete, db_error
 from pymysql import Error
 from datetime import datetime
+from typing import List
 
 algorithm_fields = ['id', 'title', 'description', 'version', 'updated_at']
 
@@ -13,6 +14,16 @@ algorithm_fields = ['id', 'title', 'description', 'version', 'updated_at']
 def index():
     try:
         return select("SELECT * FROM algorithms")
+    except Error as e:
+        db_error(e)
+
+
+def algorithm_categories(algorithm_id: int):
+    try:
+        return select("""SELECT c.*
+            FROM algorithms_categories ac
+            LEFT JOIN categories c ON c.id = ac.category_id
+            WHERE algorithm_id = %s""", [algorithm_id])
     except Error as e:
         db_error(e)
 
@@ -94,6 +105,8 @@ def store(algorithm: AlgorithmSchema):
 
         graphs.store(algorithm_id)
 
+        update_algorithm_categories(algorithm_id, algorithm.categories)
+
         return {"algorithm_id": algorithm_id}
     except Error as e:
         db_error(e)
@@ -106,6 +119,8 @@ def store_category(algorithm_category: AlgorithmCategorySchema):
             ["name", "updated_at"],
             [algorithm_category.name, datetime.today().strftime('%Y-%m-%d')],
         )
+
+        update_algorithm_categories(algorithm.id, algorithm.categories)
 
         return {"algorithm_category_id": algorithm_category_id}
     except Error as e:
@@ -124,12 +139,21 @@ def update_algorithm_category(algorithm_category: AlgorithmSchema):
         db_error(e)
 
 
+def update_algorithm_categories(algorithm_id: int, categories: List[int]):
+    delete('algorithms_categories', 'algorithm_id', algorithm_id)
+
+    for category in categories:
+        insert('algorithms_categories', ['algorithm_id', 'category_id'], [algorithm_id, category])
+
+
 def update_algorithm(algorithm: AlgorithmSchema):
     try:
         fields = ["title", "description", "version", "updated_at"]
         values = [algorithm.title, algorithm.description, algorithm.version, to_iso_date(algorithm.updated_at)]
         
         updated_algorithm_id = update("algorithms", fields, values, "id", algorithm.id)
+
+        update_algorithm_categories(algorithm.id, algorithm.categories)
 
         return {"id": updated_algorithm_id}
     except Error as e:
@@ -150,6 +174,8 @@ def delete_algorithm(algorithm_id: int):
 
         # delete graph
         graphs.delete_algorithm_graphs(algorithm_id)
+
+        update_algorithm_categories(algorithm_id, [])
 
         # then delete graph itself
         delete('algorithms', 'id', algorithm_id)

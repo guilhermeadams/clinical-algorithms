@@ -53,8 +53,15 @@ def show_graph(algorithm_id: int):
     return graphs.show(algorithm_id)
 
 
+@public_router.get("/algorithm-categories/{algorithm_id}")
+def algorithm_categories(algorithm_id: int):
+    return algorithms.algorithm_categories(algorithm_id)
+
+
 @router.post("")
 def store(algorithm: AlgorithmSchema):
+    print('categories')
+    print(algorithm.categories)
     return algorithms.store(algorithm)
 
 

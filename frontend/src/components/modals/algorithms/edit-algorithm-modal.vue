@@ -111,14 +111,13 @@
           <q-select
             v-if="canEdit"
             v-model="algorithms.data.algorithm.categories"
-            :options="categoriesMocked"
+            :options="algorithmsCategories.data.categories"
             :option-label="opt => Object(opt) === opt && 'name' in opt ? opt.name : '- Null -'"
             bg-color="white"
             label="Categorías"
             class="q-mb-md"
             multiple
             use-chips
-            disable
           >
             <template v-slot:selected-item="scope">
               <q-chip
@@ -127,16 +126,14 @@
                 color="primary"
                 text-color="white"
                 @remove="scope.removeAtIndex(scope.index)"
-              >
-                {{ scope.opt.name }}
-              </q-chip>
+              />
             </template>
           </q-select>
           <div v-else>
             <div class="text-caption text-grey-7">Categorías:</div>
-            <div v-if="hasCategories">
+            <div v-if="algorithms.data.algorithm_categories.length">
               <q-chip
-                v-for="category of algorithms.data.algorithm.categories"
+                v-for="category of algorithms.data.algorithm_categories"
                 :key="category.name"
                 :label="category.name"
               />
@@ -147,7 +144,7 @@
           </div>
         </div>
 
-        <div class="col-2">
+        <div class="col-2 flex justify-end items-end">
           <q-input
             v-if="canEdit"
             v-model="algorithms.data.algorithm.version"
@@ -176,6 +173,7 @@
 <script setup lang="ts">
 import {
   computed,
+  onBeforeMount,
   reactive,
   inject,
   watch,
@@ -187,17 +185,17 @@ import EditModal from 'components/modals/edit-modal.vue';
 import { QForm, QInput, useQuasar } from 'quasar';
 import { myLocale } from 'src/services/locale';
 import DeleteModal from 'components/modals/simple-modal.vue';
+import AlgorithmsCategories from 'src/services/algorithms-categories';
 
 const algorithms = inject('algorithms') as Algorithms;
+
+const algorithmsCategories = new AlgorithmsCategories();
+
 const $q = useQuasar();
 
 const refFlowchartForm = ref<QForm>();
 
 const showEditUserDialog = computed(() => algorithms.data.showEditDialog);
-
-const hasCategories = computed(
-  () => algorithms.data.algorithm.categories && algorithms.data.algorithm.categories.length,
-);
 
 const inputFlowchartTitle = ref<QInput>();
 
@@ -210,12 +208,6 @@ const data = reactive({
 });
 
 const canEdit = computed(() => data.editing || !algorithms.data.algorithm.id);
-
-const categoriesMocked = ref([
-  { name: 'Doenças' },
-  { name: 'Prevenção' },
-  { name: 'Emergências' },
-]);
 
 watch(() => showEditUserDialog.value, (value) => {
   data.showDialog = value;
@@ -271,6 +263,8 @@ const saveAndClose = async () => {
 const setEditing = (value: boolean) => {
   data.editing = value;
 
+  algorithms.setAlgorithmCategories();
+
   setTimeout(() => {
     inputFlowchartTitle.value?.focus();
   }, 250);
@@ -279,4 +273,8 @@ const setEditing = (value: boolean) => {
 const submitFlowchartForm = async () => {
   refFlowchartForm.value?.submit();
 };
+
+onBeforeMount(() => {
+  algorithmsCategories.get();
+});
 </script>
