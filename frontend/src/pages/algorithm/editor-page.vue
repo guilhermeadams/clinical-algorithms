@@ -48,6 +48,7 @@ import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router';
 import Settings from 'src/services/settings';
 import EditorStage from 'components/editor/editor-stage.vue';
 import Editor from 'src/services/editor';
+import Algorithms from 'src/services/algorithms';
 import EditorStageHeader from 'components/editor/editor-stage-header.vue';
 import EditorElementsToolbar from 'components/editor/editor-elements-toolbar.vue';
 import EditorMetadataPanel from 'components/editor/editor-metadata-panel.vue';
@@ -64,6 +65,8 @@ const router = useRouter();
 
 const editor = new Editor({ route, router });
 provide('editor', editor);
+
+const algorithms = new Algorithms();
 
 const settings = inject('settings') as Settings;
 

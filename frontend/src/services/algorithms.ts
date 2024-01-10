@@ -95,11 +95,11 @@ class Algorithms {
     }
   }
 
-  public async getAlgorithmCategories() {
+  public async getAlgorithmCategories(algorithmId?: number) {
     try {
       const { data: categories }: {
         data: { id: number, name: string }[],
-      } = await api.get(`${resource}/algorithm-categories/${this.data.algorithm.id}`);
+      } = await api.get(`${resource}/algorithm-categories/${algorithmId || this.data.algorithm.id}`);
 
       if (categories) {
         this.data.algorithm_categories = [...categories];
