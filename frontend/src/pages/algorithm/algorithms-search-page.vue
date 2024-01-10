@@ -134,7 +134,7 @@ onBeforeMount(() => {
   if (settings.isPublicView) {
     settings.page.setTitle('Búsqueda de algoritmos');
   } else {
-    settings.page.setTitle('Publicación de algoritmos (visualización para uso de usuarios finales)');
+    settings.page.setTitle('Publicación de algoritmos (visualización para usuarios finales)');
   }
 });
 </script>
