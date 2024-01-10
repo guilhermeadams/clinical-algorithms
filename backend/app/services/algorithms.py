@@ -120,8 +120,6 @@ def store_category(algorithm_category: AlgorithmCategorySchema):
             [algorithm_category.name, datetime.today().strftime('%Y-%m-%d')],
         )
 
-        update_algorithm_categories(algorithm.id, algorithm.categories)
-
         return {"algorithm_category_id": algorithm_category_id}
     except Error as e:
         db_error(e)
@@ -160,9 +158,11 @@ def update_algorithm(algorithm: AlgorithmSchema):
         db_error(e)
 
 
-def delete_algorithm_category(algorithm_id: int):
+def delete_category(category_id: int):
     try:
-        delete('categories', 'id', algorithm_id)
+        delete('algorithms_categories', 'category_id', category_id)
+
+        delete('categories', 'id', category_id)
     except Error as e:
         db_error(e)
 
