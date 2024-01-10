@@ -18,6 +18,10 @@ const sections: IMainMenuSection[] = [
         name: USERS_INDEX,
         label: 'Usuarios',
       },
+      {
+        name: ALGORITHMS_CATEGORIES_INDEX,
+        label: 'Categorías',
+      },
     ],
   },
   {
@@ -30,10 +34,6 @@ const sections: IMainMenuSection[] = [
       {
         name: ALGORITHMS_SEARCH,
         label: 'Búsqueda y publicación',
-      },
-      {
-        name: ALGORITHMS_CATEGORIES_INDEX,
-        label: 'Categorías',
       },
     ],
   },

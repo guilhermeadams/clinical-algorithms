@@ -42,7 +42,7 @@ const algorithm = computed(() => editor.graph.data.algorithm);
 const algorithmCategories = computed(() => algorithms.data.algorithm_categories);
 
 onBeforeMount(async () => {
-  const { id, mode } = route.query;
+  const { id } = route.query;
 
   if (id) {
     await algorithms.getAlgorithmCategories(Number(id));
