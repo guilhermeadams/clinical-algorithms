@@ -59,9 +59,7 @@ def algorithm_categories(algorithm_id: int):
 
 
 @router.post("")
-def store(algorithm: AlgorithmSchema):
-    print('categories')
-    print(algorithm.categories)
+def store_algorithm(algorithm: AlgorithmSchema):
     return algorithms.store(algorithm)
 
 
@@ -76,7 +74,7 @@ def update_algorithm_category(algorithm_category: AlgorithmCategorySchema):
 
 
 @router.put("/{algorithm_id}")
-def update(algorithm: AlgorithmSchema):
+def update_algorithm(algorithm: AlgorithmSchema):
     return algorithms.update_algorithm(algorithm)
 
 

@@ -1,6 +1,7 @@
 import { reactive } from 'vue';
 import { api } from 'boot/axios';
 import date from 'src/services/date';
+import { LocalStorage } from 'quasar';
 
 export interface IFlowchartCategory {
   id: number,
@@ -57,6 +58,7 @@ class Algorithms {
     algorithm_categories: { id: number, name: string }[],
     searchKeyword: string,
     searchCategory: { id: number, name: string } | null,
+    searchUser: { id: number, name: string } | null,
     searchResults: IAlgorithm[] | null,
     totalSearchResult: number | null,
   } = reactive({
@@ -67,6 +69,7 @@ class Algorithms {
       algorithm_categories: [],
       searchKeyword: '',
       searchCategory: null,
+      searchUser: null,
       searchResults: null,
       totalSearchResult: null,
     });
@@ -170,13 +173,13 @@ class Algorithms {
     void this.toggleEditDialog();
   }
 
-  public viewFlowchartData(flowchart: IAlgorithm) {
+  public async viewFlowchartData(flowchart: IAlgorithm) {
     this.data.algorithm = { ...flowchart };
 
     // convert to brazilian date (DD/MM/YYYY)
     this.data.algorithm.updated_at = date.toBR(flowchart.updated_at);
 
-    this.toggleEditDialog();
+    await this.toggleEditDialog();
   }
 
   public async update() {
@@ -189,9 +192,10 @@ class Algorithms {
         ...this.data.algorithm,
         categories: this.data.algorithm.categories?.length
           ? this.data.algorithm.categories.map((category) => category.id) : [],
+        user_id: LocalStorage.getItem('user'),
       });
 
-      this.toggleEditDialog();
+      await this.toggleEditDialog();
 
       return Promise.resolve(true);
     } catch (error) {
@@ -207,9 +211,10 @@ class Algorithms {
         ...this.data.algorithm,
         categories: this.data.algorithm.categories?.length
           ? this.data.algorithm.categories.map((category) => category.id) : [],
+        user_id: LocalStorage.getItem('user'),
       });
 
-      this.toggleEditDialog();
+      await this.toggleEditDialog();
 
       return Promise.resolve(true);
     } catch (error) {
@@ -223,7 +228,7 @@ class Algorithms {
 
       await this.getAll();
 
-      this.toggleEditDialog();
+      await this.toggleEditDialog();
 
       return Promise.resolve(true);
     } catch (error) {

@@ -20,6 +20,16 @@
             @update:model-value="searchAlgorithmByCategory"
           />
         </div>
+
+        <div class="float-left q-mr-lg" style="width:auto;min-width:150px">
+          <q-select
+            v-model="algorithms.data.searchUser"
+            :options="users.data.users"
+            :option-label="opt => Object(opt) === opt && 'name' in opt ? opt.name : '- Null -'"
+            label="Usuarios"
+            clearable
+          />
+        </div>
       </div>
 
       <div class="col-3 q-pt-lg q-pr-md text-right">
@@ -27,7 +37,7 @@
           label="Registrar algoritmo"
           color="primary"
           push
-          @click="createFlowchart"
+          @click="createAlgorithm"
         />
       </div>
     </div>
@@ -53,13 +63,18 @@ import {
 
 import { onBeforeRouteLeave } from 'vue-router';
 
+import { ALGORITHMS_EDITOR } from 'src/router/routes/algorithms';
+
 import Settings from 'src/services/settings';
 import SearchInput from 'components/inputs/search-input.vue';
 import AlgorithmsTable from 'components/tables/algorithms-table.vue';
 import Algorithms from 'src/services/algorithms';
 import EditAlgorithmModal from 'components/modals/algorithms/edit-algorithm-modal.vue';
-import { ALGORITHMS_EDITOR } from 'src/router/routes/algorithms';
 import AlgorithmsCategories from 'src/services/algorithms-categories';
+import Users from 'src/services/users';
+
+const users = new Users();
+provide('users', users);
 
 const algorithms = new Algorithms();
 provide('algorithms', algorithms);
@@ -85,7 +100,7 @@ const searchAlgorithmByCategory = () => {
   }
 };
 
-const createFlowchart = () => algorithms.startCreating();
+const createAlgorithm = () => algorithms.startCreating();
 
 const tryClearingSearch = () => {
   algorithms.clearSearch();
@@ -99,6 +114,8 @@ const tryClearingSearch = () => {
 
 onBeforeMount(() => {
   settings.page.setTitle('Mantenimiento de algoritmos');
+
+  users.get();
 
   algorithmsCategories.get();
 });

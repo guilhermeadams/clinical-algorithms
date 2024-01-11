@@ -108,8 +108,14 @@ def store(algorithm: AlgorithmSchema):
     try:
         algorithm_id = insert(
             "algorithms",
-            ["title", "description", "version", "updated_at"],
-            [algorithm.title, algorithm.description, algorithm.version, to_iso_date(algorithm.updated_at)],
+            ["user_id", "title", "description", "version", "updated_at"],
+            [
+                algorithm.user_id,
+                algorithm.title,
+                algorithm.description,
+                algorithm.version,
+                to_iso_date(algorithm.updated_at),
+            ],
         )
 
         graphs.store(algorithm_id)
@@ -156,7 +162,12 @@ def update_algorithm_categories(algorithm_id: int, categories: List[int]):
 def update_algorithm(algorithm: AlgorithmSchema):
     try:
         fields = ["title", "description", "version", "updated_at"]
-        values = [algorithm.title, algorithm.description, algorithm.version, to_iso_date(algorithm.updated_at)]
+        values = [
+            algorithm.title,
+            algorithm.description,
+            algorithm.version,
+            to_iso_date(algorithm.updated_at),
+        ]
         
         updated_algorithm_id = update("algorithms", fields, values, "id", algorithm.id)
 

@@ -4,6 +4,7 @@ from typing import List
 
 class AlgorithmSchema(BaseModel):
     id: int
+    user_id: int | None = None
     title: str
     description: str
     categories: List[int] | None = None

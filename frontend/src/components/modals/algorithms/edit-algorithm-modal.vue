@@ -47,19 +47,6 @@
 
       <!-- AUTHOR / VERSION  -->
       <div class="row">
-        <div class="col-8 q-pr-lg">
-          <q-input
-            v-if="canEdit"
-            v-model="algorithms.data.algorithm.author"
-            label="Autor"
-            disable
-          />
-          <div v-else>
-            <div class="text-caption text-grey-7">Autor:</div>
-            <div>{{ algorithms.data.algorithm.author || 'No definido' }}</div>
-          </div>
-        </div>
-
         <div class="col-4">
           <q-input
             v-if="canEdit"
@@ -103,10 +90,24 @@
             <div>{{ algorithms.data.algorithm.updated_at }}</div>
           </div>
         </div>
+
+        <div class="col-3 q-pl-xl">
+          <q-input
+            v-if="canEdit"
+            v-model="algorithms.data.algorithm.version"
+            label="Versión"
+            :rules="[val => !!val || 'Ingrese la versión']"
+            lazy-rules
+          />
+          <div v-else>
+            <div class="text-caption text-grey-7">Versión:</div>
+            <div>{{ algorithms.data.algorithm.version }}</div>
+          </div>
+        </div>
       </div>
 
       <div class="row">
-        <div class="col-10 q-pr-lg">
+        <div class="col-12">
           <!-- CATEGORIES -->
           <q-select
             v-if="canEdit"
@@ -143,20 +144,6 @@
             </div>
           </div>
         </div>
-
-        <div class="col-2 flex justify-end items-end">
-          <q-input
-            v-if="canEdit"
-            v-model="algorithms.data.algorithm.version"
-            label="Versión"
-            :rules="[val => !!val || 'Ingrese la versión']"
-            lazy-rules
-          />
-          <div v-else>
-            <div class="text-caption text-grey-7">Versión:</div>
-            <div>{{ algorithms.data.algorithm.version }}</div>
-          </div>
-        </div>
       </div>
     </q-form>
 
@@ -179,10 +166,11 @@ import {
   ref,
 } from 'vue';
 
-import Algorithms from 'src/services/algorithms';
-import EditModal from 'components/modals/edit-modal.vue';
 import { QForm, QInput, useQuasar } from 'quasar';
 import { myLocale } from 'src/services/locale';
+
+import Algorithms from 'src/services/algorithms';
+import EditModal from 'components/modals/edit-modal.vue';
 import DeleteModal from 'components/modals/simple-modal.vue';
 import AlgorithmsCategories from 'src/services/algorithms-categories';
 
@@ -245,7 +233,7 @@ const saveAndClose = async () => {
 
     // update algorithms list
     if (algorithms.data.searchKeyword) {
-      await algorithms.search(algorithms.data.searchKeyword);
+      await algorithms.search();
     } else {
       await algorithms.getAll();
     }
