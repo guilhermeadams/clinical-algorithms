@@ -104,6 +104,13 @@
             <div>{{ algorithms.data.algorithm.version }}</div>
           </div>
         </div>
+
+        <div
+          class="col-3 q-pl-xl"
+        >
+          <div class="text-caption text-grey-7">Autor:</div>
+          <div>{{ users.getUserName(algorithms.data.algorithm.user_id) }}</div>
+        </div>
       </div>
 
       <div class="row">
@@ -173,7 +180,9 @@ import Algorithms from 'src/services/algorithms';
 import EditModal from 'components/modals/edit-modal.vue';
 import DeleteModal from 'components/modals/simple-modal.vue';
 import AlgorithmsCategories from 'src/services/algorithms-categories';
+import Users from 'src/services/users';
 
+const users = inject('users') as Users;
 const algorithms = inject('algorithms') as Algorithms;
 const algorithmsCategories = inject('algorithmsCategories') as AlgorithmsCategories;
 

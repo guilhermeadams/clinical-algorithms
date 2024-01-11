@@ -35,7 +35,7 @@
         </q-td>
 
         <q-td key="user_id" :props="props">
-          {{ getUserName(props.row.user_id) }}
+          {{ users.getUserName(props.row.user_id) }}
         </q-td>
 
         <q-td
@@ -151,8 +151,6 @@ const editFlowchart = (flowchartId: number, mode: 'edit' | 'public' = 'edit') =>
 };
 
 const viewFlowchartData = (flowchart: IAlgorithm) => algorithms.viewFlowchartData(flowchart);
-
-const getUserName = (userId: number) => users.data.users.find((user) => user.id === userId)?.name || 'No definido';
 
 onBeforeMount(() => {
   algorithms.getAll();

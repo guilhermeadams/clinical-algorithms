@@ -28,21 +28,58 @@ def algorithm_categories(algorithm_id: int):
         db_error(e)
 
 
-def search(keyword: str, category_id = 0, thorough=False):
+def search(keyword: str, category_id = 0, user_id = 0, thorough=False):
     try:
         if thorough:
             return select("SELECT * FROM algorithms WHERE title REGEXP %s", "[[:<:]]"+keyword+"[[:>:]]")
         else:
-            if category_id:
+            # search by category only
+            if not keyword and category_id and not user_id:
                 query = """SELECT a.*
                         FROM algorithms_categories ac
                         LEFT JOIN algorithms a ON a.id = ac.algorithm_id
-                        WHERE category_id = %s
-                        AND a.title LIKE %s"""
+                        WHERE ac.category_id = %s"""
 
-                return select(query, [category_id, "%"+keyword+"%"])
-            else:
-                return select("SELECT * FROM algorithms WHERE title LIKE %s", "%"+keyword+"%")
+                return select(query, [category_id])
+
+
+            # search by keyword and category
+            if keyword and category_id and not user_id:
+                query = """SELECT a.*
+                        FROM algorithms_categories ac
+                        LEFT JOIN algorithms a ON a.id = ac.algorithm_id
+                        WHERE a.title LIKE %s
+                        AND ac.category_id = %s"""
+
+                return select(query, ["%"+keyword+"%", category_id])
+
+
+            # search by category and user
+            if not keyword and category_id and user_id:
+                query = """SELECT a.*
+                        FROM algorithms_categories ac
+                        LEFT JOIN algorithms a ON a.id = ac.algorithm_id
+                        WHERE ac.category_id = %s
+                        AND a.user_id LIKE %s"""
+
+                return select(query, [category_id, user_id])
+
+
+            # search by keyword and user
+            if keyword and not category_id and user_id:
+                query = """SELECT * FROM algorithms WHERE title LIKE %s AND user_id LIKE %s"""
+
+                return select(query, ["%"+keyword+"%", user_id])
+
+
+            # search by user only
+            if not keyword and not category_id and user_id:
+                query = """SELECT * FROM algorithms WHERE user_id LIKE %s"""
+
+                return select(query, [user_id])
+
+
+            return select("SELECT * FROM algorithms WHERE title LIKE %s", "%"+keyword+"%")
     except Error as e:
         db_error(e)
 

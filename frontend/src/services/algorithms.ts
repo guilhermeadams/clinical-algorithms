@@ -10,6 +10,7 @@ export interface IFlowchartCategory {
 
 export interface IAlgorithm {
   id: number,
+  user_id?: number,
   title: string,
   description: string,
   author: string,
@@ -148,6 +149,7 @@ class Algorithms {
       let url = `${resource}/search?`;
       url += `keyword=${this.data.searchKeyword}`;
       url += `&category_id=${this.data.searchCategory?.id || 0}`;
+      url += `&user_id=${this.data.searchUser?.id || 0}`;
 
       const { data: flowchartsFound }: { data: IAlgorithm[] } = await api.get(url);
 

@@ -10,24 +10,31 @@
           />
         </div>
 
-        <div class="float-left q-mr-lg" style="width:auto;min-width:150px">
+        <div
+          v-if="algorithmsCategories.data.categories.length"
+          class="float-left q-mr-lg" style="width:auto;min-width:150px"
+        >
           <q-select
             v-model="algorithms.data.searchCategory"
             :options="algorithmsCategories.data.categories"
             :option-label="opt => Object(opt) === opt && 'name' in opt ? opt.name : '- Null -'"
             label="Categorías"
             clearable
-            @update:model-value="searchAlgorithmByCategory"
+            @update:model-value="updateSearch"
           />
         </div>
 
-        <div class="float-left q-mr-lg" style="width:auto;min-width:150px">
+        <div
+          v-if="users.data.users.length"
+          class="float-left q-mr-lg" style="width:auto;min-width:150px"
+        >
           <q-select
             v-model="algorithms.data.searchUser"
             :options="users.data.users"
             :option-label="opt => Object(opt) === opt && 'name' in opt ? opt.name : '- Null -'"
             label="Usuarios"
             clearable
+            @update:model-value="updateSearch"
           />
         </div>
       </div>
@@ -90,8 +97,12 @@ const searchAlgorithm = (keyword: string) => {
   algorithms.search();
 };
 
-const searchAlgorithmByCategory = () => {
-  if (!algorithms.data.searchKeyword && !algorithms.data.searchCategory) {
+const updateSearch = () => {
+  if (
+    !algorithms.data.searchKeyword
+    && !algorithms.data.searchCategory
+    && !algorithms.data.searchUser
+  ) {
     algorithms.clearSearch();
 
     algorithms.getAll();
@@ -105,7 +116,10 @@ const createAlgorithm = () => algorithms.startCreating();
 const tryClearingSearch = () => {
   algorithms.clearSearch();
 
-  if (algorithms.data.searchCategory) {
+  if (
+    algorithms.data.searchCategory
+    || algorithms.data.searchUser
+  ) {
     algorithms.search();
   } else {
     algorithms.getAll();
