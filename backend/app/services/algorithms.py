@@ -28,12 +28,21 @@ def algorithm_categories(algorithm_id: int):
         db_error(e)
 
 
-def search(keyword: str, thorough=False):
+def search(keyword: str, category_id = 0, thorough=False):
     try:
         if thorough:
             return select("SELECT * FROM algorithms WHERE title REGEXP %s", "[[:<:]]"+keyword+"[[:>:]]")
         else:
-            return select("SELECT * FROM algorithms WHERE title LIKE %s", "%"+keyword+"%")
+            if category_id:
+                query = """SELECT a.*
+                        FROM algorithms_categories ac
+                        LEFT JOIN algorithms a ON a.id = ac.algorithm_id
+                        WHERE category_id = %s
+                        AND a.title LIKE %s"""
+
+                return select(query, [category_id, "%"+keyword+"%"])
+            else:
+                return select("SELECT * FROM algorithms WHERE title LIKE %s", "%"+keyword+"%")
     except Error as e:
         db_error(e)
 
@@ -42,7 +51,7 @@ def thorough_search(keyword: str):
     try:
         nodes_found = nodes.search(keyword)
 
-        algorithms_found = search(keyword, True)
+        algorithms_found = search(keyword, 0, True)
 
         results = {}
 

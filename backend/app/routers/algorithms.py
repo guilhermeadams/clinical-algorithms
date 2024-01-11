@@ -32,9 +32,9 @@ def thorough_search(keyword: str | None = None):
 
 
 @public_router.get("/search")
-def search(keyword: str | None = None):
-    if keyword:
-        return algorithms.search(keyword)
+def search(keyword: str | None = None, category_id: int | None = None):
+    if keyword or category_id:
+        return algorithms.search(keyword, category_id)
     return True
 
 

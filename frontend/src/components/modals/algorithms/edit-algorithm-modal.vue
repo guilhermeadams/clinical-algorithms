@@ -173,7 +173,6 @@
 <script setup lang="ts">
 import {
   computed,
-  onBeforeMount,
   reactive,
   inject,
   watch,
@@ -188,8 +187,7 @@ import DeleteModal from 'components/modals/simple-modal.vue';
 import AlgorithmsCategories from 'src/services/algorithms-categories';
 
 const algorithms = inject('algorithms') as Algorithms;
-
-const algorithmsCategories = new AlgorithmsCategories();
+const algorithmsCategories = inject('algorithmsCategories') as AlgorithmsCategories;
 
 const $q = useQuasar();
 
@@ -273,8 +271,4 @@ const setEditing = (value: boolean) => {
 const submitFlowchartForm = async () => {
   refFlowchartForm.value?.submit();
 };
-
-onBeforeMount(() => {
-  algorithmsCategories.get();
-});
 </script>

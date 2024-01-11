@@ -56,6 +56,7 @@ class Algorithms {
     algorithm: IAlgorithm,
     algorithm_categories: { id: number, name: string }[],
     searchKeyword: string,
+    searchCategory: { id: number, name: string } | null,
     searchResults: IAlgorithm[] | null,
     totalSearchResult: number | null,
   } = reactive({
@@ -65,6 +66,7 @@ class Algorithms {
       algorithm: { ...emptyFlowchart },
       algorithm_categories: [],
       searchKeyword: '',
+      searchCategory: null,
       searchResults: null,
       totalSearchResult: null,
     });
@@ -133,23 +135,24 @@ class Algorithms {
     }
   }
 
-  public async search(keyword: string) {
+  public async search() {
     try {
       this.data.loading = true;
-      this.data.searchKeyword = keyword;
 
       this.data.searchResults = [];
       this.data.totalSearchResult = 0;
 
-      const { data: flowchartsFound }: { data: IAlgorithm[] } = await api.get(`${resource}/search?keyword=${keyword}`);
+      let url = `${resource}/search?`;
+      url += `keyword=${this.data.searchKeyword}`;
+      url += `&category_id=${this.data.searchCategory?.id || 0}`;
+
+      const { data: flowchartsFound }: { data: IAlgorithm[] } = await api.get(url);
 
       if (flowchartsFound && flowchartsFound.length) {
         this.data.searchResults = [...flowchartsFound];
 
         this.data.totalSearchResult = flowchartsFound.length;
       }
-
-      // this.data.totalSearchResult = 0;
 
       return Promise.resolve(true);
     } catch (error) {
@@ -164,7 +167,7 @@ class Algorithms {
   public startCreating() {
     this.data.algorithm = { ...emptyFlowchart };
 
-    this.toggleEditDialog();
+    void this.toggleEditDialog();
   }
 
   public viewFlowchartData(flowchart: IAlgorithm) {
