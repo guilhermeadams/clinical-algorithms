@@ -60,23 +60,35 @@ def search(keyword: str, category_id = 0, user_id = 0, thorough=False):
                         FROM algorithms_categories ac
                         LEFT JOIN algorithms a ON a.id = ac.algorithm_id
                         WHERE ac.category_id = %s
-                        AND a.user_id LIKE %s"""
+                        AND a.user_id = %s"""
 
                 return select(query, [category_id, user_id])
 
 
             # search by keyword and user
             if keyword and not category_id and user_id:
-                query = """SELECT * FROM algorithms WHERE title LIKE %s AND user_id LIKE %s"""
+                query = """SELECT * FROM algorithms WHERE title LIKE %s AND user_id = %s"""
 
                 return select(query, ["%"+keyword+"%", user_id])
 
 
             # search by user only
             if not keyword and not category_id and user_id:
-                query = """SELECT * FROM algorithms WHERE user_id LIKE %s"""
+                query = """SELECT * FROM algorithms WHERE user_id = %s"""
 
                 return select(query, [user_id])
+
+
+            # search by keyword, category and user_id
+            if keyword and category_id and user_id:
+                query = """SELECT a.*
+                        FROM algorithms_categories ac
+                        LEFT JOIN algorithms a ON a.id = ac.algorithm_id
+                        WHERE a.title LIKE %s
+                        AND ac.category_id = %s
+                        AND a.user_id = %s"""
+
+                return select(query, ["%"+keyword+"%", category_id, user_id])
 
 
             return select("SELECT * FROM algorithms WHERE title LIKE %s", "%"+keyword+"%")
@@ -88,7 +100,7 @@ def thorough_search(keyword: str):
     try:
         nodes_found = nodes.search(keyword)
 
-        algorithms_found = search(keyword, 0, True)
+        algorithms_found = search(keyword, 0, 0, True)
 
         results = {}
 
