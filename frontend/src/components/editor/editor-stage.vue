@@ -8,11 +8,8 @@
 import { inject, onMounted } from 'vue';
 
 import Editor from 'src/services/editor';
-import { useRoute } from 'vue-router';
 
 const editor = inject('editor') as Editor;
-
-const route = useRoute();
 
 onMounted(async () => {
   await editor.init('editor-stage');

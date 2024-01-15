@@ -43,12 +43,12 @@
       No se encontraron resultados en la búsqueda.
     </div>
 
-    <div
-      v-if="!data.keyword && publicView"
-      class="q-px-md"
-    >
-      <algorithms-table />
-    </div>
+<!--    <div-->
+<!--      v-if="!data.keyword && publicView"-->
+<!--      class="q-px-md"-->
+<!--    >-->
+<!--      <algorithms-table />-->
+<!--    </div>-->
   </q-page>
 </template>
 
@@ -69,7 +69,7 @@ import SearchInput from 'components/inputs/search-input.vue';
 import LoadingSpinner from 'components/spinners/loading-spinner.vue';
 import Algorithms, { IAlgorithmThoroughSearchResult } from 'src/services/algorithms';
 import AlgorithmsSearchResult from 'components/items/algorithms-search-result-item.vue';
-import AlgorithmsTable from 'components/tables/algorithms-table.vue';
+// import AlgorithmsTable from 'components/tables/algorithms-table.vue';
 import { ALGORITHMS_PUBLIC_SEARCH } from 'src/router/routes/algorithms';
 
 const route = useRoute();
@@ -98,7 +98,7 @@ const hasResults = computed(() => {
   return Object.keys(data.results).length > 0;
 });
 
-const publicView = computed(() => settings.isPublicView);
+// const publicView = computed(() => settings.isPublicView);
 
 const searchFlowchart = async (keyword: string) => {
   try {
@@ -134,7 +134,7 @@ onBeforeMount(() => {
   if (settings.isPublicView) {
     settings.page.setTitle('Búsqueda de algoritmos');
   } else {
-    settings.page.setTitle('Publicación de algoritmos (visualización para uso de usuarios finales)');
+    settings.page.setTitle('Publicación de algoritmos (visualización para usuarios finales)');
   }
 });
 </script>

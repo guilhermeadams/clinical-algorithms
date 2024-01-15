@@ -34,8 +34,8 @@
           {{ props.row.version }}
         </q-td>
 
-        <q-td key="author" :props="props">
-          {{ props.row.author || 'No definido' }}
+        <q-td key="user_id" :props="props">
+          {{ users.getUserName(props.row.user_id) }}
         </q-td>
 
         <q-td
@@ -88,8 +88,11 @@ import { useRouter } from 'vue-router';
 import Settings from 'src/services/settings';
 import Algorithms, { IAlgorithm } from 'src/services/algorithms';
 import { ALGORITHMS_EDITOR, ALGORITHMS_PUBLIC_EDITOR } from 'src/router/routes/algorithms';
+import Users from 'src/services/users';
 
 const settings = inject('settings') as Settings;
+
+const users = inject('users') as Users;
 
 const algorithms = inject('algorithms') as Algorithms;
 
@@ -113,10 +116,10 @@ const columns = [
     style: 'width:100px',
   },
   {
-    name: 'author',
+    name: 'user_id',
     align: 'left',
     label: 'Autor',
-    field: 'author',
+    field: 'user_id',
     style: 'width:25%',
   },
   {

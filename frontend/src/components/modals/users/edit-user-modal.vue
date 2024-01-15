@@ -66,6 +66,7 @@
             v-if="canEdit"
             v-model="users.data.user.password"
             :type="isPwd ? 'password' : 'text'"
+            label="Contraseña"
             class="q-mb-md"
             :rules="users.data.user.id ? [] : [
               (val) => !!val || 'Ingrese la contraseña de usuario.'
