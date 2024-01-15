@@ -107,9 +107,12 @@
 
         <div
           class="col-3 q-pl-xl"
+          :class="canEdit ? 'q-mt-sm' : ''"
         >
           <div class="text-caption text-grey-7">Autor:</div>
-          <div>{{ users.getUserName(algorithms.data.algorithm.user_id) }}</div>
+          <div class="q-pt-xs">
+            {{ users.getUserName(algorithms.data.algorithm.user_id) }}
+          </div>
         </div>
       </div>
 
