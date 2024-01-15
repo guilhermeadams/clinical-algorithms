@@ -164,6 +164,10 @@ class Users {
   public toggleEditDialog() {
     this.data.showEditDialog = !this.data.showEditDialog;
   }
+
+  public getUserName(userId: number) {
+    return this.data.users.find((user) => user.id === userId)?.name || 'No definido';
+  }
 }
 
 export default Users;

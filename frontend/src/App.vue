@@ -6,6 +6,7 @@
 import { onMounted, provide } from 'vue';
 
 import Settings from 'src/services/settings';
+import AlgorithmsCategories from 'src/services/algorithms-categories';
 import { useRoute, useRouter } from 'vue-router';
 import { LocalStorage } from 'quasar';
 import { ACCOUNT_LOGIN } from 'src/router/routes/account';
@@ -18,6 +19,8 @@ const settings = new Settings({ route });
 settings.page.setTitle('Início');
 
 provide('settings', settings);
+
+provide(new AlgorithmsCategories(), 'algorithmsCategories');
 
 onMounted(() => {
   const token = LocalStorage.getItem('token');

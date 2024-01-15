@@ -3,6 +3,7 @@ from app.schemas.user import UserSchema
 from .data_handler import to_iso_date
 from datetime import datetime
 from pymysql import Error
+from app.services.data import encrypt_password
 
 
 def index():
@@ -20,7 +21,7 @@ def store(user_data: UserSchema):
             [
                 user_data.name,
                 user_data.email,
-                user_data.password,
+                encrypt_password(user_data.password),
                 user_data.phone,
                 user_data.maintainer,
                 user_data.master,
@@ -48,7 +49,13 @@ def update_user(user: UserSchema):
         updated_user_id = update("users", fields, values, "id", user.id)
 
         if user.password:
-            updated_user_id = update("users", ["password"], [user.password], "id", user.id)
+            updated_user_id = update(
+                "users",
+                ["password"],
+                [encrypt_password(user.password)],
+                "id",
+                user.id,
+            )
 
         return {"id": updated_user_id}
     except Error as e:

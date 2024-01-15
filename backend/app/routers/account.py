@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
+from app.services import account
 
 router = APIRouter(
     prefix="/account",
@@ -16,7 +17,8 @@ class LoginData(BaseModel):
 
 @router.post("/login")
 async def index(login_data: LoginData):
-    if login_data.username == 'paho' and login_data.password == 'paho':
-        return {"token": '89745cfd55cf9181b253981a65dbafe7'}
+    user = account.login(login_data.username, login_data.password)
+    if user:
+        return {"user": user['id'], "token": '89745cfd55cf9181b253981a65dbafe7'}
 
-    return {"token": ''}
+    return {"user": 0, "token": ''}
