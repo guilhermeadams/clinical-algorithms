@@ -29,6 +29,8 @@
       title="Hay cambios no guardados en este algoritmo."
       item-name="¿Quieres guardar antes de salir?"
       :negative="true"
+      :show-close-button="true"
+      @close="toggleSaveDialog"
       @cancel="exitEditor"
       @confirm="saveGraph"
     />
@@ -107,6 +109,10 @@ onBeforeMount(async () => {
     settings.page.setTitle(editor.data.readOnly ? 'Publicación de algoritmo' : 'Editar algoritmo');
   }
 });
+
+const toggleSaveDialog = () => {
+  editor.toggleSaveDialog();
+};
 
 onBeforeRouteLeave(() => {
   settings.page.mainMenu = true;
