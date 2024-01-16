@@ -84,6 +84,11 @@ class Graph {
           this.editor.element.textarea.setValues(allElements);
           this.editor.element.textarea.createEventHandlers();
 
+          // reset scroll because of createEventHandlers method
+          // that focus on input fields
+          // which changes the scroll
+          Editor.setScroll({ x: 0, y: 0 });
+
           // READ ONLY MODE
           if (this.editor.data.readOnly) {
             this.editor.element.textarea.disableAll();
