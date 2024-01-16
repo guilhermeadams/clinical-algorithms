@@ -18,7 +18,7 @@
             v-model="algorithms.data.searchCategory"
             :options="algorithmsCategories.data.categories"
             :option-label="opt => Object(opt) === opt && 'name' in opt ? opt.name : '- Null -'"
-            label="Categorías"
+            label="Categoría"
             clearable
             @update:model-value="updateSearch"
           />
@@ -32,7 +32,7 @@
             v-model="algorithms.data.searchUser"
             :options="users.data.users"
             :option-label="opt => Object(opt) === opt && 'name' in opt ? opt.name : '- Null -'"
-            label="Usuarios"
+            label="Autor"
             clearable
             @update:model-value="updateSearch"
           />
