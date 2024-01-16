@@ -670,6 +670,24 @@ class Element {
       }
     }
   }
+
+  public centerViewOnSelected() {
+    const selectedElement = this.getSelected();
+
+    if (selectedElement) {
+      const { y } = selectedElement.position();
+
+      const stageWrapper = document.getElementById('editor-stage-wrapper');
+
+      if (stageWrapper) {
+        const diffToCenter = (((stageWrapper.offsetHeight - 36) / 2) - 100);
+
+        const newY = y - diffToCenter;
+
+        Editor.setScroll({ y: newY });
+      }
+    }
+  }
 }
 
 export default Element;
