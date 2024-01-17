@@ -22,6 +22,7 @@ export interface IEditorData {
   saving: boolean,
   saved: boolean | null,
   savingTimeout: ReturnType<typeof setTimeout> | null,
+  exportingPDF: boolean,
 }
 
 class Graph {
@@ -44,6 +45,7 @@ class Graph {
     saving: false,
     saved: null,
     savingTimeout: null,
+    exportingPDF: false,
   });
 
   constructor(editor: Editor) {
@@ -181,6 +183,24 @@ class Graph {
       setTimeout(() => {
         this.data.saving = false;
       }, 1000);
+    }
+  }
+
+  exportPDF() {
+    try {
+      this.data.exportingPDF = true;
+
+      const stageStage = document.getElementById('editor-stage');
+
+      if (stageStage) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        window.html2pdf(stageStage);
+      }
+    } finally {
+      setTimeout(() => {
+        this.data.exportingPDF = false;
+      }, 2000);
     }
   }
 }

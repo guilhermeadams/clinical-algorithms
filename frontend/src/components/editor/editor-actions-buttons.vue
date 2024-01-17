@@ -39,11 +39,21 @@
     <q-btn
       v-if="!readOnly"
       label="Publicación"
-      class="float-right q-ml-lg"
+      class="float-right q-ml-md"
       style="width:120px"
       color="primary"
       push
       @click="viewPublicGraph"
+    />
+
+    <q-btn
+      :loading="exportingPDF"
+      label="PDF"
+      class="float-right q-ml-md"
+      style="width:120px"
+      color="primary"
+      push
+      @click="toPDF"
     />
 
     <q-btn
@@ -92,6 +102,7 @@ const editor = inject('editor') as Editor;
 
 const saved = computed(() => editor.graph.data.saved);
 const savingGraph = computed(() => editor.graph.data.saving);
+const exportingPDF = computed(() => editor.graph.data.exportingPDF);
 const lastUpdate = computed(() => editor.graph.lastUpdate);
 const readOnly = computed(() => editor.data.readOnly);
 const showEditButton = computed(() => route.name !== ALGORITHMS_PUBLIC_EDITOR);
@@ -144,6 +155,8 @@ const viewPublicGraph = async () => {
 
   await editor.switchToMode();
 };
+
+const toPDF = () => editor.graph.exportPDF();
 </script>
 
 <style lang="sass">
