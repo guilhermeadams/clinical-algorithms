@@ -21,6 +21,7 @@ export interface IEditorData {
   loading: boolean,
   saving: boolean,
   saved: boolean | null,
+  savingTimeout: ReturnType<typeof setTimeout> | null,
 }
 
 class Graph {
@@ -42,6 +43,7 @@ class Graph {
     loading: false,
     saving: false,
     saved: null,
+    savingTimeout: null,
   });
 
   constructor(editor: Editor) {
@@ -144,6 +146,14 @@ class Graph {
 
   public notSaved() {
     this.data.saved = false;
+
+    if (this.data.savingTimeout) {
+      clearTimeout(this.data.savingTimeout);
+    }
+
+    this.data.savingTimeout = setTimeout(() => {
+      void this.save();
+    }, 2000);
   }
 
   public saved() {
