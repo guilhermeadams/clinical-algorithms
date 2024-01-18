@@ -8,6 +8,7 @@ export enum CustomElement {
   ACTION = 'ActionElement',
   EVALUATION = 'EvaluationElement',
   RECOMMENDATION = 'RecommendationElement',
+  RECOMMENDATION_TOTAL = 'RecommendationTotalElement',
   END = 'EndElement',
   LINK = 'LinkElement',
   // CARD = 'ElementCardExample',
@@ -21,18 +22,10 @@ export const elementName: {
   [CustomElement.ACTION]: 'Action',
   [CustomElement.EVALUATION]: 'Evaluation',
   [CustomElement.RECOMMENDATION]: 'Recommendation',
+  [CustomElement.RECOMMENDATION_TOTAL]: 'RecommendationTotal',
   [CustomElement.END]: 'End',
   [CustomElement.LINK]: 'Link',
-  // [CustomElement.CARD]: 'Card interativo',
   [CustomElement.LANE]: 'Time',
-  // [CustomElement.START]: 'Início',
-  // [CustomElement.ACTION]: 'Acción',
-  // [CustomElement.EVALUATION]: 'Evaluación',
-  // [CustomElement.RECOMMENDATION]: 'Recomendación',
-  // [CustomElement.END]: 'Fin',
-  // [CustomElement.LINK]: 'Enlace',
-  // // [CustomElement.CARD]: 'Card interativo',
-  // [CustomElement.LANE]: 'Tiempo',
 };
 
 export const ROUND_PORT = {
@@ -275,45 +268,6 @@ const customElements = {
       </foreignObject>
     `,
   }),
-
-  // OLD ACTION (without editing text inside element)
-  // [Element.ACTION]: joint.dia.Element.define(Element.ACTION, {
-  //   size: {
-  //     width: 50,
-  //     height: 50,
-  //   },
-  //   attrs: {
-  //     body: {
-  //       width: 'calc(w)',
-  //       height: 'calc(h)',
-  //       fill: '#FFFFFF',
-  //       stroke: '#0099FF',
-  //       strokeWidth: 3,
-  //       rx: 5,
-  //       ry: 5,
-  //     },
-  //     label: {
-  //       textVerticalAnchor: 'middle',
-  //       textAnchor: 'middle',
-  //       x: 'calc(0.5*w)',
-  //       y: 'calc(0.5*h)',
-  //       fontSize: 14,
-  //       fill: '#0099FF',
-  //       text: 'Ação',
-  //     },
-  //   },
-  // }, {
-  //   markup: [{
-  //     tagName: 'rect',
-  //     selector: 'body',
-  //   }, {
-  //     tagName: 'text',
-  //     selector: 'label',
-  //   }, {
-  //     tagName: 'path',
-  //     selector: 'icon',
-  //   }],
-  // }),
 
   [CustomElement.LANE]: joint.dia.Element.define(CustomElement.LANE, {
     attrs: {

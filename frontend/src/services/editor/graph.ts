@@ -95,6 +95,8 @@ class Graph {
 
             this.editor.element.createRecommendations();
 
+            await this.editor.element.createRecommendationsTotals();
+
             this.editor.element.showAllTools();
 
             if (this.editor.route.query.node && this.editor.data.readOnly) {

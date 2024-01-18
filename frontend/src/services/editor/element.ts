@@ -14,6 +14,11 @@ import { reactive } from 'vue';
 
 import { autoResizeTextarea } from 'src/services/editor/textarea';
 import icons from 'src/services/editor/elements/svg_icons';
+import {
+  FORMAL_RECOMMENDATION,
+  INFORMAL_RECOMMENDATION,
+  GOOD_PRACTICES,
+} from 'src/services/editor/constants';
 
 // export interface IElementToolsPadding {
 //   left: number | 20,
@@ -416,6 +421,27 @@ class Element {
 
         // deselectAllTexts();
       },
+      RecommendationTotal: async (element: dia.Element, type: string, total: number) => {
+        const recommendationAbbreviation = {
+          [FORMAL_RECOMMENDATION]: 'RF',
+          [INFORMAL_RECOMMENDATION]: 'RI',
+          [GOOD_PRACTICES]: 'BP',
+        };
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        console.log('Label:', recommendationAbbreviation[type]);
+
+        const { x, y } = element.position();
+
+        new customElements.ActionElement({
+          position: {
+            x: x + 200,
+            y,
+          },
+          ports: Ports.generateToAction(),
+        }).resize(200, 84).addTo(this.editor.data.graph);
+      },
     };
   }
 
@@ -673,6 +699,38 @@ class Element {
           const { x, y } = element.position();
 
           void this.create.Recommendation(x + 1, y + 111, element);
+        }
+      }
+    }
+  }
+
+  public async createRecommendationsTotals() {
+    const allElements = this.getAll();
+
+    if (allElements.length) {
+      for (const element of allElements) {
+        if (
+          [CustomElement.ACTION, CustomElement.EVALUATION].includes(element.prop('type'))
+        ) {
+          const totals: { [key: string]: number } = {};
+
+          const metadata = this.editor.metadata.getFromElement(element);
+
+          if (metadata && metadata.fixed.length) {
+            for (const fixedMetadata of metadata.fixed) {
+              if (!totals[fixedMetadata.recommendation_type]) {
+                totals[fixedMetadata.recommendation_type] = 1;
+              } else {
+                totals[fixedMetadata.recommendation_type] += 1;
+              }
+            }
+
+            if (Object.keys(totals).length) {
+              for (const type of Object.keys(totals)) {
+                void this.create.RecommendationTotal(element, type, totals[type]);
+              }
+            }
+          }
         }
       }
     }
