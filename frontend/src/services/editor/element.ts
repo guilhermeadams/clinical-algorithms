@@ -141,13 +141,16 @@ class Element {
 
   public createRecommendationsExpandButton(
     allTools: (joint.elementTools.Button | joint.elementTools.Boundary)[],
+    position: { x: number, y: number },
     recommendationToggleButtonIndex: number,
   ) {
-    const infoButton = new joint.elementTools.Button({
+    const recommendationExpandButton = new joint.elementTools.Button({
       focusOpacity: 0.5,
       // top-right corner
-      x: 222,
-      y: 83,
+      // x: 222,
+      // y: 83,
+      x: position.x,
+      y: position.y,
       offset: { x: -5, y: -5 },
       action: (clickEvent) => {
         const originalElementId = clickEvent.currentTarget.getAttribute('model-id');
@@ -196,7 +199,7 @@ class Element {
       ],
     });
 
-    allTools.push(infoButton);
+    allTools.push(recommendationExpandButton);
   }
 
   private static createBoundaryTool() {
@@ -207,10 +210,39 @@ class Element {
     });
   }
 
+  static getExpandRecommendationButtonPosition(element: dia.Element) {
+    const type = element.prop('type');
+
+    const { width, height } = element.size();
+
+    if (type === CustomElement.ACTION) {
+      return {
+        x: width + 28,
+        y: height - 2,
+      };
+    }
+
+    return {
+      x: width + 25,
+      y: height,
+    };
+  }
+
   private createTools(element: dia.Element, params?: { removeButtons: { x: number, y: number } }) {
     const allTools: (joint.elementTools.Button | joint.elementTools.Boundary)[] = [];
 
-    if (!this.editor.data.readOnly) {
+    // tools for public mode
+    if (this.editor.data.readOnly) {
+      const metadata = this.editor.metadata.getFromElement(element);
+
+      if (metadata?.fixed && metadata.fixed.length) {
+        this.createRecommendationsExpandButton(
+          allTools,
+          { ...Element.getExpandRecommendationButtonPosition(element) },
+          1,
+        );
+      }
+    } else { // tools for edit mode
       allTools.push(Element.createBoundaryTool());
 
       const removeButton = this.customRemoveButton(
@@ -219,12 +251,6 @@ class Element {
       );
 
       allTools.push(removeButton);
-    } else {
-      const metadata = this.editor.metadata.getFromElement(element);
-
-      if (metadata?.fixed && metadata.fixed.length) {
-        this.createRecommendationsExpandButton(allTools, 1);
-      }
     }
 
     const toolsView = new joint.dia.ToolsView({
@@ -285,7 +311,7 @@ class Element {
 
         this.createTools(element);
 
-        deselectAllTexts();
+        // deselectAllTexts();
       },
       Action: async () => {
         const element = new customElements.ActionElement({
@@ -300,7 +326,7 @@ class Element {
 
         this.textarea.createEventHandlers();
 
-        deselectAllTexts();
+        // deselectAllTexts();
       },
       Recommendation: async (x: number, y: number, element: dia.Element) => {
         const metadata = this.editor.metadata.getFromElement(element);
@@ -360,7 +386,7 @@ class Element {
 
         this.textarea.createEventHandlers();
 
-        deselectAllTexts();
+        // deselectAllTexts();
       },
       End: async () => {
         const element = new customElements.EndElement({
@@ -372,7 +398,7 @@ class Element {
 
         this.createTools(element);
 
-        deselectAllTexts();
+        // deselectAllTexts();
       },
       Lane: async () => {
         const element = new customElements.LaneElement({
@@ -391,7 +417,7 @@ class Element {
 
         this.textarea.createEventHandlers();
 
-        deselectAllTexts();
+        // deselectAllTexts();
       },
     };
   }
@@ -447,7 +473,11 @@ class Element {
       const metadata = this.editor.metadata.getFromElement(element);
 
       if (metadata?.fixed && metadata.fixed.length) {
-        this.createRecommendationsExpandButton(allTools, showBoundary ? 2 : 1);
+        this.createRecommendationsExpandButton(
+          allTools,
+          { ...Element.getExpandRecommendationButtonPosition(element) },
+          showBoundary ? 2 : 1,
+        );
       }
 
       const toolsView = new joint.dia.ToolsView({
