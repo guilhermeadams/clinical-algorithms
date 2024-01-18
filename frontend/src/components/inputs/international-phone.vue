@@ -1,13 +1,14 @@
 <template>
   <vue-tel-input
-    v-model="phone"
+    v-model="data.phone"
     :input-options="{ placeholder: 'Teléfono', styleClasses: 'custom-vue-tel-input' }"
-    @input="emit('update', phone)"
+    @input="emitPhone"
+    @country-changed="setCountry"
   ></vue-tel-input>
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, reactive } from 'vue';
 import { VueTelInput } from 'vue-tel-input';
 import 'src/css/vue-tel-input.css';
 
@@ -20,10 +21,34 @@ const props = defineProps({
 
 const emit = defineEmits(['update']);
 
-const phone = ref('');
+const data = reactive({
+  phone: '',
+  countryCode: '',
+});
+
+const setCountry = (country: { dialCode: string }) => {
+  data.countryCode = country.dialCode;
+
+  data.phone = '';
+};
+
+const emitPhone = () => {
+  let finalPhone: string;
+
+  // remove + from country code
+  if (data.phone.includes('+')) {
+    const phoneWithNoPlus = data.phone.replace(`+${data.countryCode}`, '');
+
+    finalPhone = `${data.countryCode} ${phoneWithNoPlus}`;
+  } else {
+    finalPhone = `${data.countryCode} ${data.phone}`;
+  }
+
+  emit('update', finalPhone);
+};
 
 onBeforeMount(() => {
-  phone.value = props.value;
+  data.phone = props.value;
 });
 </script>
 
