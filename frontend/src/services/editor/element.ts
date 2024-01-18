@@ -158,7 +158,6 @@ class Element {
 
         const recommendationToggleButton = document.querySelectorAll(`[model-id="${originalElementId}"]`);
 
-        console.log(recommendationToggleButtonIndex, recommendationToggleButton);
         // path element can be the second or third element...
         const path = recommendationToggleButton[recommendationToggleButtonIndex].getElementsByTagName('path');
 
@@ -667,6 +666,26 @@ class Element {
             elementView.showTools();
           }
         }
+      }
+    }
+  }
+
+  public centerViewOnSelected() {
+    const selectedElement = this.getSelected();
+
+    if (selectedElement) {
+      const { y, x } = selectedElement.position();
+
+      const stageWrapper = document.getElementById('editor-stage-wrapper');
+
+      if (stageWrapper) {
+        const diffToYCenter = (((stageWrapper.offsetHeight - 36) / 2) - 100);
+        const diffToXCenter = ((stageWrapper.offsetWidth / 2) - 200);
+
+        const newY = y - diffToYCenter;
+        const newX = x - diffToXCenter;
+
+        Editor.setScroll({ y: newY, x: newX });
       }
     }
   }

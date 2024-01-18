@@ -182,6 +182,20 @@ class Editor {
 
     setTimeout(() => window.location.reload(), 50);
   }
+
+  static setScroll(params: { x?: number, y?: number }) {
+    const stageWrapper = document.getElementById('editor-stage-wrapper');
+
+    if (stageWrapper) {
+      if (params.x !== undefined) {
+        stageWrapper.scrollLeft = params.x;
+      }
+
+      if (params.y !== undefined) {
+        stageWrapper.scrollTop = params.y;
+      }
+    }
+  }
 }
 
 export default Editor;
