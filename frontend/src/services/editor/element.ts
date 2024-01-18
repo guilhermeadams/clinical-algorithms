@@ -139,16 +139,13 @@ class Element {
     });
   }
 
-  public createRecommendationsExpandButton(
+  private createExpandRecommendationsButton(
     allTools: (joint.elementTools.Button | joint.elementTools.Boundary)[],
     position: { x: number, y: number },
     recommendationToggleButtonIndex: number,
   ) {
     const recommendationExpandButton = new joint.elementTools.Button({
       focusOpacity: 0.5,
-      // top-right corner
-      // x: 222,
-      // y: 83,
       x: position.x,
       y: position.y,
       offset: { x: -5, y: -5 },
@@ -236,7 +233,7 @@ class Element {
       const metadata = this.editor.metadata.getFromElement(element);
 
       if (metadata?.fixed && metadata.fixed.length) {
-        this.createRecommendationsExpandButton(
+        this.createExpandRecommendationsButton(
           allTools,
           { ...Element.getExpandRecommendationButtonPosition(element) },
           1,
@@ -473,7 +470,7 @@ class Element {
       const metadata = this.editor.metadata.getFromElement(element);
 
       if (metadata?.fixed && metadata.fixed.length) {
-        this.createRecommendationsExpandButton(
+        this.createExpandRecommendationsButton(
           allTools,
           { ...Element.getExpandRecommendationButtonPosition(element) },
           showBoundary ? 2 : 1,
