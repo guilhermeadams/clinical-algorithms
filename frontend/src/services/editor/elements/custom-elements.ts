@@ -196,6 +196,42 @@ const customElements = {
     });
   },
 
+  [CustomElement.RECOMMENDATION_TOTAL]: joint.dia.Element.define(
+    CustomElement.RECOMMENDATION_TOTAL,
+    {
+      attrs: {
+        body: {
+          width: 'calc(w)',
+          height: 'calc(h)',
+          strokeWidth: 0,
+          // stroke: '#000000',
+          fill: '#445566',
+          rx: 2,
+          ry: 2,
+        },
+        label: {
+          textVerticalAnchor: 'middle',
+          textAnchor: 'middle',
+          x: 'calc(0.5*w)',
+          y: 'calc(0.55*h)',
+          fontSize: 12,
+          fontFamily: 'Courier New, sans-serif',
+          fill: 'white',
+          text: '1RF',
+        },
+      },
+    },
+    {
+      markup: [{
+        tagName: 'rect',
+        selector: 'body',
+      }, {
+        tagName: 'text',
+        selector: 'label',
+      }],
+    },
+  ),
+
   [CustomElement.ACTION]: joint.dia.Element.define(CustomElement.ACTION, {
     attrs: {
       foreignObject: {

@@ -421,26 +421,32 @@ class Element {
 
         // deselectAllTexts();
       },
-      RecommendationTotal: async (element: dia.Element, type: string, total: number) => {
+      RecommendationTotal: async (
+        element: dia.Element,
+        type: string,
+        total: number,
+        refY: number,
+      ) => {
         const recommendationAbbreviation = {
           [FORMAL_RECOMMENDATION]: 'RF',
           [INFORMAL_RECOMMENDATION]: 'RI',
           [GOOD_PRACTICES]: 'BP',
         };
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        console.log('Label:', recommendationAbbreviation[type]);
-
         const { x, y } = element.position();
 
-        new customElements.ActionElement({
+        const { width } = element.size();
+
+        const createElement = new customElements.RecommendationTotalElement({
           position: {
-            x: x + 200,
-            y,
+            x: x + width + 9,
+            y: y + refY,
           },
-          ports: Ports.generateToAction(),
-        }).resize(200, 84).addTo(this.editor.data.graph);
+        }).resize(28, 17).addTo(this.editor.data.graph);
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        createElement.attr('label/text', `${total}${recommendationAbbreviation[type]}`);
       },
     };
   }
@@ -726,8 +732,12 @@ class Element {
             }
 
             if (Object.keys(totals).length) {
+              let y = 2;
+
               for (const type of Object.keys(totals)) {
-                void this.create.RecommendationTotal(element, type, totals[type]);
+                void this.create.RecommendationTotal(element, type, totals[type], y);
+
+                y += 20;
               }
             }
           }
