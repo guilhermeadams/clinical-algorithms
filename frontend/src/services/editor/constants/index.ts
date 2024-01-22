@@ -1,14 +1,18 @@
+export const FORMAL_RECOMMENDATION = 'formal';
+export const INFORMAL_RECOMMENDATION = 'not_formal';
+export const GOOD_PRACTICES = 'good_practices';
+
 export const RECOMMENDATION_TYPE = [
   {
-    value: 'formal',
+    value: FORMAL_RECOMMENDATION,
     label: 'Formal recommendation',
   },
   {
-    value: 'good_practices',
+    value: GOOD_PRACTICES,
     label: 'Good practice statement',
   },
   {
-    value: 'not_formal',
+    value: INFORMAL_RECOMMENDATION,
     label: 'Informal recommendation',
   },
 ];

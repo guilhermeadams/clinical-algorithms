@@ -15,7 +15,7 @@
           v-if="props.showCloseButton"
           class="absolute-top-right q-ma-sm"
           icon="close"
-          color="black"
+          color="primary"
           dense
           round
           flat
