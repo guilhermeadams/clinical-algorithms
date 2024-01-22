@@ -14,6 +14,11 @@ import { reactive } from 'vue';
 
 import { autoResizeTextarea } from 'src/services/editor/textarea';
 import icons from 'src/services/editor/elements/svg_icons';
+import {
+  FORMAL_RECOMMENDATION,
+  INFORMAL_RECOMMENDATION,
+  GOOD_PRACTICES,
+} from 'src/services/editor/constants';
 
 // export interface IElementToolsPadding {
 //   left: number | 20,
@@ -139,15 +144,15 @@ class Element {
     });
   }
 
-  public createRecommendationsExpandButton(
+  private createExpandRecommendationsButton(
     allTools: (joint.elementTools.Button | joint.elementTools.Boundary)[],
+    position: { x: number, y: number },
     recommendationToggleButtonIndex: number,
   ) {
-    const infoButton = new joint.elementTools.Button({
+    const recommendationExpandButton = new joint.elementTools.Button({
       focusOpacity: 0.5,
-      // top-right corner
-      x: 222,
-      y: 83,
+      x: position.x,
+      y: position.y,
       offset: { x: -5, y: -5 },
       action: (clickEvent) => {
         const originalElementId = clickEvent.currentTarget.getAttribute('model-id');
@@ -158,7 +163,6 @@ class Element {
 
         const recommendationToggleButton = document.querySelectorAll(`[model-id="${originalElementId}"]`);
 
-        console.log(recommendationToggleButtonIndex, recommendationToggleButton);
         // path element can be the second or third element...
         const path = recommendationToggleButton[recommendationToggleButtonIndex].getElementsByTagName('path');
 
@@ -197,7 +201,7 @@ class Element {
       ],
     });
 
-    allTools.push(infoButton);
+    allTools.push(recommendationExpandButton);
   }
 
   private static createBoundaryTool() {
@@ -208,10 +212,39 @@ class Element {
     });
   }
 
+  static getExpandRecommendationButtonPosition(element: dia.Element) {
+    const type = element.prop('type');
+
+    const { width, height } = element.size();
+
+    if (type === CustomElement.ACTION) {
+      return {
+        x: width + 28,
+        y: height - 2,
+      };
+    }
+
+    return {
+      x: width + 25,
+      y: height,
+    };
+  }
+
   private createTools(element: dia.Element, params?: { removeButtons: { x: number, y: number } }) {
     const allTools: (joint.elementTools.Button | joint.elementTools.Boundary)[] = [];
 
-    if (!this.editor.data.readOnly) {
+    // tools for public mode
+    if (this.editor.data.readOnly) {
+      const metadata = this.editor.metadata.getFromElement(element);
+
+      if (metadata?.fixed && metadata.fixed.length) {
+        this.createExpandRecommendationsButton(
+          allTools,
+          { ...Element.getExpandRecommendationButtonPosition(element) },
+          1,
+        );
+      }
+    } else { // tools for edit mode
       allTools.push(Element.createBoundaryTool());
 
       const removeButton = this.customRemoveButton(
@@ -220,12 +253,6 @@ class Element {
       );
 
       allTools.push(removeButton);
-    } else {
-      const metadata = this.editor.metadata.getFromElement(element);
-
-      if (metadata?.fixed && metadata.fixed.length) {
-        this.createRecommendationsExpandButton(allTools, 1);
-      }
     }
 
     const toolsView = new joint.dia.ToolsView({
@@ -286,7 +313,7 @@ class Element {
 
         this.createTools(element);
 
-        deselectAllTexts();
+        // deselectAllTexts();
       },
       Action: async () => {
         const element = new customElements.ActionElement({
@@ -301,7 +328,7 @@ class Element {
 
         this.textarea.createEventHandlers();
 
-        deselectAllTexts();
+        // deselectAllTexts();
       },
       Recommendation: async (x: number, y: number, element: dia.Element) => {
         const metadata = this.editor.metadata.getFromElement(element);
@@ -361,7 +388,7 @@ class Element {
 
         this.textarea.createEventHandlers();
 
-        deselectAllTexts();
+        // deselectAllTexts();
       },
       End: async () => {
         const element = new customElements.EndElement({
@@ -373,7 +400,7 @@ class Element {
 
         this.createTools(element);
 
-        deselectAllTexts();
+        // deselectAllTexts();
       },
       Lane: async () => {
         const element = new customElements.LaneElement({
@@ -392,7 +419,34 @@ class Element {
 
         this.textarea.createEventHandlers();
 
-        deselectAllTexts();
+        // deselectAllTexts();
+      },
+      RecommendationTotal: async (
+        element: dia.Element,
+        type: string,
+        total: number,
+        refY: number,
+      ) => {
+        const recommendationAbbreviation = {
+          [FORMAL_RECOMMENDATION]: 'RF',
+          [INFORMAL_RECOMMENDATION]: 'RI',
+          [GOOD_PRACTICES]: 'BP',
+        };
+
+        const { x, y } = element.position();
+
+        const { width } = element.size();
+
+        const createElement = new customElements.RecommendationTotalElement({
+          position: {
+            x: x + width + 9,
+            y: y + refY,
+          },
+        }).resize(28, 17).addTo(this.editor.data.graph);
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        createElement.attr('label/text', `${total}${recommendationAbbreviation[type]}`);
       },
     };
   }
@@ -448,7 +502,11 @@ class Element {
       const metadata = this.editor.metadata.getFromElement(element);
 
       if (metadata?.fixed && metadata.fixed.length) {
-        this.createRecommendationsExpandButton(allTools, showBoundary ? 2 : 1);
+        this.createExpandRecommendationsButton(
+          allTools,
+          { ...Element.getExpandRecommendationButtonPosition(element) },
+          showBoundary ? 2 : 1,
+        );
       }
 
       const toolsView = new joint.dia.ToolsView({
@@ -652,6 +710,42 @@ class Element {
     }
   }
 
+  public async createRecommendationsTotals() {
+    const allElements = this.getAll();
+
+    if (allElements.length) {
+      for (const element of allElements) {
+        if (
+          [CustomElement.ACTION, CustomElement.EVALUATION].includes(element.prop('type'))
+        ) {
+          const totals: { [key: string]: number } = {};
+
+          const metadata = this.editor.metadata.getFromElement(element);
+
+          if (metadata && metadata.fixed.length) {
+            for (const fixedMetadata of metadata.fixed) {
+              if (!totals[fixedMetadata.recommendation_type]) {
+                totals[fixedMetadata.recommendation_type] = 1;
+              } else {
+                totals[fixedMetadata.recommendation_type] += 1;
+              }
+            }
+
+            if (Object.keys(totals).length) {
+              let y = 2;
+
+              for (const type of Object.keys(totals)) {
+                void this.create.RecommendationTotal(element, type, totals[type], y);
+
+                y += 20;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   public showAllTools() {
     const allElements = this.getAll();
 
@@ -667,6 +761,26 @@ class Element {
             elementView.showTools();
           }
         }
+      }
+    }
+  }
+
+  public centerViewOnSelected() {
+    const selectedElement = this.getSelected();
+
+    if (selectedElement) {
+      const { y, x } = selectedElement.position();
+
+      const stageWrapper = document.getElementById('editor-stage-wrapper');
+
+      if (stageWrapper) {
+        const diffToYCenter = (((stageWrapper.offsetHeight - 36) / 2) - 100);
+        const diffToXCenter = ((stageWrapper.offsetWidth / 2) - 200);
+
+        const newY = y - diffToYCenter;
+        const newX = x - diffToXCenter;
+
+        Editor.setScroll({ y: newY, x: newX });
       }
     }
   }

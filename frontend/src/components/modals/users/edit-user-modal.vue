@@ -30,14 +30,15 @@
             <div>{{ users.data.user.name }}</div>
           </div>
         </div>
+
         <div class="col-6">
-          <q-input
+          <international-phone
             v-if="canEdit"
-            v-model="users.data.user.phone"
-            label="Teléfono"
-            class="q-mb-md"
-            :rules="[val => !!val || 'Introduzca el teléfono del usuario']"
+            :value="users.data.user.phone"
+            class="q-mt-md"
+            @update="setPhone"
           />
+
           <div class="q-mb-lg" v-else>
             <div class="text-caption text-grey-7">Teléfono:</div>
             <div>{{ users.data.user.phone }}</div>
@@ -149,6 +150,7 @@ import { QForm, QInput, useQuasar } from 'quasar';
 import CheckOrNotIcon from 'components/icons/check-or-not-icon.vue';
 import { validateEmail } from 'src/services/validation';
 import DeleteModal from 'components/modals/simple-modal.vue';
+import InternationalPhone from 'components/inputs/international-phone.vue';
 
 const users = inject('users') as Users;
 const $q = useQuasar();
@@ -229,5 +231,9 @@ const saveAndClose = async () => {
 
 const submitUsersForm = async () => {
   refUsersForm.value?.submit();
+};
+
+const setPhone = (value: string) => {
+  users.data.user.phone = value;
 };
 </script>

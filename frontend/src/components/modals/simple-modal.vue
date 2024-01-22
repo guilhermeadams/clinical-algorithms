@@ -7,9 +7,20 @@
       <q-card-section
         v-if="props.title"
         class="row items-center"
-        :class="{ 'text-negative': props.negative }"
+        :class="{ 'text-negative': props.negative, 'q-px-xl q-pt-lg': props.showCloseButton }"
       >
         <b class="q-px-md q-pt-sm">{{ props.title }}</b>
+
+        <q-btn
+          v-if="props.showCloseButton"
+          class="absolute-top-right q-ma-sm"
+          icon="close"
+          color="primary"
+          dense
+          round
+          flat
+          @click="emitEvent('close')"
+        />
       </q-card-section>
 
       <q-card-section
@@ -51,6 +62,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  showCloseButton: {
+    type: Boolean,
+    default: false,
+  },
   title: {
     type: String,
     default: '',
@@ -77,7 +92,7 @@ const props = defineProps({
   },
 });
 
-const emits = defineEmits(['cancel', 'confirm']);
+const emits = defineEmits(['cancel', 'confirm', 'close']);
 
 const showDialog = ref(false);
 
@@ -85,7 +100,7 @@ watch(() => props.show, (value) => {
   showDialog.value = value;
 });
 
-const emitEvent = (eventName: 'cancel' | 'confirm') => {
+const emitEvent = (eventName: 'cancel' | 'confirm' | 'close') => {
   emits(eventName);
 };
 </script>

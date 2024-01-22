@@ -22,11 +22,13 @@
     "jointjs": "^3.7.6",
     "quasar": "^2.6.0",
     "vue": "^3.0.0",
-    "vue-router": "^4.0.0"
+    "vue-router": "^4.0.0",
+    "vue-tel-input": "^8.3.1"
   },
   "devDependencies": {
     "@quasar/app-webpack": "^3.0.0",
     "@types/node": "^12.20.21",
+    "@types/vue-tel-input": "^2.1.6",
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.10.0",
     "eslint": "^8.10.0",

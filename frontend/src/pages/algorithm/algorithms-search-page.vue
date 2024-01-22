@@ -43,12 +43,12 @@
       No se encontraron resultados en la búsqueda.
     </div>
 
-<!--    <div-->
-<!--      v-if="!data.keyword && publicView"-->
-<!--      class="q-px-md"-->
-<!--    >-->
-<!--      <algorithms-table />-->
-<!--    </div>-->
+    <div
+      v-if="!data.keyword && publicView"
+      class="q-px-md"
+    >
+      <algorithms-table />
+    </div>
   </q-page>
 </template>
 
@@ -69,8 +69,9 @@ import SearchInput from 'components/inputs/search-input.vue';
 import LoadingSpinner from 'components/spinners/loading-spinner.vue';
 import Algorithms, { IAlgorithmThoroughSearchResult } from 'src/services/algorithms';
 import AlgorithmsSearchResult from 'components/items/algorithms-search-result-item.vue';
-// import AlgorithmsTable from 'components/tables/algorithms-table.vue';
+import AlgorithmsTable from 'components/tables/algorithms-table.vue';
 import { ALGORITHMS_PUBLIC_SEARCH } from 'src/router/routes/algorithms';
+import Users from 'src/services/users';
 
 const route = useRoute();
 const router = useRouter();
@@ -79,6 +80,9 @@ const settings = inject('settings') as Settings;
 
 const algorithms = new Algorithms();
 provide('algorithms', algorithms);
+
+const users = new Users();
+provide('users', users);
 
 const data: {
   searching: boolean,
@@ -98,7 +102,7 @@ const hasResults = computed(() => {
   return Object.keys(data.results).length > 0;
 });
 
-// const publicView = computed(() => settings.isPublicView);
+const publicView = computed(() => settings.isPublicView);
 
 const searchFlowchart = async (keyword: string) => {
   try {
