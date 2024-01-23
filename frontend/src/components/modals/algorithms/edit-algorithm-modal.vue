@@ -5,8 +5,8 @@
     :deleting="data.deleting"
     :saving="data.saving"
     :editing="data.editing"
-    :hide-delete="!isMaintainer || !algorithms.data.algorithm.id"
-    :hide-confirm="!isMaintainer"
+    :hide-delete="!props.isMaintainer || !algorithms.data.algorithm.id"
+    :hide-confirm="!props.isMaintainer"
     @delete="showDeleteDialog"
     @edit="setEditing"
     @save="submitFlowchartForm"
@@ -178,7 +178,6 @@ import {
 } from 'vue';
 
 import {
-  LocalStorage,
   QForm,
   QInput,
   useQuasar,
@@ -191,6 +190,13 @@ import EditModal from 'components/modals/edit-modal.vue';
 import DeleteModal from 'components/modals/simple-modal.vue';
 import AlgorithmsCategories from 'src/services/algorithms-categories';
 import Users from 'src/services/users';
+
+const props = defineProps({
+  isMaintainer: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 const users = inject('users') as Users;
 const algorithms = inject('algorithms') as Algorithms;
@@ -213,12 +219,6 @@ const data = reactive({
 });
 
 const canEdit = computed(() => data.editing || !algorithms.data.algorithm.id);
-
-const isMaintainer = computed(() => {
-  const { maintainer } = LocalStorage.getItem('user') as { maintainer: boolean };
-
-  return maintainer;
-});
 
 watch(() => showEditUserDialog.value, (value) => {
   data.showDialog = value;

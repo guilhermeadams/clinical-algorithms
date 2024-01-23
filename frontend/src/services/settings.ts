@@ -46,10 +46,12 @@ class Settings {
 
   private async getUserRoles() {
     try {
+      if (!this.userId) return Promise.resolve({ maintainer: false, master: false });
+
       const { data }: {
         data: {
-          maintainer: boolean,
-          master: boolean,
+          maintainer: number,
+          master: number,
         }
       } = await api.get(`users/roles/${this.userId}`);
 
@@ -65,7 +67,7 @@ class Settings {
     try {
       const { maintainer } = await this.getUserRoles();
 
-      return Promise.resolve(maintainer);
+      return Promise.resolve(!!maintainer);
     } catch (error) {
       return Promise.reject(error);
     }
@@ -75,7 +77,7 @@ class Settings {
     try {
       const { master } = await this.getUserRoles();
 
-      return Promise.resolve(master);
+      return Promise.resolve(!!master);
     } catch (error) {
       return Promise.reject(error);
     }

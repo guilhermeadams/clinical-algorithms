@@ -104,12 +104,9 @@ const showEditButton = computed(() => {
 });
 
 const exitEditor = () => {
-  if (route.name === ALGORITHMS_PUBLIC_EDITOR) {
+  if (route.name === ALGORITHMS_PUBLIC_EDITOR && route.query.from_admin) {
     return router.push({
-      name: ALGORITHMS_PUBLIC_SEARCH,
-      query: {
-        keyword: route.query.search,
-      },
+      name: ALGORITHMS_SEARCH,
     });
   }
 

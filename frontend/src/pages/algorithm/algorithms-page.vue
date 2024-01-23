@@ -53,12 +53,16 @@
     <div class="q-px-md">
       <q-card class="shadow-light">
         <q-card-section>
-          <algorithms-table />
+          <algorithms-table
+            :is-maintainer="isMaintainer"
+          />
         </q-card-section>
       </q-card>
     </div>
 
-    <edit-algorithm-modal />
+    <edit-algorithm-modal
+      :is-maintainer="isMaintainer"
+    />
   </q-page>
 </template>
 
@@ -66,10 +70,11 @@
 import {
   onBeforeMount,
   provide,
-  inject, computed,
+  inject,
+  ref,
 } from 'vue';
+
 import { onBeforeRouteLeave } from 'vue-router';
-import { LocalStorage } from 'quasar';
 
 import { ALGORITHMS_EDITOR } from 'src/router/routes/algorithms';
 
@@ -92,11 +97,7 @@ provide('algorithmsCategories', algorithmsCategories);
 
 const settings = inject('settings') as Settings;
 
-const isMaintainer = computed(() => {
-  const { maintainer } = LocalStorage.getItem('user') as { maintainer: boolean };
-
-  return maintainer;
-});
+const isMaintainer = ref(false);
 
 const searchAlgorithm = (keyword: string) => {
   algorithms.data.searchKeyword = keyword;
@@ -133,12 +134,14 @@ const tryClearingSearch = () => {
   }
 };
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
+  isMaintainer.value = await settings.isMaintainer();
+
   settings.page.setTitle('Mantenimiento de algoritmos');
 
-  users.get();
+  await users.get();
 
-  algorithmsCategories.get();
+  await algorithmsCategories.get();
 });
 
 onBeforeRouteLeave((leaveGuard) => {

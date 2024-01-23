@@ -10,7 +10,6 @@ import Graph from 'src/services/editor/graph';
 import Metadata from 'src/services/editor/metadata';
 import { RouteLocationNormalizedLoaded, Router } from 'vue-router';
 import { ALGORITHMS_EDITOR } from 'src/router/routes/algorithms';
-import { LocalStorage } from 'quasar';
 
 const graph = new joint.dia.Graph({}, { cellNamespace: customElements });
 
@@ -34,6 +33,7 @@ class Editor {
   router: Router;
 
   data: IJointData = reactive({
+    isMaintainer: false,
     readOnly: false,
     showSaveDialog: false,
     paper: undefined,
@@ -167,9 +167,7 @@ class Editor {
   }
 
   public setReadOnly(mode: string) {
-    const { maintainer } = LocalStorage.getItem('user') as { maintainer: boolean };
-
-    this.data.readOnly = !maintainer || mode === 'public';
+    this.data.readOnly = !this.data.isMaintainer || mode === 'public';
   }
 
   public async switchToMode() {
@@ -198,6 +196,10 @@ class Editor {
         stageWrapper.scrollTop = params.y;
       }
     }
+  }
+
+  public setIsMaintainer(value: boolean) {
+    this.data.isMaintainer = value;
   }
 }
 
