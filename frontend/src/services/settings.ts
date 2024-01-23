@@ -2,8 +2,6 @@ import { reactive } from 'vue';
 import { RouteLocationNormalizedLoaded, Router } from 'vue-router';
 import { ALGORITHMS_PUBLIC_EDITOR, ALGORITHMS_PUBLIC_SEARCH } from 'src/router/routes/algorithms';
 import { api } from 'boot/axios';
-import { USERS_INDEX } from 'src/router/routes/users';
-import { HOME } from 'src/router/routes/home';
 
 class Settings {
   private appName = 'PAHO';
