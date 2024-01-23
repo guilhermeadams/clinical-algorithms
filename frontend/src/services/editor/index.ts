@@ -10,6 +10,7 @@ import Graph from 'src/services/editor/graph';
 import Metadata from 'src/services/editor/metadata';
 import { RouteLocationNormalizedLoaded, Router } from 'vue-router';
 import { ALGORITHMS_EDITOR } from 'src/router/routes/algorithms';
+import { LocalStorage } from 'quasar';
 
 const graph = new joint.dia.Graph({}, { cellNamespace: customElements });
 
@@ -166,7 +167,9 @@ class Editor {
   }
 
   public setReadOnly(mode: string) {
-    this.data.readOnly = mode === 'public';
+    const { maintainer } = LocalStorage.getItem('user') as { maintainer: boolean };
+
+    this.data.readOnly = !maintainer || mode === 'public';
   }
 
   public async switchToMode() {

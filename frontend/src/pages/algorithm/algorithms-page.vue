@@ -41,6 +41,7 @@
 
       <div class="col-3 q-pt-lg q-pr-md text-right">
         <q-btn
+          v-if="isMaintainer"
           label="Registrar algoritmo"
           color="primary"
           push
@@ -65,10 +66,10 @@
 import {
   onBeforeMount,
   provide,
-  inject,
+  inject, computed,
 } from 'vue';
-
 import { onBeforeRouteLeave } from 'vue-router';
+import { LocalStorage } from 'quasar';
 
 import { ALGORITHMS_EDITOR } from 'src/router/routes/algorithms';
 
@@ -90,6 +91,12 @@ const algorithmsCategories = new AlgorithmsCategories();
 provide('algorithmsCategories', algorithmsCategories);
 
 const settings = inject('settings') as Settings;
+
+const isMaintainer = computed(() => {
+  const { maintainer } = LocalStorage.getItem('user') as { maintainer: boolean };
+
+  return maintainer;
+});
 
 const searchAlgorithm = (keyword: string) => {
   algorithms.data.searchKeyword = keyword;

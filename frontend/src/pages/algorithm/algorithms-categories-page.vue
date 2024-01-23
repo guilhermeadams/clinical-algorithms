@@ -23,8 +23,12 @@ import EditAlgorithmCategoryModal from 'components/modals/algorithms/edit-algori
 import AlgorithmsCategories from 'src/services/algorithms-categories';
 import { inject, onBeforeMount, provide } from 'vue';
 import Settings from 'src/services/settings';
+import { HOME } from 'src/router/routes/home';
+import { useRouter } from 'vue-router';
 
 const settings = inject('settings') as Settings;
+
+const router = useRouter();
 
 const algorithmsCategories = new AlgorithmsCategories();
 
@@ -34,7 +38,13 @@ const startCreatingCategory = () => {
   algorithmsCategories.toggleEditDialog(true);
 };
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
+  if (!await settings.isMaster()) {
+    await router.push({
+      name: HOME,
+    });
+  }
+
   settings.page.setTitle('Mantenimiento de categorías');
 });
 </script>

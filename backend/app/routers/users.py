@@ -33,6 +33,11 @@ def search_user(keyword: str | None = None):
     return True
 
 
+@router.get("/roles/{user_id}")
+def user_roles(user_id: int):
+    return users.user_roles(user_id)
+
+
 @router.delete("/{user_id}")
 def delete_user(user_id: int):
     return users.delete_user(user_id)

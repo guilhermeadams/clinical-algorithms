@@ -21,6 +21,8 @@ settings.page.setTitle('Início');
 provide('settings', settings);
 
 provide(new AlgorithmsCategories(), 'algorithmsCategories');
+console.log(LocalStorage.getItem('user'));
+settings.setUser(LocalStorage.getItem('user') || 0);
 
 onMounted(() => {
   const token = LocalStorage.getItem('token');

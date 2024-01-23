@@ -50,7 +50,7 @@
             />
 
             <q-btn
-              v-else
+              v-else-if="!props.hideConfirm"
               :loading="props.saving"
               style="padding: 0 30px"
               class="float-right"
@@ -93,6 +93,10 @@ const props = defineProps({
     default: false,
   },
   hideDelete: {
+    type: Boolean,
+    default: false,
+  },
+  hideConfirm: {
     type: Boolean,
     default: false,
   },

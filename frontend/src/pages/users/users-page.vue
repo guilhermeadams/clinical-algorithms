@@ -36,16 +36,21 @@ import {
   inject,
 } from 'vue';
 
+import { useRouter } from 'vue-router';
+
 import Settings from 'src/services/settings';
+import Users from 'src/services/users';
 import SearchInput from 'components/inputs/search-input.vue';
 import UsersTable from 'components/tables/users-table.vue';
-import Users from 'src/services/users';
 import EditUserModal from 'components/modals/users/edit-user-modal.vue';
+import { HOME } from 'src/router/routes/home';
 
 const users = new Users();
 provide('users', users);
 
 const settings = inject('settings') as Settings;
+
+const router = useRouter();
 
 const searchUsers = (keyword: string) => users.search(keyword);
 
@@ -53,7 +58,13 @@ const clearSearch = () => users.clearSearch();
 
 const createUser = () => users.startCreatingUser();
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
+  if (!await settings.isMaster()) {
+    await router.push({
+      name: HOME,
+    });
+  }
+
   settings.page.setTitle('Usuarios');
 });
 </script>

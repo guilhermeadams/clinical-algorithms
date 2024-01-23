@@ -84,6 +84,7 @@ import {
 } from 'src/router/routes/algorithms';
 
 import { formatDatetime } from 'src/services/date';
+import { LocalStorage } from 'quasar';
 
 const route = useRoute();
 const router = useRouter();
@@ -94,7 +95,13 @@ const saved = computed(() => editor.graph.data.saved);
 const savingGraph = computed(() => editor.graph.data.saving);
 const lastUpdate = computed(() => editor.graph.lastUpdate);
 const readOnly = computed(() => editor.data.readOnly);
-const showEditButton = computed(() => route.name !== ALGORITHMS_PUBLIC_EDITOR);
+const showEditButton = computed(() => {
+  const { maintainer } = LocalStorage.getItem('user') as { maintainer: boolean };
+
+  if (!maintainer) return false;
+
+  return route.name !== ALGORITHMS_PUBLIC_EDITOR;
+});
 
 const exitEditor = () => {
   if (route.name === ALGORITHMS_PUBLIC_EDITOR) {

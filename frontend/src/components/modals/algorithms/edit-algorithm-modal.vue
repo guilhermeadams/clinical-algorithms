@@ -5,7 +5,8 @@
     :deleting="data.deleting"
     :saving="data.saving"
     :editing="data.editing"
-    :hide-delete="!algorithms.data.algorithm.id"
+    :hide-delete="!isMaintainer || !algorithms.data.algorithm.id"
+    :hide-confirm="!isMaintainer"
     @delete="showDeleteDialog"
     @edit="setEditing"
     @save="submitFlowchartForm"
@@ -176,7 +177,13 @@ import {
   ref,
 } from 'vue';
 
-import { QForm, QInput, useQuasar } from 'quasar';
+import {
+  LocalStorage,
+  QForm,
+  QInput,
+  useQuasar,
+} from 'quasar';
+
 import { myLocale } from 'src/services/locale';
 
 import Algorithms from 'src/services/algorithms';
@@ -206,6 +213,12 @@ const data = reactive({
 });
 
 const canEdit = computed(() => data.editing || !algorithms.data.algorithm.id);
+
+const isMaintainer = computed(() => {
+  const { maintainer } = LocalStorage.getItem('user') as { maintainer: boolean };
+
+  return maintainer;
+});
 
 watch(() => showEditUserDialog.value, (value) => {
   data.showDialog = value;
