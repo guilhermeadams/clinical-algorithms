@@ -734,10 +734,18 @@ class Element {
             if (Object.keys(totals).length) {
               let y = 2;
 
-              for (const type of Object.keys(totals)) {
-                void this.create.RecommendationTotal(element, type, totals[type], y);
+              const recommendationsTypes = [
+                FORMAL_RECOMMENDATION,
+                INFORMAL_RECOMMENDATION,
+                GOOD_PRACTICES,
+              ];
 
-                y += 20;
+              for (const type of recommendationsTypes) {
+                if (totals[type]) {
+                  void this.create.RecommendationTotal(element, type, totals[type], y);
+
+                  y += 20;
+                }
               }
             }
           }
