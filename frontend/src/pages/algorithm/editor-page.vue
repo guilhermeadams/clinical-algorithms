@@ -19,7 +19,8 @@
       <editor-metadata-panel />
 
       <!-- ACTIONS -->
-      <editor-actions-buttons />
+      <editor-actions-buttons
+      />
     </div>
 
     <simple-modal
