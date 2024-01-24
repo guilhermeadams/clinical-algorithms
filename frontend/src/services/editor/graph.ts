@@ -89,13 +89,13 @@ class Graph {
           // which changes the scroll
           Editor.setScroll({ x: 0, y: 0 });
 
+          await this.editor.element.createAllRecommendationsTotals();
+
           // READ ONLY MODE
           if (this.editor.data.readOnly) {
             this.editor.element.textarea.disableAll();
 
             this.editor.element.createRecommendations();
-
-            await this.editor.element.createRecommendationsTotals();
 
             this.editor.element.showAllTools();
 
