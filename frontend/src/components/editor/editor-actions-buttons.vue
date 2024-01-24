@@ -71,7 +71,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject } from 'vue';
+import {
+  computed,
+  onBeforeMount,
+  inject,
+  ref,
+} from 'vue';
+
 import { useRoute, useRouter } from 'vue-router';
 
 import Editor from 'src/services/editor';
@@ -94,18 +100,10 @@ const saved = computed(() => editor.graph.data.saved);
 const savingGraph = computed(() => editor.graph.data.saving);
 const lastUpdate = computed(() => editor.graph.lastUpdate);
 const readOnly = computed(() => editor.data.readOnly);
-const showEditButton = computed(() => route.name !== ALGORITHMS_PUBLIC_EDITOR);
+
+const showEditButton = ref(false);
 
 const exitEditor = () => {
-  if (route.name === ALGORITHMS_PUBLIC_EDITOR) {
-    return router.push({
-      name: ALGORITHMS_PUBLIC_SEARCH,
-      query: {
-        keyword: route.query.search,
-      },
-    });
-  }
-
   if (route.query.search) {
     const name = route.name === ALGORITHMS_PUBLIC_EDITOR
       ? ALGORITHMS_PUBLIC_SEARCH : ALGORITHMS_SEARCH;
@@ -115,6 +113,12 @@ const exitEditor = () => {
       query: {
         keyword: route.query.search,
       },
+    });
+  }
+
+  if (route.name === ALGORITHMS_PUBLIC_EDITOR) {
+    return router.push({
+      name: route.query.from_admin ? ALGORITHMS_SEARCH : ALGORITHMS_PUBLIC_SEARCH,
     });
   }
 
@@ -144,6 +148,10 @@ const viewPublicGraph = async () => {
 
   await editor.switchToMode();
 };
+
+onBeforeMount(async () => {
+  showEditButton.value = editor.data.isMaintainer || route.name !== ALGORITHMS_PUBLIC_EDITOR;
+});
 </script>
 
 <style lang="sass">

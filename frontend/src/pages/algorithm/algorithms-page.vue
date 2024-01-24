@@ -41,6 +41,7 @@
 
       <div class="col-3 q-pt-lg q-pr-md text-right">
         <q-btn
+          v-if="isMaintainer"
           label="Registrar algoritmo"
           color="primary"
           push
@@ -52,12 +53,16 @@
     <div class="q-px-md">
       <q-card class="shadow-light">
         <q-card-section>
-          <algorithms-table />
+          <algorithms-table
+            :is-maintainer="isMaintainer"
+          />
         </q-card-section>
       </q-card>
     </div>
 
-    <edit-algorithm-modal />
+    <edit-algorithm-modal
+      :is-maintainer="isMaintainer"
+    />
   </q-page>
 </template>
 
@@ -66,6 +71,7 @@ import {
   onBeforeMount,
   provide,
   inject,
+  ref,
 } from 'vue';
 
 import { onBeforeRouteLeave } from 'vue-router';
@@ -90,6 +96,8 @@ const algorithmsCategories = new AlgorithmsCategories();
 provide('algorithmsCategories', algorithmsCategories);
 
 const settings = inject('settings') as Settings;
+
+const isMaintainer = ref(false);
 
 const searchAlgorithm = (keyword: string) => {
   algorithms.data.searchKeyword = keyword;
@@ -126,12 +134,14 @@ const tryClearingSearch = () => {
   }
 };
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
+  isMaintainer.value = await settings.isMaintainer();
+
   settings.page.setTitle('Mantenimiento de algoritmos');
 
-  users.get();
+  await users.get();
 
-  algorithmsCategories.get();
+  await algorithmsCategories.get();
 });
 
 onBeforeRouteLeave((leaveGuard) => {

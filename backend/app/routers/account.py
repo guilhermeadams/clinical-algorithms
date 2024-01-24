@@ -19,6 +19,9 @@ class LoginData(BaseModel):
 async def index(login_data: LoginData):
     user = account.login(login_data.username, login_data.password)
     if user:
-        return {"user": user['id'], "token": '89745cfd55cf9181b253981a65dbafe7'}
+        return {
+            "id": user['id'],
+            "token": '89745cfd55cf9181b253981a65dbafe7',
+        }
 
     return {"user": 0, "token": ''}

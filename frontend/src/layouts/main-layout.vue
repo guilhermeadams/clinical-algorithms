@@ -38,9 +38,11 @@
 
 <script setup lang="ts">
 import { computed, inject } from 'vue';
+
+import { useRoute } from 'vue-router';
+
 import Settings from 'src/services/settings';
 import MainMenu from 'components/menus/main-menu.vue';
-import { useRoute } from 'vue-router';
 import { ALGORITHMS_EDITOR, ALGORITHMS_PUBLIC_EDITOR, ALGORITHMS_PUBLIC_SEARCH } from 'src/router/routes/algorithms';
 
 const route = useRoute();

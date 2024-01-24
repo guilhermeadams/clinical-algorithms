@@ -44,7 +44,7 @@
     </div>
 
     <div
-      v-if="!data.keyword && publicView"
+      v-if="!data.keyword"
       class="q-px-md"
     >
       <algorithms-table />
@@ -101,8 +101,6 @@ const hasResults = computed(() => {
 
   return Object.keys(data.results).length > 0;
 });
-
-const publicView = computed(() => settings.isPublicView);
 
 const searchFlowchart = async (keyword: string) => {
   try {

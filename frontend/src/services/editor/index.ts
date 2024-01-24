@@ -33,6 +33,7 @@ class Editor {
   router: Router;
 
   data: IJointData = reactive({
+    isMaintainer: false,
     readOnly: false,
     showSaveDialog: false,
     paper: undefined,
@@ -166,7 +167,7 @@ class Editor {
   }
 
   public setReadOnly(mode: string) {
-    this.data.readOnly = mode === 'public';
+    this.data.readOnly = !this.data.isMaintainer || mode === 'public';
   }
 
   public async switchToMode() {
@@ -195,6 +196,10 @@ class Editor {
         stageWrapper.scrollTop = params.y;
       }
     }
+  }
+
+  public setIsMaintainer(value: boolean) {
+    this.data.isMaintainer = value;
   }
 }
 
