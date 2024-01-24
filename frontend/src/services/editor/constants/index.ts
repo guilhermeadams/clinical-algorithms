@@ -20,11 +20,11 @@ export const RECOMMENDATION_TYPE = [
 export const DIRECTIONS = [
   {
     value: 'for_intervention',
-    label: 'In favor of intervention',
+    label: 'In favor of the intervention',
   },
   {
     value: 'against_intervention',
-    label: 'Against intervention',
+    label: 'Against the intervention',
   },
   {
     value: 'both',
@@ -35,7 +35,7 @@ export const DIRECTIONS = [
 export const STRENGTH = [
   {
     value: 'weak',
-    label: 'Weak',
+    label: 'Conditional',
   },
   {
     value: 'strong',
