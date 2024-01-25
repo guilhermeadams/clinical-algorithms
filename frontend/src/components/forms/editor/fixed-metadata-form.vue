@@ -228,10 +228,12 @@ const setProp = (propName: string) => {
   editor.element.setProp(`metadata/fixed/${props.index - 1}/${propName}`, data[propName]);
 
   if (propName === 'recommendation_type') {
-    editor.element.updateRecommendationsTotals();
-  }
+    setTimeout(() => {
+      editor.element.updateRecommendationsTotals();
 
-  editor.graph.notSaved();
+      editor.graph.notSaved();
+    }, 500);
+  }
 };
 
 const deleteBlock = () => {

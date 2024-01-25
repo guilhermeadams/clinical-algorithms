@@ -722,12 +722,13 @@ class Element {
       const metadata = this.editor.metadata.getFromElement(element);
 
       if (metadata && metadata.fixed.length) {
-        console.log(metadata.fixed);
         for (const fixedMetadata of metadata.fixed) {
-          if (!totals[fixedMetadata.recommendation_type]) {
-            totals[fixedMetadata.recommendation_type] = 1;
-          } else {
-            totals[fixedMetadata.recommendation_type] += 1;
+          if (fixedMetadata) {
+            if (!totals[fixedMetadata.recommendation_type]) {
+              totals[fixedMetadata.recommendation_type] = 1;
+            } else {
+              totals[fixedMetadata.recommendation_type] += 1;
+            }
           }
         }
 

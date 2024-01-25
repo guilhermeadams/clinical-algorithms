@@ -150,7 +150,11 @@ const viewPublicGraph = async () => {
 };
 
 onBeforeMount(async () => {
-  showEditButton.value = editor.data.isMaintainer || route.name !== ALGORITHMS_PUBLIC_EDITOR;
+  if (editor.data.isMaintainer) {
+    showEditButton.value = true;
+  } else {
+    showEditButton.value = route.name !== ALGORITHMS_PUBLIC_EDITOR;
+  }
 });
 </script>
 
