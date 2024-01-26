@@ -13,7 +13,7 @@ algorithm_fields = ['id', 'title', 'description', 'version', 'updated_at']
 
 def index():
     try:
-        return select("SELECT * FROM algorithms")
+        return select("SELECT * FROM algorithms ORDER BY id DESC")
     except Error as e:
         db_error(e)
 

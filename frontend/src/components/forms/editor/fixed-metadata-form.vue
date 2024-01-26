@@ -233,6 +233,8 @@ const setProp = (propName: string) => {
 
       editor.graph.notSaved();
     }, 500);
+  } else {
+    editor.graph.notSaved();
   }
 };
 

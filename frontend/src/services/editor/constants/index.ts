@@ -34,7 +34,7 @@ export const DIRECTIONS = [
 
 export const STRENGTH = [
   {
-    value: 'weak',
+    value: 'conditional',
     label: 'Conditional',
   },
   {
