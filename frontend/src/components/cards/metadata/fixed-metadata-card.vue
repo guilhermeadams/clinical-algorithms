@@ -156,17 +156,17 @@
           class="q-mb-md"
         >
           <q-card-section>
-            <div class="q-pb-sm"><b>URL:</b> <a
+            <div class="q-pb-sm"><b>{{ link.type }}</b>
+            </div>
+
+            <div><a
               :href="link.url"
               target="_blank"
               class="text-primary"
               style="word-break: break-all"
             >
               {{ link.url }}
-            </a>
-            </div>
-
-            <div class="q-py-sm"><b>Link type:</b> {{ link.type }}</div>
+            </a></div>
           </q-card-section>
         </q-card>
       </div>
