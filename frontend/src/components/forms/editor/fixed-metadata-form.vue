@@ -164,9 +164,10 @@ import {
   ref,
 } from 'vue';
 
-import MetadataLinksForm from 'components/forms/editor/fixed-metadata-links-form.vue';
 import Editor from 'src/services/editor';
+import MetadataLinksForm from 'components/forms/editor/fixed-metadata-links-form.vue';
 import DeleteModal from 'components/modals/simple-modal.vue';
+
 import { DIRECTIONS, RECOMMENDATION_TYPE, STRENGTH } from 'src/services/editor/constants';
 
 const editor = inject('editor') as Editor;
@@ -226,7 +227,15 @@ const setProp = (propName: string) => {
   // @ts-ignore
   editor.element.setProp(`metadata/fixed/${props.index - 1}/${propName}`, data[propName]);
 
-  editor.graph.notSaved();
+  if (propName === 'recommendation_type') {
+    setTimeout(() => {
+      editor.element.updateRecommendationsTotals();
+
+      editor.graph.notSaved();
+    }, 500);
+  } else {
+    editor.graph.notSaved();
+  }
 };
 
 const deleteBlock = () => {

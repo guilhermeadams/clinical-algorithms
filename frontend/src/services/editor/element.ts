@@ -444,6 +444,8 @@ class Element {
           },
         }).resize(28, 17).addTo(this.editor.data.graph);
 
+        createElement.prop('props/parentElement', element.id);
+
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         createElement.attr('label/text', `${total}${recommendationAbbreviation[type]}`);
@@ -570,11 +572,12 @@ class Element {
     return this.getSelected()?.prop('title') || '';
   }
 
-  public async setTitle(title: string) {
-    await this.setProp('title', title);
-
-    await this.setAttr('label/text', title);
-  }
+  // PROBABLY DEPRECATED
+  // public async setTitle(title: string) {
+  //   await this.setProp('title', title);
+  //
+  //   await this.setAttr('label/text', title);
+  // }
 
   public getName() {
     const elementType = this.getSelected()?.prop('type');
@@ -710,46 +713,69 @@ class Element {
     }
   }
 
-  public async createRecommendationsTotals() {
+  public createRecommendationsTotals(element: dia.Element) {
+    if (
+      [CustomElement.ACTION, CustomElement.EVALUATION].includes(element.prop('type'))
+    ) {
+      const totals: { [key: string]: number } = {};
+
+      const metadata = this.editor.metadata.getFromElement(element);
+
+      if (metadata && metadata.fixed.length) {
+        for (const fixedMetadata of metadata.fixed) {
+          if (fixedMetadata) {
+            if (!totals[fixedMetadata.recommendation_type]) {
+              totals[fixedMetadata.recommendation_type] = 1;
+            } else {
+              totals[fixedMetadata.recommendation_type] += 1;
+            }
+          }
+        }
+
+        if (Object.keys(totals).length) {
+          let y = 2;
+
+          const recommendationsTypes = [
+            FORMAL_RECOMMENDATION,
+            INFORMAL_RECOMMENDATION,
+            GOOD_PRACTICES,
+          ];
+
+          for (const type of recommendationsTypes) {
+            if (totals[type]) {
+              void this.create.RecommendationTotal(element, type, totals[type], y);
+
+              y += 20;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  public updateRecommendationsTotals(element?: dia.Element) {
+    const parentElement = element || this.getSelected();
+
+    if (parentElement) {
+      for (const currentElement of this.getAll()) {
+        if (
+          currentElement.prop('type') === CustomElement.RECOMMENDATION_TOTAL
+          && currentElement.prop('props/parentElement') === parentElement.id
+        ) {
+          currentElement.remove();
+        }
+      }
+
+      this.createRecommendationsTotals(parentElement);
+    }
+  }
+
+  public async createAllRecommendationsTotals() {
     const allElements = this.getAll();
 
     if (allElements.length) {
       for (const element of allElements) {
-        if (
-          [CustomElement.ACTION, CustomElement.EVALUATION].includes(element.prop('type'))
-        ) {
-          const totals: { [key: string]: number } = {};
-
-          const metadata = this.editor.metadata.getFromElement(element);
-
-          if (metadata && metadata.fixed.length) {
-            for (const fixedMetadata of metadata.fixed) {
-              if (!totals[fixedMetadata.recommendation_type]) {
-                totals[fixedMetadata.recommendation_type] = 1;
-              } else {
-                totals[fixedMetadata.recommendation_type] += 1;
-              }
-            }
-
-            if (Object.keys(totals).length) {
-              let y = 2;
-
-              const recommendationsTypes = [
-                FORMAL_RECOMMENDATION,
-                INFORMAL_RECOMMENDATION,
-                GOOD_PRACTICES,
-              ];
-
-              for (const type of recommendationsTypes) {
-                if (totals[type]) {
-                  void this.create.RecommendationTotal(element, type, totals[type], y);
-
-                  y += 20;
-                }
-              }
-            }
-          }
-        }
+        this.updateRecommendationsTotals(element);
       }
     }
   }

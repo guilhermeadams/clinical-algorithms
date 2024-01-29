@@ -145,6 +145,8 @@ class Metadata {
         }
 
         setTimeout(() => {
+          this.editor.element.updateRecommendationsTotals(selectedElement);
+
           this.editor.graph.notSaved();
 
           this.updateTotalBlocks();

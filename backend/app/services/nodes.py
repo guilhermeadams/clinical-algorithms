@@ -15,6 +15,7 @@ def map_nodes(graph_string: str, algorithm_id: int):
         graph = json.loads(graph_string)['cells']
 
         for node in graph:
+            print(node)
             data = [algorithm_id, node['id'], node['type'], "", datetime.now()]
 
             if "props" in node:
@@ -32,8 +33,12 @@ def search(keyword: str):
     try:
         return select(
             "SELECT * FROM nodes WHERE label REGEXP %s",
-            "[[:<:]]"+keyword+"[[:>:]]"
+            keyword
         )
+        # return select(
+        #     "SELECT * FROM nodes WHERE label REGEXP %s",
+        #     ([[:<:]]|^)"[[:<:]]"+keyword+"[[:>:]]"([[:>:]]|$)
+        # )
     except Error as e:
         db_error(e)
 
