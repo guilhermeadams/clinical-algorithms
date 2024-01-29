@@ -33,8 +33,12 @@ def search(keyword: str):
     try:
         return select(
             "SELECT * FROM nodes WHERE label REGEXP %s",
-            "[[:<:]]"+keyword+"[[:>:]]"
+            keyword
         )
+        # return select(
+        #     "SELECT * FROM nodes WHERE label REGEXP %s",
+        #     ([[:<:]]|^)"[[:<:]]"+keyword+"[[:>:]]"([[:>:]]|$)
+        # )
     except Error as e:
         db_error(e)
 

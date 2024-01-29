@@ -31,7 +31,8 @@ def algorithm_categories(algorithm_id: int):
 def search(keyword: str, category_id = 0, user_id = 0, thorough=False):
     try:
         if thorough:
-            return select("SELECT * FROM algorithms WHERE title REGEXP %s", "[[:<:]]"+keyword+"[[:>:]]")
+            # return select("SELECT * FROM algorithms WHERE title REGEXP %s", "[[:<:]]"+keyword+"[[:>:]]")
+            return select("SELECT * FROM algorithms WHERE title REGEXP %s", keyword)
         else:
             # search by category only
             if not keyword and category_id and not user_id:
