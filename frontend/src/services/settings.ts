@@ -8,7 +8,7 @@ class Settings {
 
   private readonly route: RouteLocationNormalizedLoaded;
 
-  private router: Router;
+  private router: Router | null = null;
 
   private userId = 0;
 
@@ -26,9 +26,12 @@ class Settings {
       mainMenu: true,
     });
 
-  constructor(options: { route: RouteLocationNormalizedLoaded, router: Router }) {
+  constructor(options: { route: RouteLocationNormalizedLoaded, router?: Router }) {
     this.route = options.route;
-    this.router = options.router;
+
+    if (options.router) {
+      this.router = options.router;
+    }
   }
 
   public setUser(userId: number) {

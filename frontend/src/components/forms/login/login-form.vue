@@ -77,6 +77,7 @@ async function tryLogin() {
     const { data }: { data: {
         id: number,
         token: string,
+        user_name: string,
     } } = await api.post('account/login', {
       username: user.username,
       password: user.password,
@@ -85,6 +86,7 @@ async function tryLogin() {
     if (data.id && data.token) {
       LocalStorage.set('token', data.token);
       LocalStorage.set('user', data.id);
+      LocalStorage.set('user_name', data.user_name);
 
       await router.push({
         name: HOME,
