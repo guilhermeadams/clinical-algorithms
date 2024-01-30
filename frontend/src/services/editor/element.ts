@@ -90,6 +90,8 @@ class Element {
   }
 
   private removeSelected() {
+    this.deleteRecommendationsTotals();
+
     this.getSelected()?.remove();
 
     this.deselectAll();
@@ -753,7 +755,7 @@ class Element {
     }
   }
 
-  public updateRecommendationsTotals(element?: dia.Element) {
+  public deleteRecommendationsTotals(element?: dia.Element) {
     const parentElement = element || this.getSelected();
 
     if (parentElement) {
@@ -765,7 +767,15 @@ class Element {
           currentElement.remove();
         }
       }
+    }
+  }
 
+  public updateRecommendationsTotals(element?: dia.Element) {
+    this.deleteRecommendationsTotals();
+
+    const parentElement = element || this.getSelected();
+
+    if (parentElement) {
       this.createRecommendationsTotals(parentElement);
     }
   }
