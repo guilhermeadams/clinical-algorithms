@@ -15,7 +15,7 @@ const routes = [
   {
     path: '/editor',
     name: ALGORITHMS_PUBLIC_EDITOR,
-    component: () => import('pages/algorithm/editor-page.vue'),
+    component: () => import('pages/editor/editor-page.vue'),
   },
   {
     path: `/admin/${ALGORITHMS_INDEX}`,
@@ -25,7 +25,7 @@ const routes = [
   {
     path: `/admin/${ALGORITHMS_EDITOR}`,
     name: ALGORITHMS_EDITOR,
-    component: () => import('pages/algorithm/editor-page.vue'),
+    component: () => import('pages/editor/editor-page.vue'),
   },
   {
     path: `/admin/${ALGORITHMS_SEARCH}`,

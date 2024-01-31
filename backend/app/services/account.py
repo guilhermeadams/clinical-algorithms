@@ -6,7 +6,7 @@ from app.services.data import encrypt_password
 def login(email: str, password: str):
     try:
         user = select(
-            "SELECT id FROM users WHERE email = %s AND password = %s",
+            "SELECT id, name FROM users WHERE email = %s AND password = %s",
             [email, encrypt_password(password)],
         )
         if user:

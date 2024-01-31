@@ -21,6 +21,7 @@ async def index(login_data: LoginData):
     if user:
         return {
             "id": user['id'],
+            "user_name": user['name'],
             "token": '89745cfd55cf9181b253981a65dbafe7',
         }
 

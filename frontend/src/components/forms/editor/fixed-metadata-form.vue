@@ -41,6 +41,8 @@
 
               <q-input
                 v-model="data.intervention"
+                :rules="[val => !!val || 'Informe la intervención.']"
+                ref="refIntervention"
                 class="q-mt-md"
                 label="Intervention"
                 spellcheck="false"
@@ -50,6 +52,8 @@
 
               <q-input
                 v-model="data.comparator"
+                :rules="[val => !!val || 'Informe el comparador.']"
+                ref="redComparator"
                 class="q-mt-md"
                 label="Comparator"
                 spellcheck="false"
@@ -169,6 +173,7 @@ import MetadataLinksForm from 'components/forms/editor/fixed-metadata-links-form
 import DeleteModal from 'components/modals/simple-modal.vue';
 
 import { DIRECTIONS, RECOMMENDATION_TYPE, STRENGTH } from 'src/services/editor/constants';
+import { QInput } from 'quasar';
 
 const editor = inject('editor') as Editor;
 
@@ -180,6 +185,10 @@ const props = defineProps({
 });
 
 const showDeleteBlockDialog = ref(false);
+
+const refIntervention = ref<QInput>();
+const redComparator = ref<QInput>();
+const validationTimeoutId = ref<ReturnType<typeof setTimeout>>(0);
 
 const data = reactive({
   index: 1,
@@ -205,13 +214,26 @@ const blockName = computed(() => `${props.index}. ${
 
 const isFormal = computed(() => data.recommendation_type === RECOMMENDATION_TYPE[0].value);
 
-// DEPRECATED
-// watch(data, (value) => {
-//   console.log('Property has changed:', value.links);
-//   editor.metadata.fixed.set(props.index, {
-//     ...value,
-//   });
-// });
+const validate = (propName: string) => {
+  clearTimeout(validationTimeoutId.value);
+
+  if (propName === 'intervention') {
+    if (!data.comparator) {
+      validationTimeoutId.value = setTimeout(() => {
+        redComparator.value?.validate();
+      }, 1000);
+    }
+  }
+
+  if (propName === 'comparator') {
+    if (!data.intervention) {
+      validationTimeoutId.value = setTimeout(() => {
+        console.log('Validate');
+        refIntervention.value?.validate();
+      }, 1000);
+    }
+  }
+};
 
 const setProp = (propName: string) => {
   const metadata = editor.metadata.getFromElement();
@@ -236,6 +258,8 @@ const setProp = (propName: string) => {
   } else {
     editor.graph.notSaved();
   }
+
+  validate(propName);
 };
 
 const deleteBlock = () => {
