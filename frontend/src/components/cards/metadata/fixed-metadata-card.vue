@@ -52,34 +52,39 @@
       <q-separator />
 
       <div class="q-pa-md">
-        <div
-          v-if="fixedMetadata.intervention"
-          class="q-pb-md"
-        >
-          <div class="q-pb-sm"><b>Intervention</b></div>
+        <recommendation-arrows
+          v-if="fixedMetadata.intervention && fixedMetadata.comparator"
+          :fixed-metadata="fixedMetadata"
+        />
 
-          <div>{{ fixedMetadata.intervention }}</div>
-        </div>
+<!--        <div-->
+<!--          v-if="fixedMetadata.intervention"-->
+<!--          class="q-pb-md"-->
+<!--        >-->
+<!--          <div class="q-pb-sm"><b>Intervention</b></div>-->
 
-        <div
-          v-if="fixedMetadata.direction || fixedMetadata.strength"
-          class="row flex items-end justify-center"
-        >
-          <div
-            class="col-6"
-            v-html="getDirectionIcon(
-              fixedMetadata.direction,
-              { iconWidth: 44, labelSize: 14, lineHeight: 30 },
-            )"
-          />
-          <div
-            class="col-6"
-            v-html="getStrengthIcon(
-              fixedMetadata.strength,
-              { iconWidth: 44, labelSize: 14, lineHeight: 30 },
-            )"
-          />
-        </div>
+<!--          <div>{{ fixedMetadata.intervention }}</div>-->
+<!--        </div>-->
+
+<!--        <div-->
+<!--          v-if="fixedMetadata.direction || fixedMetadata.strength"-->
+<!--          class="row flex items-end justify-center"-->
+<!--        >-->
+<!--          <div-->
+<!--            class="col-6"-->
+<!--            v-html="getDirectionIcon(-->
+<!--              fixedMetadata.direction,-->
+<!--              { iconWidth: 44, labelSize: 14, lineHeight: 30 },-->
+<!--            )"-->
+<!--          />-->
+<!--          <div-->
+<!--            class="col-6"-->
+<!--            v-html="getStrengthIcon(-->
+<!--              fixedMetadata.strength,-->
+<!--              { iconWidth: 44, labelSize: 14, lineHeight: 30 },-->
+<!--            )"-->
+<!--          />-->
+<!--        </div>-->
       </div>
 
       <q-separator
@@ -187,7 +192,8 @@ import { IFixedMetadata } from 'src/services/editor/metadata';
 
 import Editor from 'src/services/editor';
 import { RECOMMENDATION_TYPE } from 'src/services/editor/constants';
-import { getDirectionIcon, getStrengthIcon } from 'src/services/editor/elements/recommendations';
+import RecommendationArrows from 'components/items/recommendations/recommendation-arrows.vue';
+// import { getDirectionIcon, getStrengthIcon } from 'src/services/editor/elements/recommendations';
 
 const editor = inject('editor') as Editor;
 

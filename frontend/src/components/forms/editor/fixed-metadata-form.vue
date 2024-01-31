@@ -228,7 +228,6 @@ const validate = (propName: string) => {
   if (propName === 'comparator') {
     if (!data.intervention) {
       validationTimeoutId.value = setTimeout(() => {
-        console.log('Validate');
         refIntervention.value?.validate();
       }, 1000);
     }
