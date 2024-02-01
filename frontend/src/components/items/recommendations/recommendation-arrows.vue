@@ -3,17 +3,17 @@
     v-if="fixedMetadata && fixedMetadata.intervention && fixedMetadata.comparator"
     class="row"
   >
-    <div class="col-4 text-caption q-pr-sm">
+    <div class="col-4 flex items-center text-caption q-pr-sm">
       {{ fixedMetadata.comparator }}
     </div>
 
-    <div class="col-4 text-center">
+    <div class="col-4 flex items-center">
       <recommendation-arrows-image
         :fixed-metadata="fixedMetadata"
       />
     </div>
 
-    <div class="col-4 text-caption q-pl-sm">
+    <div class="col-4 flex items-center text-caption q-pl-sm">
       {{ fixedMetadata.intervention }}
     </div>
   </div>

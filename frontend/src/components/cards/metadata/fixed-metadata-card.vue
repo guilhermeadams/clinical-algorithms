@@ -55,6 +55,7 @@
         <recommendation-arrows
           v-if="fixedMetadata.intervention && fixedMetadata.comparator"
           :fixed-metadata="fixedMetadata"
+          class="q-mb-md"
         />
 
 <!--        <div-->
@@ -67,8 +68,16 @@
 <!--        </div>-->
 
 <!--        <div-->
+<!--          v-if="fixedMetadata.comparator"-->
+<!--        >-->
+<!--          <div class="q-pb-sm"><b>Comparator</b></div>-->
+
+<!--          <div>{{ fixedMetadata.comparator }}</div>-->
+<!--        </div>-->
+
+<!--        <div-->
 <!--          v-if="fixedMetadata.direction || fixedMetadata.strength"-->
-<!--          class="row flex items-end justify-center"-->
+<!--          class="row flex items-end justify-center q-mt-lg"-->
 <!--        >-->
 <!--          <div-->
 <!--            class="col-6"-->
@@ -89,8 +98,7 @@
 
       <q-separator
         v-if="(
-          fixedMetadata.comparator
-          || fixedMetadata.implementation_considerations
+          fixedMetadata.implementation_considerations
           || fixedMetadata.additional_comments
           || fixedMetadata.recommendation_source
         )"
@@ -105,15 +113,6 @@
         )"
       >
         <div class="q-pt-md q-px-md">
-          <div
-            v-if="fixedMetadata.comparator"
-            class="q-pb-lg"
-          >
-            <div class="q-pb-sm"><b>Comparator</b></div>
-
-            <div>{{ fixedMetadata.comparator }}</div>
-          </div>
-
           <div
             v-if="fixedMetadata.implementation_considerations"
             class="q-pb-lg"
@@ -216,7 +215,8 @@ const recommendation = computed(() => editor.metadata.data.recommendationToShow)
 onBeforeMount(() => {
   // show single recommendation
   if (recommendation.value) {
-    fixedMetadata.value = { ...recommendation.value?.data };
+    Object.assign(fixedMetadata.value, recommendation.value?.data);
+    // fixedMetadata.value = { ...recommendation.value?.data };
   } else {
     // show all recommendations
     const metadata = editor.metadata.getFromElement();
