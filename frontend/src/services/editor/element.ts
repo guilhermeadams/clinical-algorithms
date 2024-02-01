@@ -14,11 +14,12 @@ import { reactive } from 'vue';
 
 import { autoResizeTextarea } from 'src/services/editor/textarea';
 import icons from 'src/services/editor/elements/svg_icons';
+
 import {
   FORMAL_RECOMMENDATION,
   INFORMAL_RECOMMENDATION,
   GOOD_PRACTICES,
-} from 'src/services/editor/constants';
+} from 'src/services/editor/constants/metadata/recommendation_type';
 
 // export interface IElementToolsPadding {
 //   left: number | 20,

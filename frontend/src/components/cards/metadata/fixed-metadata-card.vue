@@ -12,7 +12,7 @@
           >
             {{ fixedMetadata.index }}. {{
               fixedMetadata.recommendation_type ?
-                RECOMMENDATION_TYPE.find(
+                RECOMMENDATION_TYPES.find(
                   (type) => type.value === fixedMetadata.recommendation_type,
                 ).label : 'Recommendation type was not selected'
             }}
@@ -188,10 +188,10 @@ import {
   ref,
 } from 'vue';
 
-import { IFixedMetadata } from 'src/services/editor/metadata';
+import { IFixedMetadata } from 'src/services/editor/constants/metadata';
 
 import Editor from 'src/services/editor';
-import { RECOMMENDATION_TYPE } from 'src/services/editor/constants';
+import { RECOMMENDATION_TYPES } from 'src/services/editor/constants/metadata/recommendation_type';
 import RecommendationArrows from 'components/items/recommendations/recommendation-arrows.vue';
 // import { getDirectionIcon, getStrengthIcon } from 'src/services/editor/elements/recommendations';
 
@@ -208,7 +208,7 @@ const fixedMetadata = ref<IFixedMetadata | null>(null);
 
 const isFormal = computed(
   () => fixedMetadata.value
-    && fixedMetadata.value.recommendation_type === RECOMMENDATION_TYPE[0].value,
+    && fixedMetadata.value.recommendation_type === RECOMMENDATION_TYPES[0].value,
 );
 
 const recommendation = computed(() => editor.metadata.data.recommendationToShow);

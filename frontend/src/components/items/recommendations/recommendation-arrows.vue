@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="fixedMetadata.intervention && fixedMetadata.comparator"
+    v-if="fixedMetadata && fixedMetadata.intervention && fixedMetadata.comparator"
     class="row"
   >
     <div class="col-4 text-caption q-pr-sm">
@@ -8,7 +8,9 @@
     </div>
 
     <div class="col-4 text-center">
-      <img :src="StrongInFavorIntervention" class="full-width" />
+      <recommendation-arrows-image
+        :fixed-metadata="fixedMetadata"
+      />
     </div>
 
     <div class="col-4 text-caption q-pl-sm">
@@ -18,12 +20,13 @@
 </template>
 
 <script setup lang="ts">
-import { IFixedMetadata } from 'src/services/editor/metadata';
 import { PropType } from 'vue';
 
-import StrongInFavorIntervention from 'assets/imgs/recommendation_arrows/conditional_both_directions.png';
+import { IFixedMetadata } from 'src/services/editor/constants/metadata';
 
-const props = defineProps({
+import RecommendationArrowsImage from 'components/images/recommendation-arrows-image.vue';
+
+const { fixedMetadata } = defineProps({
   fixedMetadata: {
     type: Object as PropType<IFixedMetadata>,
     required: true,

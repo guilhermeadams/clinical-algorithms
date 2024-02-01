@@ -12,7 +12,7 @@
             <div class="q-px-md q-py-md">
               <q-select
                 v-model="data.recommendation_type"
-                :options="RECOMMENDATION_TYPE"
+                :options="RECOMMENDATION_TYPES"
                 class="q-mb-lg"
                 label="Recommendation type"
                 map-options
@@ -172,7 +172,10 @@ import Editor from 'src/services/editor';
 import MetadataLinksForm from 'components/forms/editor/fixed-metadata-links-form.vue';
 import DeleteModal from 'components/modals/simple-modal.vue';
 
-import { DIRECTIONS, RECOMMENDATION_TYPE, STRENGTH } from 'src/services/editor/constants';
+import { DIRECTIONS } from 'src/services/editor/constants/metadata/direction';
+import { RECOMMENDATION_TYPES } from 'src/services/editor/constants/metadata/recommendation_type';
+import { STRENGTH } from 'src/services/editor/constants/metadata/recommendation_strength';
+
 import { QInput } from 'quasar';
 
 const editor = inject('editor') as Editor;
@@ -207,12 +210,12 @@ const data = reactive({
 });
 
 const blockName = computed(() => `${props.index}. ${
-  data.recommendation_type ? RECOMMENDATION_TYPE.find(
+  data.recommendation_type ? RECOMMENDATION_TYPES.find(
     (type) => type.value === data.recommendation_type,
   )?.label : 'Select recommendation type'
 }`);
 
-const isFormal = computed(() => data.recommendation_type === RECOMMENDATION_TYPE[0].value);
+const isFormal = computed(() => data.recommendation_type === RECOMMENDATION_TYPES[0].value);
 
 const validate = (propName: string) => {
   clearTimeout(validationTimeoutId.value);

@@ -1,4 +1,5 @@
-import { DIRECTIONS, STRENGTH } from 'src/services/editor/constants';
+import { DIRECTIONS } from 'src/services/editor/constants/metadata/direction';
+import { STRENGTH } from 'src/services/editor/constants/metadata/recommendation_strength';
 
 export const getDirectionIcon = (
   direction: string,

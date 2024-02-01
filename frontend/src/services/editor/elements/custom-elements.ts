@@ -1,6 +1,6 @@
 import * as joint from 'jointjs';
-import { IFixedMetadata } from 'src/services/editor/metadata';
-import { RECOMMENDATION_TYPE } from 'src/services/editor/constants';
+import { IFixedMetadata } from 'src/services/editor/constants/metadata';
+import { RECOMMENDATION_TYPES } from 'src/services/editor/constants/metadata/recommendation_type';
 import { getDirectionIcon, getStrengthIcon } from 'src/services/editor/elements/recommendations';
 
 export enum CustomElement {
@@ -162,7 +162,7 @@ const customElements = {
       items += '</div>';
 
       // is formal?
-      if (recommendation.recommendation_type === RECOMMENDATION_TYPE[0].value) {
+      if (recommendation.recommendation_type === RECOMMENDATION_TYPES[0].value) {
         items += '<div class="col-2 flex justify-center items-start" style="padding-top:10px">';
         items += getStrengthIcon(recommendation.strength);
         items += '</div>';
