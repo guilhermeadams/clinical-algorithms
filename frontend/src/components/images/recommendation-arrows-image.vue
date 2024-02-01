@@ -3,6 +3,7 @@
     v-if="image"
     :src="image"
     class="full-width"
+    alt=""
   />
 </template>
 
@@ -74,8 +75,8 @@ onBeforeMount(() => {
 
   // STRONG, AGAINST
   if (
-    data.direction === STRONG_RECOMMENDATION
-    && data.strength === CONDITIONAL_RECOMMENDATION
+    data.strength === STRONG_RECOMMENDATION
+    && data.direction === AGAINST_THE_INTERVENTION
   ) {
     image.value = String(StrongInFavorComparator);
   }

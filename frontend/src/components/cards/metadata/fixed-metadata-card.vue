@@ -215,8 +215,7 @@ const recommendation = computed(() => editor.metadata.data.recommendationToShow)
 onBeforeMount(() => {
   // show single recommendation
   if (recommendation.value) {
-    Object.assign(fixedMetadata.value, recommendation.value?.data);
-    // fixedMetadata.value = { ...recommendation.value?.data };
+    fixedMetadata.value = recommendation.value?.data || null;
   } else {
     // show all recommendations
     const metadata = editor.metadata.getFromElement();
