@@ -16,7 +16,9 @@
           {{ settings.page.title }}
         </q-toolbar-title>
 
-        <div>
+        <div
+          v-if="!isPublicView"
+        >
           <div class="inline-block q-mr-md">
             <b>{{ userName }}</b> {{ isMaster ? '(Master)' : '' }}
           </div>
@@ -92,6 +94,8 @@ const userName = computed(() => LocalStorage.getItem('user_name'));
 const toggleLeftDrawer = () => {
   settings.page.mainMenu = !settings.page.mainMenu;
 };
+
+const isPublicView = computed(() => settings.isPublicView);
 
 const showMenuButton = computed(
   () => ![
