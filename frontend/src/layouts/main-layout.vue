@@ -16,36 +16,20 @@
           {{ settings.page.title }}
         </q-toolbar-title>
 
-        <div></div>
-        <q-btn
-          dense
-          round
-          data-testid="user_menu"
-        >
-          <q-avatar
-            size="md"
-            text-color="grey-4"
-          >
-            <q-icon name="person" />
-          </q-avatar>
+        <div>
+          <div class="inline-block q-mr-md">
+            <b>{{ userName }}</b> {{ isMaster ? '(Master)' : '' }}
+          </div>
 
-          <q-menu
-            style="width:300px"
-            class="q-pa-md"
-          >
-            <div>Registrado: {{ userName }} {{ isMaster ? '(Master)' : '' }}</div>
-
-            <q-list class="q-mt-md text-primary">
-              <q-item
-                clickable
-                v-ripple
-                @click="logout"
-              >
-                <q-item-section>Salir</q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
-        </q-btn>
+          <div class="inline-block q-mr-xs">
+            <q-btn
+              class="q-px-md q-py-xs"
+              label="Salir"
+              outline
+              @click="toggleLogoutDialog"
+            />
+          </div>
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -62,6 +46,19 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <simple-modal
+      :show="showLogoutDialog"
+      confirm-label="Salir"
+      @cancel="toggleLogoutDialog"
+      @confirm="logout"
+    >
+      <div class="q-px-xl q-pt-lg text-center">
+        <div class="q-py-lg">
+          ¿Seguro que quieres salir?
+        </div>
+      </div>
+    </simple-modal>
   </q-layout>
 </template>
 
@@ -75,16 +72,20 @@ import {
 
 import { useRoute } from 'vue-router';
 
+import { LocalStorage } from 'quasar';
+
 import Settings from 'src/services/settings';
 import MainMenu from 'components/menus/main-menu.vue';
 import { ALGORITHMS_EDITOR, ALGORITHMS_PUBLIC_EDITOR, ALGORITHMS_PUBLIC_SEARCH } from 'src/router/routes/algorithms';
-import { LocalStorage } from 'quasar';
+import SimpleModal from 'components/modals/simple-modal.vue';
 
 const route = useRoute();
 
 const settings = inject('settings') as Settings;
 
 const isMaster = ref(false);
+
+const showLogoutDialog = ref(false);
 
 const userName = computed(() => LocalStorage.getItem('user_name'));
 
@@ -106,6 +107,10 @@ const logout = () => {
   LocalStorage.remove('user_name');
 
   window.location.reload();
+};
+
+const toggleLogoutDialog = () => {
+  showLogoutDialog.value = !showLogoutDialog.value;
 };
 
 onBeforeMount(async () => {
