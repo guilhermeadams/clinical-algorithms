@@ -2,6 +2,7 @@ import * as joint from 'jointjs';
 import { IFixedMetadata } from 'src/services/editor/constants/metadata';
 import { RECOMMENDATION_TYPES } from 'src/services/editor/constants/metadata/recommendation_type';
 import { getDirectionIcon, getStrengthIcon } from 'src/services/editor/elements/recommendations';
+import { recommendationArrowsImage } from 'src/services/recommendations';
 
 export enum CustomElement {
   START = 'StartElement',
@@ -153,20 +154,23 @@ const customElements = {
 
     // only the 3 first recommendations
     for (const recommendation of recommendations) {
-      items += `<div class="row" data-index="${recommendation.index}">`;
+      items += `<div class="row bg-white" data-index="${recommendation.index}">`;
 
-      items += `<div class="col-8 q-pa-sm">${recommendation.index}. ${recommendation.intervention}</div>`;
-
-      items += '<div class="col-2 flex justify-center items-start" style="padding-top:10px">';
-      items += getDirectionIcon(recommendation.direction);
+      items += '<div class="col-4 flex items-center text-caption q-pa-sm">1';
+      items += recommendation.comparator;
       items += '</div>';
 
-      // is formal?
-      if (recommendation.recommendation_type === RECOMMENDATION_TYPES[0].value) {
-        items += '<div class="col-2 flex justify-center items-start" style="padding-top:10px">';
-        items += getStrengthIcon(recommendation.strength);
-        items += '</div>';
-      }
+      items += '<div class="col-4 flex items-center">';
+      items += `<img
+        src="${recommendationArrowsImage(recommendation)}"
+        class="full-width"
+        alt=""
+      />`;
+      items += '</div>';
+
+      items += '<div class="col-4 flex items-center text-caption q-pa-sm">3';
+      items += recommendation.intervention;
+      items += '</div>';
 
       items += '</div>';
     }

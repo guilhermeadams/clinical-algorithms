@@ -99,7 +99,7 @@ class Graph {
 
             this.editor.element.showAllTools();
 
-            if (this.editor.route.query.node && this.editor.data.readOnly) {
+            if (this.editor.route.query.node) {
               this.editor.element.select(String(this.editor.route.query.node));
 
               this.editor.element.centerViewOnSelected();

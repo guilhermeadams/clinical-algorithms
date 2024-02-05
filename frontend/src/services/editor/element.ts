@@ -344,7 +344,7 @@ class Element {
               x,
               y,
             },
-          }).resize(500, 143).addTo(this.editor.data.graph);
+          }).resize(500, 175).addTo(this.editor.data.graph);
 
           // create click event handlers for each recommendation
           this.create.RecommendationEventHandlers(createdRecommendationElement.id, element.id);
@@ -360,6 +360,8 @@ class Element {
         // and the element with recommendations list
         // (used for toggle button)
         this.data.recommendationsRelationsMap[originalElementId] = recommendationElementId;
+
+        console.log(`[model-id="${recommendationElementId}"]`);
 
         const domElement = document.querySelector(`[model-id="${recommendationElementId}"]`);
 
