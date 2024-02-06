@@ -1,8 +1,6 @@
 import * as joint from 'jointjs';
 import { IFixedMetadata } from 'src/services/editor/constants/metadata';
-import { RECOMMENDATION_TYPES } from 'src/services/editor/constants/metadata/recommendation_type';
-import { getDirectionIcon, getStrengthIcon } from 'src/services/editor/elements/recommendations';
-import { recommendationArrowsImage } from 'src/services/recommendations';
+import { recommendationArrowsLine } from 'src/services/recommendations';
 
 export enum CustomElement {
   START = 'StartElement',
@@ -154,25 +152,7 @@ const customElements = {
 
     // only the 3 first recommendations
     for (const recommendation of recommendations) {
-      items += `<div class="row bg-white" data-index="${recommendation.index}">`;
-
-      items += '<div class="col-4 flex items-center text-caption q-pa-sm">1';
-      items += recommendation.comparator;
-      items += '</div>';
-
-      items += '<div class="col-4 flex items-center">';
-      items += `<img
-        src="${recommendationArrowsImage(recommendation)}"
-        class="full-width"
-        alt=""
-      />`;
-      items += '</div>';
-
-      items += '<div class="col-4 flex items-center text-caption q-pa-sm">3';
-      items += recommendation.intervention;
-      items += '</div>';
-
-      items += '</div>';
+      items += `<div class="row bg-white" data-index="${recommendation.index}">${recommendationArrowsLine(recommendation)}</div>`;
     }
 
     return joint.dia.Element.define(CustomElement.RECOMMENDATION, {

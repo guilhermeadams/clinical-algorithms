@@ -1,22 +1,9 @@
 <template>
   <div
     v-if="fixedMetadata && fixedMetadata.intervention && fixedMetadata.comparator"
+    v-html="recommendationArrowsLine(fixedMetadata)"
     class="row"
-  >
-    <div class="col-4 flex items-center text-caption q-pr-sm">
-      {{ fixedMetadata.comparator }}
-    </div>
-
-    <div class="col-4 flex items-center">
-      <recommendation-arrows-image
-        :fixed-metadata="fixedMetadata"
-      />
-    </div>
-
-    <div class="col-4 flex items-center text-caption q-pl-sm">
-      {{ fixedMetadata.intervention }}
-    </div>
-  </div>
+  />
 </template>
 
 <script setup lang="ts">
@@ -24,7 +11,7 @@ import { PropType } from 'vue';
 
 import { IFixedMetadata } from 'src/services/editor/constants/metadata';
 
-import RecommendationArrowsImage from 'components/images/recommendation-arrows-image.vue';
+import { recommendationArrowsLine } from 'src/services/recommendations';
 
 const { fixedMetadata } = defineProps({
   fixedMetadata: {

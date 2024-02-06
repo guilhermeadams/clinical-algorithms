@@ -51,50 +51,11 @@
 
       <q-separator />
 
-      <div class="q-pa-md">
-        <recommendation-arrows
-          v-if="fixedMetadata.intervention && fixedMetadata.comparator"
-          :fixed-metadata="fixedMetadata"
-          class="q-mb-md"
-        />
-
-<!--        <div-->
-<!--          v-if="fixedMetadata.intervention"-->
-<!--          class="q-pb-md"-->
-<!--        >-->
-<!--          <div class="q-pb-sm"><b>Intervention</b></div>-->
-
-<!--          <div>{{ fixedMetadata.intervention }}</div>-->
-<!--        </div>-->
-
-<!--        <div-->
-<!--          v-if="fixedMetadata.comparator"-->
-<!--        >-->
-<!--          <div class="q-pb-sm"><b>Comparator</b></div>-->
-
-<!--          <div>{{ fixedMetadata.comparator }}</div>-->
-<!--        </div>-->
-
-<!--        <div-->
-<!--          v-if="fixedMetadata.direction || fixedMetadata.strength"-->
-<!--          class="row flex items-end justify-center q-mt-lg"-->
-<!--        >-->
-<!--          <div-->
-<!--            class="col-6"-->
-<!--            v-html="getDirectionIcon(-->
-<!--              fixedMetadata.direction,-->
-<!--              { iconWidth: 44, labelSize: 14, lineHeight: 30 },-->
-<!--            )"-->
-<!--          />-->
-<!--          <div-->
-<!--            class="col-6"-->
-<!--            v-html="getStrengthIcon(-->
-<!--              fixedMetadata.strength,-->
-<!--              { iconWidth: 44, labelSize: 14, lineHeight: 30 },-->
-<!--            )"-->
-<!--          />-->
-<!--        </div>-->
-      </div>
+      <recommendation-arrows
+        v-if="fixedMetadata.intervention && fixedMetadata.comparator"
+        :fixed-metadata="fixedMetadata"
+        class="q-my-md q-mx-sm"
+      />
 
       <q-separator
         v-if="(

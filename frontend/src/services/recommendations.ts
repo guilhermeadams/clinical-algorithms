@@ -54,3 +54,24 @@ export const recommendationArrowsImage = (data: IFixedMetadata) => {
 
   return '';
 };
+
+export const recommendationArrowsLine = (recommendation: IFixedMetadata) => {
+  let items = '';
+
+  items += '<div class="col-4 flex items-center text-caption q-pa-sm">1';
+  items += recommendation.comparator;
+  items += '</div>';
+
+  items += '<div class="col-4 flex items-center justify-center">';
+  items += `<img
+        src="${recommendationArrowsImage(recommendation)}"
+        alt=""
+      />`;
+  items += '</div>';
+
+  items += '<div class="col-4 flex items-center text-caption q-pa-sm">3';
+  items += recommendation.intervention;
+  items += '</div>';
+
+  return items;
+};
