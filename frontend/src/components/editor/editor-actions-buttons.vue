@@ -46,15 +46,15 @@
       @click="viewPublicGraph"
     />
 
-    <q-btn
-      :loading="exportingPDF"
-      label="PDF"
-      class="float-right q-ml-md"
-      style="width:120px"
-      color="primary"
-      push
-      @click="toPDF"
-    />
+<!--    <q-btn-->
+<!--      :loading="exportingPDF"-->
+<!--      label="PDF"-->
+<!--      class="float-right q-ml-md"-->
+<!--      style="width:120px"-->
+<!--      color="primary"-->
+<!--      push-->
+<!--      @click="toPDF"-->
+<!--    />-->
 
     <q-btn
       v-if="!readOnly"
@@ -108,7 +108,7 @@ const editor = inject('editor') as Editor;
 
 const saved = computed(() => editor.graph.data.saved);
 const savingGraph = computed(() => editor.graph.data.saving);
-const exportingPDF = computed(() => editor.graph.data.exportingPDF);
+// const exportingPDF = computed(() => editor.graph.data.exportingPDF);
 const lastUpdate = computed(() => editor.graph.lastUpdate);
 const readOnly = computed(() => editor.data.readOnly);
 
@@ -163,7 +163,7 @@ const viewPublicGraph = async () => {
   await editor.switchToMode();
 };
 
-const toPDF = () => editor.graph.exportPDF();
+// const toPDF = () => editor.graph.exportPDF();
 
 onBeforeMount(async () => {
   if (editor.data.isMaintainer) {

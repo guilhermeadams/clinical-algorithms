@@ -398,6 +398,31 @@ class Metadata {
       }
     }
   }
+
+  public async setMetadataProps(index: number, propName: string, data: IFixedMetadata) {
+    const metadata = this.getFromElement();
+
+    // create metadata block if it doesn't exist
+    if (!metadata || !metadata.fixed[index - 1]) {
+      await this.fixed.set(index, {
+        ...data,
+      });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await this.editor.element.setProp(`metadata/fixed/${index - 1}/${propName}`, data[propName]);
+
+    if (propName === 'recommendation_type') {
+      setTimeout(() => {
+        this.editor.element.updateRecommendationsTotals();
+
+        this.editor.graph.notSaved();
+      }, 500);
+    } else {
+      this.editor.graph.notSaved();
+    }
+  }
 }
 
 export default Metadata;

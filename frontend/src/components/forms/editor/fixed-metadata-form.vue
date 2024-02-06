@@ -172,9 +172,13 @@ import Editor from 'src/services/editor';
 import MetadataLinksForm from 'components/forms/editor/fixed-metadata-links-form.vue';
 import DeleteModal from 'components/modals/simple-modal.vue';
 
-import { DIRECTIONS } from 'src/services/editor/constants/metadata/direction';
+import { BOTH, DIRECTIONS, IN_FAVOR_OF_THE_INTERVENTION } from 'src/services/editor/constants/metadata/direction';
 import { RECOMMENDATION_TYPES } from 'src/services/editor/constants/metadata/recommendation_type';
-import { STRENGTH } from 'src/services/editor/constants/metadata/recommendation_strength';
+import {
+  STRENGTH,
+  CONDITIONAL_RECOMMENDATION,
+  STRONG_RECOMMENDATION,
+} from 'src/services/editor/constants/metadata/recommendation_strength';
 
 import { QInput } from 'quasar';
 
@@ -237,28 +241,36 @@ const validate = (propName: string) => {
   }
 };
 
-const setProp = (propName: string) => {
-  const metadata = editor.metadata.getFromElement();
+const checkDirectionStrengthRelationship = (value: string) => {
+  if (
+    value === BOTH
+    && data.strength === STRONG_RECOMMENDATION
+  ) {
+    data.strength = CONDITIONAL_RECOMMENDATION;
 
-  // create metadata block if it doesn't exist
-  if (!metadata || !metadata.fixed[props.index - 1]) {
-    editor.metadata.fixed.set(props.index, {
-      ...data,
-    });
+    editor.metadata.setMetadataProps(props.index, 'strength', data);
   }
+};
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  editor.element.setProp(`metadata/fixed/${props.index - 1}/${propName}`, data[propName]);
+const checkStrengthDirectionRelationship = (value: string) => {
+  if (
+    value === STRONG_RECOMMENDATION
+    && data.direction === BOTH
+  ) {
+    data.direction = IN_FAVOR_OF_THE_INTERVENTION;
 
-  if (propName === 'recommendation_type') {
-    setTimeout(() => {
-      editor.element.updateRecommendationsTotals();
+    editor.metadata.setMetadataProps(props.index, 'direction', data);
+  }
+};
 
-      editor.graph.notSaved();
-    }, 500);
-  } else {
-    editor.graph.notSaved();
+const setProp = (propName: string) => {
+  editor.metadata.setMetadataProps(props.index, propName, data);
+
+  // strength cant be
+  if (propName === 'direction') {
+    checkDirectionStrengthRelationship(data[propName]);
+  } else if (propName === 'strength') {
+    checkStrengthDirectionRelationship(data[propName]);
   }
 
   validate(propName);
