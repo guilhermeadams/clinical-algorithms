@@ -47,6 +47,16 @@
     />
 
     <q-btn
+      :loading="exportingPDF"
+      label="PDF"
+      class="float-right q-ml-md"
+      style="width:120px"
+      color="primary"
+      push
+      @click="toPDF"
+    />
+
+    <q-btn
       v-if="!readOnly"
       :loading="savingGraph"
       label="Guardar"
@@ -98,12 +108,22 @@ const editor = inject('editor') as Editor;
 
 const saved = computed(() => editor.graph.data.saved);
 const savingGraph = computed(() => editor.graph.data.saving);
+const exportingPDF = computed(() => editor.graph.data.exportingPDF);
 const lastUpdate = computed(() => editor.graph.lastUpdate);
 const readOnly = computed(() => editor.data.readOnly);
 
 const showEditButton = ref(false);
 
 const exitEditor = () => {
+  if (route.name === ALGORITHMS_PUBLIC_EDITOR) {
+    return router.push({
+      name: ALGORITHMS_PUBLIC_SEARCH,
+      query: {
+        keyword: route.query.search,
+      },
+    });
+  }
+
   if (route.query.search) {
     const name = route.name === ALGORITHMS_PUBLIC_EDITOR
       ? ALGORITHMS_PUBLIC_SEARCH : ALGORITHMS_SEARCH;
@@ -113,12 +133,6 @@ const exitEditor = () => {
       query: {
         keyword: route.query.search,
       },
-    });
-  }
-
-  if (route.name === ALGORITHMS_PUBLIC_EDITOR) {
-    return router.push({
-      name: route.query.from_admin ? ALGORITHMS_SEARCH : ALGORITHMS_PUBLIC_SEARCH,
     });
   }
 
@@ -148,6 +162,8 @@ const viewPublicGraph = async () => {
 
   await editor.switchToMode();
 };
+
+const toPDF = () => editor.graph.exportPDF();
 
 onBeforeMount(async () => {
   if (editor.data.isMaintainer) {
