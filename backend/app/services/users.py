@@ -71,6 +71,16 @@ def search_user(keyword: str):
         db_error(e)
 
 
+def user_roles(user_id: int):
+    try:
+        user = select("SELECT maintainer, master FROM users WHERE id = %s", [user_id])
+
+        if user:
+            return user[0]
+    except Error as e:
+        db_error(e)
+
+
 def delete_user(user_id: int):
     try:
         delete("users", 'id', user_id)

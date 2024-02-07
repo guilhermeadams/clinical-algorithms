@@ -10,7 +10,7 @@ export interface IMainMenuSection {
   }[],
 }
 
-const sections: IMainMenuSection[] = [
+export const allSections = [
   {
     name: 'Registros básicos',
     items: [
@@ -39,4 +39,18 @@ const sections: IMainMenuSection[] = [
   },
 ];
 
-export default sections;
+export const restrictedSections = [
+  {
+    name: 'Algoritmos',
+    items: [
+      {
+        name: ALGORITHMS_INDEX,
+        label: 'Mantenimiento',
+      },
+      {
+        name: ALGORITHMS_SEARCH,
+        label: 'Búsqueda y publicación',
+      },
+    ],
+  },
+];

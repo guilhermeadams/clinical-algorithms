@@ -1,7 +1,6 @@
 import * as joint from 'jointjs';
-import { IFixedMetadata } from 'src/services/editor/metadata';
-import { RECOMMENDATION_TYPE } from 'src/services/editor/constants';
-import { getDirectionIcon, getStrengthIcon } from 'src/services/editor/elements/recommendations';
+import { IFixedMetadata } from 'src/services/editor/constants/metadata';
+import { recommendationArrowsLine } from 'src/services/recommendations';
 
 export enum CustomElement {
   START = 'StartElement',
@@ -153,22 +152,7 @@ const customElements = {
 
     // only the 3 first recommendations
     for (const recommendation of recommendations) {
-      items += `<div class="row" data-index="${recommendation.index}">`;
-
-      items += `<div class="col-8 q-pa-sm">${recommendation.index}. ${recommendation.intervention}</div>`;
-
-      items += '<div class="col-2 flex justify-center items-start" style="padding-top:10px">';
-      items += getDirectionIcon(recommendation.direction);
-      items += '</div>';
-
-      // is formal?
-      if (recommendation.recommendation_type === RECOMMENDATION_TYPE[0].value) {
-        items += '<div class="col-2 flex justify-center items-start" style="padding-top:10px">';
-        items += getStrengthIcon(recommendation.strength);
-        items += '</div>';
-      }
-
-      items += '</div>';
+      items += `<div class="row bg-white" data-index="${recommendation.index}">${recommendationArrowsLine(recommendation)}</div>`;
     }
 
     return joint.dia.Element.define(CustomElement.RECOMMENDATION, {

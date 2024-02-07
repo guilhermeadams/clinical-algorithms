@@ -128,6 +128,7 @@ class Users {
 
       await api.put('users', {
         ...this.data.user,
+        phone: this.data.user.phone || '',
       });
 
       return Promise.resolve(true);

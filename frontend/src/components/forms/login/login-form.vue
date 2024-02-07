@@ -74,18 +74,25 @@ async function tryLogin() {
   try {
     user.loggingIn = true;
 
-    const { data }: { data: { user: number, token: string } } = await api.post('account/login', {
+    const { data }: { data: {
+        id: number,
+        token: string,
+        user_name: string,
+    } } = await api.post('account/login', {
       username: user.username,
       password: user.password,
     });
 
-    if (data.user && data.token) {
+    if (data.id && data.token) {
       LocalStorage.set('token', data.token);
-      LocalStorage.set('user', data.user);
+      LocalStorage.set('user', data.id);
+      LocalStorage.set('user_name', data.user_name);
 
       await router.push({
         name: HOME,
       });
+
+      window.location.reload();
     } else {
       $q.notify({
         type: 'warning',

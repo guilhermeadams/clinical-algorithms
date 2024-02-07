@@ -22,7 +22,9 @@ provide('settings', settings);
 
 provide(new AlgorithmsCategories(), 'algorithmsCategories');
 
-onMounted(() => {
+settings.setUser(LocalStorage.getItem('user') || 0);
+
+onMounted(async () => {
   const token = LocalStorage.getItem('token');
 
   setTimeout(() => {

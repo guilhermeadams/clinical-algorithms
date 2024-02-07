@@ -33,6 +33,7 @@ class Editor {
   router: Router;
 
   data: IJointData = reactive({
+    isMaintainer: false,
     readOnly: false,
     showSaveDialog: false,
     paper: undefined,
@@ -109,10 +110,16 @@ class Editor {
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        this.data.graph.on('change:position', (/* cell: dia.Cell */) => {
+        this.data.graph.on('change:position', (cell: dia.Cell) => {
           this.graph.notSaved();
 
           deselectAllTexts();
+
+          const element = this.element.getById(cell.id);
+
+          if (element) {
+            this.element.deleteRecommendationsTotals(element);
+          }
         });
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -130,6 +137,10 @@ class Editor {
           if (!(this.data.readOnly && elementView.options.model.prop('type') === CustomElement.LANE)) {
             this.element.select(elementView.options.model.id);
           }
+
+          setTimeout(() => {
+            this.element.updateRecommendationsTotals();
+          }, 100);
         });
 
         this.data.paper.on('link:snap:connect', () => {
@@ -166,7 +177,7 @@ class Editor {
   }
 
   public setReadOnly(mode: string) {
-    this.data.readOnly = mode === 'public';
+    this.data.readOnly = !this.data.isMaintainer || mode === 'public';
   }
 
   public async switchToMode() {
@@ -195,6 +206,10 @@ class Editor {
         stageWrapper.scrollTop = params.y;
       }
     }
+  }
+
+  public setIsMaintainer(value: boolean) {
+    this.data.isMaintainer = value;
   }
 }
 

@@ -12,7 +12,7 @@
           >
             {{ fixedMetadata.index }}. {{
               fixedMetadata.recommendation_type ?
-                RECOMMENDATION_TYPE.find(
+                RECOMMENDATION_TYPES.find(
                   (type) => type.value === fixedMetadata.recommendation_type,
                 ).label : 'Recommendation type was not selected'
             }}
@@ -51,41 +51,15 @@
 
       <q-separator />
 
-      <div class="q-pa-md">
-        <div
-          v-if="fixedMetadata.intervention"
-          class="q-pb-md"
-        >
-          <div class="q-pb-sm"><b>Intervention</b></div>
-
-          <div>{{ fixedMetadata.intervention }}</div>
-        </div>
-
-        <div
-          v-if="fixedMetadata.direction || fixedMetadata.strength"
-          class="row flex items-end justify-center"
-        >
-          <div
-            class="col-6"
-            v-html="getDirectionIcon(
-              fixedMetadata.direction,
-              { iconWidth: 44, labelSize: 14, lineHeight: 30 },
-            )"
-          />
-          <div
-            class="col-6"
-            v-html="getStrengthIcon(
-              fixedMetadata.strength,
-              { iconWidth: 44, labelSize: 14, lineHeight: 30 },
-            )"
-          />
-        </div>
-      </div>
+      <recommendation-arrows
+        v-if="fixedMetadata.intervention && fixedMetadata.comparator"
+        :fixed-metadata="fixedMetadata"
+        class="q-my-md q-mx-sm"
+      />
 
       <q-separator
         v-if="(
-          fixedMetadata.comparator
-          || fixedMetadata.implementation_considerations
+          fixedMetadata.implementation_considerations
           || fixedMetadata.additional_comments
           || fixedMetadata.recommendation_source
         )"
@@ -100,15 +74,6 @@
         )"
       >
         <div class="q-pt-md q-px-md">
-          <div
-            v-if="fixedMetadata.comparator"
-            class="q-pb-lg"
-          >
-            <div class="q-pb-sm"><b>Comparator</b></div>
-
-            <div>{{ fixedMetadata.comparator }}</div>
-          </div>
-
           <div
             v-if="fixedMetadata.implementation_considerations"
             class="q-pb-lg"
@@ -156,17 +121,17 @@
           class="q-mb-md"
         >
           <q-card-section>
-            <div class="q-pb-sm"><b>URL:</b> <a
+            <div class="q-pb-sm"><b>{{ link.type }}</b>
+            </div>
+
+            <div><a
               :href="link.url"
               target="_blank"
               class="text-primary"
               style="word-break: break-all"
             >
               {{ link.url }}
-            </a>
-            </div>
-
-            <div class="q-py-sm"><b>Link type:</b> {{ link.type }}</div>
+            </a></div>
           </q-card-section>
         </q-card>
       </div>
@@ -183,11 +148,12 @@ import {
   ref,
 } from 'vue';
 
-import { IFixedMetadata } from 'src/services/editor/metadata';
+import { IFixedMetadata } from 'src/services/editor/constants/metadata';
 
 import Editor from 'src/services/editor';
-import { RECOMMENDATION_TYPE } from 'src/services/editor/constants';
-import { getDirectionIcon, getStrengthIcon } from 'src/services/editor/elements/recommendations';
+import { RECOMMENDATION_TYPES } from 'src/services/editor/constants/metadata/recommendation_type';
+import RecommendationArrows from 'components/items/recommendations/recommendation-arrows.vue';
+// import { getDirectionIcon, getStrengthIcon } from 'src/services/editor/elements/recommendations';
 
 const editor = inject('editor') as Editor;
 
@@ -202,7 +168,7 @@ const fixedMetadata = ref<IFixedMetadata | null>(null);
 
 const isFormal = computed(
   () => fixedMetadata.value
-    && fixedMetadata.value.recommendation_type === RECOMMENDATION_TYPE[0].value,
+    && fixedMetadata.value.recommendation_type === RECOMMENDATION_TYPES[0].value,
 );
 
 const recommendation = computed(() => editor.metadata.data.recommendationToShow);
@@ -210,7 +176,7 @@ const recommendation = computed(() => editor.metadata.data.recommendationToShow)
 onBeforeMount(() => {
   // show single recommendation
   if (recommendation.value) {
-    fixedMetadata.value = { ...recommendation.value?.data };
+    fixedMetadata.value = recommendation.value?.data || null;
   } else {
     // show all recommendations
     const metadata = editor.metadata.getFromElement();

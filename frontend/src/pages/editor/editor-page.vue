@@ -104,6 +104,8 @@ onBeforeMount(async () => {
     && typeof id === 'string'
     && typeof mode === 'string'
   ) {
+    editor.setIsMaintainer(await settings.isMaintainer());
+
     await editor.graph.open(id, mode);
 
     settings.page.setTitle(editor.data.readOnly ? 'Publicación de algoritmo' : 'Editar algoritmo');

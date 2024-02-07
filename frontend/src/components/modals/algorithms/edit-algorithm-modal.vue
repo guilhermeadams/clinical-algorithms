@@ -5,7 +5,8 @@
     :deleting="data.deleting"
     :saving="data.saving"
     :editing="data.editing"
-    :hide-delete="!algorithms.data.algorithm.id"
+    :hide-delete="!props.isMaintainer || !algorithms.data.algorithm.id"
+    :hide-confirm="!props.isMaintainer"
     @delete="showDeleteDialog"
     @edit="setEditing"
     @save="submitFlowchartForm"
@@ -176,7 +177,12 @@ import {
   ref,
 } from 'vue';
 
-import { QForm, QInput, useQuasar } from 'quasar';
+import {
+  QForm,
+  QInput,
+  useQuasar,
+} from 'quasar';
+
 import { myLocale } from 'src/services/locale';
 
 import Algorithms from 'src/services/algorithms';
@@ -184,6 +190,13 @@ import EditModal from 'components/modals/edit-modal.vue';
 import DeleteModal from 'components/modals/simple-modal.vue';
 import AlgorithmsCategories from 'src/services/algorithms-categories';
 import Users from 'src/services/users';
+
+const props = defineProps({
+  isMaintainer: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 const users = inject('users') as Users;
 const algorithms = inject('algorithms') as Algorithms;

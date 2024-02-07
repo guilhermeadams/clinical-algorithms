@@ -1,28 +1,7 @@
 import Editor from 'src/services/editor/index';
 import { dia } from 'jointjs';
 import { reactive } from 'vue';
-
-export interface IFixedMetadataLink {
-  index: number,
-  url: string,
-  type: string,
-}
-
-export interface IFixedMetadata {
-  index: number,
-  description: string,
-  recommendation_type: string,
-  intervention_type: string,
-  intervention: string,
-  comparator: string,
-  direction: string,
-  strength: string,
-  certainty_of_the_evidence: string,
-  implementation_considerations: string,
-  additional_comments: string,
-  recommendation_source: string,
-  links: IFixedMetadataLink[],
-}
+import { IFixedMetadata, IFixedMetadataLink } from 'src/services/editor/constants/metadata';
 
 class Metadata {
   editor: Editor;
@@ -145,6 +124,8 @@ class Metadata {
         }
 
         setTimeout(() => {
+          this.editor.element.updateRecommendationsTotals(selectedElement);
+
           this.editor.graph.notSaved();
 
           this.updateTotalBlocks();
@@ -415,6 +396,31 @@ class Metadata {
           originalElementId: elementId,
         };
       }
+    }
+  }
+
+  public async setMetadataProps(index: number, propName: string, data: IFixedMetadata) {
+    const metadata = this.getFromElement();
+
+    // create metadata block if it doesn't exist
+    if (!metadata || !metadata.fixed[index - 1]) {
+      await this.fixed.set(index, {
+        ...data,
+      });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await this.editor.element.setProp(`metadata/fixed/${index - 1}/${propName}`, data[propName]);
+
+    if (propName === 'recommendation_type') {
+      setTimeout(() => {
+        this.editor.element.updateRecommendationsTotals();
+
+        this.editor.graph.notSaved();
+      }, 500);
+    } else {
+      this.editor.graph.notSaved();
     }
   }
 }

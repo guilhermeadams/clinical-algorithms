@@ -12,7 +12,7 @@
             <div class="q-px-md q-py-md">
               <q-select
                 v-model="data.recommendation_type"
-                :options="RECOMMENDATION_TYPE"
+                :options="RECOMMENDATION_TYPES"
                 class="q-mb-lg"
                 label="Recommendation type"
                 map-options
@@ -41,6 +41,8 @@
 
               <q-input
                 v-model="data.intervention"
+                :rules="[val => !!val || 'Informe la intervención.']"
+                ref="refIntervention"
                 class="q-mt-md"
                 label="Intervention"
                 spellcheck="false"
@@ -50,6 +52,8 @@
 
               <q-input
                 v-model="data.comparator"
+                :rules="[val => !!val || 'Informe el comparador.']"
+                ref="redComparator"
                 class="q-mt-md"
                 label="Comparator"
                 spellcheck="false"
@@ -164,10 +168,19 @@ import {
   ref,
 } from 'vue';
 
-import MetadataLinksForm from 'components/forms/editor/fixed-metadata-links-form.vue';
 import Editor from 'src/services/editor';
+import MetadataLinksForm from 'components/forms/editor/fixed-metadata-links-form.vue';
 import DeleteModal from 'components/modals/simple-modal.vue';
-import { DIRECTIONS, RECOMMENDATION_TYPE, STRENGTH } from 'src/services/editor/constants';
+
+import { BOTH, DIRECTIONS, IN_FAVOR_OF_THE_INTERVENTION } from 'src/services/editor/constants/metadata/direction';
+import { RECOMMENDATION_TYPES } from 'src/services/editor/constants/metadata/recommendation_type';
+import {
+  STRENGTH,
+  CONDITIONAL_RECOMMENDATION,
+  STRONG_RECOMMENDATION,
+} from 'src/services/editor/constants/metadata/recommendation_strength';
+
+import { QInput } from 'quasar';
 
 const editor = inject('editor') as Editor;
 
@@ -179,6 +192,10 @@ const props = defineProps({
 });
 
 const showDeleteBlockDialog = ref(false);
+
+const refIntervention = ref<QInput>();
+const redComparator = ref<QInput>();
+const validationTimeoutId = ref<ReturnType<typeof setTimeout>>(0);
 
 const data = reactive({
   index: 1,
@@ -197,36 +214,66 @@ const data = reactive({
 });
 
 const blockName = computed(() => `${props.index}. ${
-  data.recommendation_type ? RECOMMENDATION_TYPE.find(
+  data.recommendation_type ? RECOMMENDATION_TYPES.find(
     (type) => type.value === data.recommendation_type,
   )?.label : 'Select recommendation type'
 }`);
 
-const isFormal = computed(() => data.recommendation_type === RECOMMENDATION_TYPE[0].value);
+const isFormal = computed(() => data.recommendation_type === RECOMMENDATION_TYPES[0].value);
 
-// DEPRECATED
-// watch(data, (value) => {
-//   console.log('Property has changed:', value.links);
-//   editor.metadata.fixed.set(props.index, {
-//     ...value,
-//   });
-// });
+const validate = (propName: string) => {
+  clearTimeout(validationTimeoutId.value);
 
-const setProp = (propName: string) => {
-  const metadata = editor.metadata.getFromElement();
-
-  // create metadata block if it doesn't exist
-  if (!metadata || !metadata.fixed[props.index - 1]) {
-    editor.metadata.fixed.set(props.index, {
-      ...data,
-    });
+  if (propName === 'intervention') {
+    if (!data.comparator) {
+      validationTimeoutId.value = setTimeout(() => {
+        redComparator.value?.validate();
+      }, 1000);
+    }
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  editor.element.setProp(`metadata/fixed/${props.index - 1}/${propName}`, data[propName]);
+  if (propName === 'comparator') {
+    if (!data.intervention) {
+      validationTimeoutId.value = setTimeout(() => {
+        refIntervention.value?.validate();
+      }, 1000);
+    }
+  }
+};
 
-  editor.graph.notSaved();
+const checkDirectionStrengthRelationship = (value: string) => {
+  if (
+    value === BOTH
+    && data.strength === STRONG_RECOMMENDATION
+  ) {
+    data.strength = CONDITIONAL_RECOMMENDATION;
+
+    editor.metadata.setMetadataProps(props.index, 'strength', data);
+  }
+};
+
+const checkStrengthDirectionRelationship = (value: string) => {
+  if (
+    value === STRONG_RECOMMENDATION
+    && data.direction === BOTH
+  ) {
+    data.direction = IN_FAVOR_OF_THE_INTERVENTION;
+
+    editor.metadata.setMetadataProps(props.index, 'direction', data);
+  }
+};
+
+const setProp = (propName: string) => {
+  editor.metadata.setMetadataProps(props.index, propName, data);
+
+  // strength cant be
+  if (propName === 'direction') {
+    checkDirectionStrengthRelationship(data[propName]);
+  } else if (propName === 'strength') {
+    checkStrengthDirectionRelationship(data[propName]);
+  }
+
+  validate(propName);
 };
 
 const deleteBlock = () => {

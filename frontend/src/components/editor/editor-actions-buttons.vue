@@ -46,6 +46,16 @@
       @click="viewPublicGraph"
     />
 
+<!--    <q-btn-->
+<!--      :loading="exportingPDF"-->
+<!--      label="PDF"-->
+<!--      class="float-right q-ml-md"-->
+<!--      style="width:120px"-->
+<!--      color="primary"-->
+<!--      push-->
+<!--      @click="toPDF"-->
+<!--    />-->
+
     <q-btn
       v-if="!readOnly"
       :loading="savingGraph"
@@ -71,7 +81,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject } from 'vue';
+import {
+  computed,
+  onBeforeMount,
+  inject,
+  ref,
+} from 'vue';
+
 import { useRoute, useRouter } from 'vue-router';
 
 import Editor from 'src/services/editor';
@@ -92,9 +108,11 @@ const editor = inject('editor') as Editor;
 
 const saved = computed(() => editor.graph.data.saved);
 const savingGraph = computed(() => editor.graph.data.saving);
+// const exportingPDF = computed(() => editor.graph.data.exportingPDF);
 const lastUpdate = computed(() => editor.graph.lastUpdate);
 const readOnly = computed(() => editor.data.readOnly);
-const showEditButton = computed(() => route.name !== ALGORITHMS_PUBLIC_EDITOR);
+
+const showEditButton = ref(false);
 
 const exitEditor = () => {
   if (route.name === ALGORITHMS_PUBLIC_EDITOR) {
@@ -144,6 +162,16 @@ const viewPublicGraph = async () => {
 
   await editor.switchToMode();
 };
+
+// const toPDF = () => editor.graph.exportPDF();
+
+onBeforeMount(async () => {
+  if (editor.data.isMaintainer) {
+    showEditButton.value = true;
+  } else {
+    showEditButton.value = route.name !== ALGORITHMS_PUBLIC_EDITOR;
+  }
+});
 </script>
 
 <style lang="sass">

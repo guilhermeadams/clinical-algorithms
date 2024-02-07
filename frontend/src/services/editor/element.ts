@@ -14,11 +14,12 @@ import { reactive } from 'vue';
 
 import { autoResizeTextarea } from 'src/services/editor/textarea';
 import icons from 'src/services/editor/elements/svg_icons';
+
 import {
   FORMAL_RECOMMENDATION,
   INFORMAL_RECOMMENDATION,
   GOOD_PRACTICES,
-} from 'src/services/editor/constants';
+} from 'src/services/editor/constants/metadata/recommendation_type';
 
 // export interface IElementToolsPadding {
 //   left: number | 20,
@@ -90,6 +91,8 @@ class Element {
   }
 
   private removeSelected() {
+    this.deleteRecommendationsTotals();
+
     this.getSelected()?.remove();
 
     this.deselectAll();
@@ -341,7 +344,7 @@ class Element {
               x,
               y,
             },
-          }).resize(500, 143).addTo(this.editor.data.graph);
+          }).resize(500, 175).addTo(this.editor.data.graph);
 
           // create click event handlers for each recommendation
           this.create.RecommendationEventHandlers(createdRecommendationElement.id, element.id);
@@ -357,6 +360,8 @@ class Element {
         // and the element with recommendations list
         // (used for toggle button)
         this.data.recommendationsRelationsMap[originalElementId] = recommendationElementId;
+
+        console.log(`[model-id="${recommendationElementId}"]`);
 
         const domElement = document.querySelector(`[model-id="${recommendationElementId}"]`);
 
@@ -443,6 +448,8 @@ class Element {
             y: y + refY,
           },
         }).resize(28, 17).addTo(this.editor.data.graph);
+
+        createElement.prop('props/parentElement', element.id);
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -570,11 +577,12 @@ class Element {
     return this.getSelected()?.prop('title') || '';
   }
 
-  public async setTitle(title: string) {
-    await this.setProp('title', title);
-
-    await this.setAttr('label/text', title);
-  }
+  // PROBABLY DEPRECATED
+  // public async setTitle(title: string) {
+  //   await this.setProp('title', title);
+  //
+  //   await this.setAttr('label/text', title);
+  // }
 
   public getName() {
     const elementType = this.getSelected()?.prop('type');
@@ -710,38 +718,77 @@ class Element {
     }
   }
 
-  public async createRecommendationsTotals() {
+  public createRecommendationsTotals(element: dia.Element) {
+    if (
+      [CustomElement.ACTION, CustomElement.EVALUATION].includes(element.prop('type'))
+    ) {
+      const totals: { [key: string]: number } = {};
+
+      const metadata = this.editor.metadata.getFromElement(element);
+
+      if (metadata && metadata.fixed.length) {
+        for (const fixedMetadata of metadata.fixed) {
+          if (fixedMetadata) {
+            if (!totals[fixedMetadata.recommendation_type]) {
+              totals[fixedMetadata.recommendation_type] = 1;
+            } else {
+              totals[fixedMetadata.recommendation_type] += 1;
+            }
+          }
+        }
+
+        if (Object.keys(totals).length) {
+          let y = 2;
+
+          const recommendationsTypes = [
+            FORMAL_RECOMMENDATION,
+            INFORMAL_RECOMMENDATION,
+            GOOD_PRACTICES,
+          ];
+
+          for (const type of recommendationsTypes) {
+            if (totals[type]) {
+              void this.create.RecommendationTotal(element, type, totals[type], y);
+
+              y += 20;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  public deleteRecommendationsTotals(element?: dia.Element) {
+    const parentElement = element || this.getSelected();
+
+    if (parentElement) {
+      for (const currentElement of this.getAll()) {
+        if (
+          currentElement.prop('type') === CustomElement.RECOMMENDATION_TOTAL
+          && currentElement.prop('props/parentElement') === parentElement.id
+        ) {
+          currentElement.remove();
+        }
+      }
+    }
+  }
+
+  public updateRecommendationsTotals(element?: dia.Element) {
+    this.deleteRecommendationsTotals();
+
+    const parentElement = element || this.getSelected();
+
+    if (parentElement) {
+      this.createRecommendationsTotals(parentElement);
+    }
+  }
+
+  public async createAllRecommendationsTotals() {
     const allElements = this.getAll();
 
     if (allElements.length) {
       for (const element of allElements) {
-        if (
-          [CustomElement.ACTION, CustomElement.EVALUATION].includes(element.prop('type'))
-        ) {
-          const totals: { [key: string]: number } = {};
-
-          const metadata = this.editor.metadata.getFromElement(element);
-
-          if (metadata && metadata.fixed.length) {
-            for (const fixedMetadata of metadata.fixed) {
-              if (!totals[fixedMetadata.recommendation_type]) {
-                totals[fixedMetadata.recommendation_type] = 1;
-              } else {
-                totals[fixedMetadata.recommendation_type] += 1;
-              }
-            }
-
-            if (Object.keys(totals).length) {
-              let y = 2;
-
-              for (const type of Object.keys(totals)) {
-                void this.create.RecommendationTotal(element, type, totals[type], y);
-
-                y += 20;
-              }
-            }
-          }
-        }
+        this.updateRecommendationsTotals(element);
       }
     }
   }
