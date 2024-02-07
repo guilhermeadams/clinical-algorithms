@@ -63,10 +63,7 @@ export const recommendationArrowsLine = (recommendation: IFixedMetadata) => {
   items += '</div>';
 
   items += '<div class="col-4 flex items-center justify-center">';
-  items += `<img
-        src="${recommendationArrowsImage(recommendation)}"
-        alt=""
-      />`;
+  items += `<img src="${recommendationArrowsImage(recommendation)}" alt="" />`;
   items += '</div>';
 
   items += '<div class="col-4 flex items-center text-caption q-pa-sm">';
