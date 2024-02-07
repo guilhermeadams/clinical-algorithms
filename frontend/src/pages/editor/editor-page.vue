@@ -41,7 +41,6 @@
 import {
   computed,
   onBeforeMount,
-  provide,
   inject,
 } from 'vue';
 
@@ -64,8 +63,7 @@ import {
 const route = useRoute();
 const router = useRouter();
 
-const editor = new Editor({ route, router });
-provide('editor', editor);
+const editor = inject('editor') as Editor;
 
 const settings = inject('settings') as Settings;
 

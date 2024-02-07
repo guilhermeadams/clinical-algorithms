@@ -58,18 +58,15 @@ export const recommendationArrowsImage = (data: IFixedMetadata) => {
 export const recommendationArrowsLine = (recommendation: IFixedMetadata) => {
   let items = '';
 
-  items += '<div class="col-4 flex items-center text-caption q-pa-sm">1';
+  items += '<div class="col-4 flex items-center text-caption q-pa-sm">';
   items += recommendation.comparator;
   items += '</div>';
 
   items += '<div class="col-4 flex items-center justify-center">';
-  items += `<img
-        src="${recommendationArrowsImage(recommendation)}"
-        alt=""
-      />`;
+  items += `<img src="${recommendationArrowsImage(recommendation)}" alt="" />`;
   items += '</div>';
 
-  items += '<div class="col-4 flex items-center text-caption q-pa-sm">3';
+  items += '<div class="col-4 flex items-center text-caption q-pa-sm">';
   items += recommendation.intervention;
   items += '</div>';
 
