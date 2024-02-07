@@ -51,6 +51,7 @@ class Editor {
   }
 
   public reset() {
+    this.graph.data.savingTimeout = null;
     this.data.graph.clear();
   }
 

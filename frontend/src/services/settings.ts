@@ -26,11 +26,11 @@ class Settings {
       mainMenu: true,
     });
 
-  constructor(options: { route: RouteLocationNormalizedLoaded, router?: Router }) {
-    this.route = options.route;
+  constructor(route: RouteLocationNormalizedLoaded, router?: Router) {
+    this.route = route;
 
-    if (options.router) {
-      this.router = options.router;
+    if (router) {
+      this.router = router;
     }
   }
 
